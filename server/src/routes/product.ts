@@ -7,12 +7,13 @@ import {
   deleteProduct,
 } from "../controllers/productController";
 import parser from "../middleware/upload";
+import { protect } from "../middleware/protect";
 
 const router = Router();
 router.get("/", getAllProducts);
 router.get("/:id", getProductbyId);
-router.post("/", parser.single("image"), createProduct);
-router.put("/:id", parser.single("image"), updateProduct);
-router.delete("/:id", deleteProduct);
+router.post("/", protect, parser.single("image"), createProduct);
+router.put("/:id", protect, parser.single("image"), updateProduct);
+router.delete("/:id", protect, deleteProduct);
 
 export default router;

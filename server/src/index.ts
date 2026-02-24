@@ -1,24 +1,26 @@
-import { Request, Response } from "express";
 import productRoutes from "./routes/product";
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const connectDB = require("./config/db");
+import authRoutes from "./routes/authRoute";
+import express from "express";
+import cors from "cors";
+import connectDB from "./config/db";
+import dotenv from "dotenv";
 
-connectDB();
+dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
+// middleware
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
-
-//connect to db
+// connect db (ONCE)
 connectDB();
 
+// routes
 app.use("/api/products", productRoutes);
+app.use("/api/auth", authRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

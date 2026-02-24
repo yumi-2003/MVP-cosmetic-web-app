@@ -16,7 +16,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
 export const getProductbyId = async (req: Request, res: Response) => {
   try {
     const product = await Product.findById(req.params.id);
-    if (!product) res.status(404).json({ msg: "Product doesn't exist" });
+    if (!product) return res.status(404).json({ msg: "Product doesn't exist" });
     res.status(200).json(product);
   } catch (error) {
     res.status(500).json({ msg: "Server error" });
@@ -62,7 +62,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       updateFields,
       { new: true }
     );
-    if (!updateProduct) res.status(404).json({ msg: "Product not found" });
+    if (!updateProduct) return res.status(404).json({ msg: "Product not found" });
     res.status(200).json(updateProduct);
   } catch (error) {
     res.status(500).json({ msg: "Server error" });
@@ -73,7 +73,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 export const deleteProduct = async (req: Request, res: Response) => {
   try {
     const deleteProduct = await Product.findByIdAndDelete(req.params.id);
-    if (!deleteProduct) res.status(404).json({ msg: "Product not found" });
+    if (!deleteProduct) return res.status(404).json({ msg: "Product not found" });
     res.status(200).json({ msg: "Product deleted successfully" });
   } catch (error) {
     res.status(500).json({ msg: "Server error" });

@@ -1,20 +1,15 @@
 import { useEffect, useState, useRef } from "react";
-import { Input } from "@/components/ui/input";
-import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SearchIcon, CloseIcon } from "@/components/icons";
 
 const SearchBar = () => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Close when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
     };
@@ -27,38 +22,42 @@ const SearchBar = () => {
   }, [open]);
 
   return (
-    <div ref={containerRef} className="relative flex items-center h-10">
-      {/* Static Search Icon (Trigger) */}
+    <>
+      {/* Icon trigger */}
       <button
         onClick={() => setOpen(true)}
-        className={cn(
-          "p-2 transition-opacity duration-200",
-          open ? "opacity-0 pointer-events-none" : "opacity-100",
-        )}
+        className="p-1.5 text-foreground/70 hover:text-foreground transition-colors"
+        aria-label="Open search"
       >
-        <Search className="w-5 h-5" />
+        <SearchIcon className="w-[20px] h-[20px]" />
       </button>
 
-      {/* Expanding Search Bar */}
+      {/* Full-width inline search bar that slides in below navbar */}
       <div
         className={cn(
-          "absolute right-0 flex items-center bg-background border rounded-full transition-all duration-300 ease-in-out shadow-sm",
-          open
-            ? "w-[50vw] md:w-[320px] opacity-100 px-3 py-1 z-20"
-            : "w-0 opacity-0 pointer-events-none border-none",
+          "fixed left-0 right-0 bg-white border-b z-40 transition-all duration-300 ease-in-out overflow-hidden",
+          open ? "top-16 opacity-100 h-14" : "top-16 opacity-0 h-0 pointer-events-none"
         )}
+        ref={containerRef}
       >
-        <Search className="w-4 h-4 text-muted-foreground shrink-0" />
-        <Input
-          ref={inputRef}
-          className="border-none shadow-none focus-visible:ring-0 h-8 text-base"
-          placeholder="Search..."
-        />
-        <button onClick={() => setOpen(false)} className="shrink-0">
-          <X className="w-4 h-4 text-muted-foreground hover:text-foreground" />
-        </button>
+        <div className="max-w-7xl mx-auto px-4 h-full flex items-center gap-3">
+          <SearchIcon className="w-5 h-5 text-foreground/40 shrink-0" />
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Search products..."
+            className="flex-1 h-full bg-transparent text-sm text-foreground placeholder:text-foreground/40 outline-none border-none"
+          />
+          <button
+            onClick={() => setOpen(false)}
+            className="p-1 text-foreground/40 hover:text-foreground transition-colors"
+            aria-label="Close search"
+          >
+            <CloseIcon className="w-5 h-5" />
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

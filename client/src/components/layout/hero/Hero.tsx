@@ -1,43 +1,50 @@
 import heroImg from "@/assets/images/hero.jpg";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRightIcon } from "@/components/icons";
 import { Link } from "react-router";
 
 const Hero = () => {
   return (
-    <section className="relative w-full z-0 h-[70vh]">
-      {/* image */}
-
+    <section className="relative w-full z-0 h-[85vh] min-h-[500px]">
+      {/* Background Image */}
       <img
         src={heroImg}
-        alt="Hero section"
+        alt="JustaGirl"
         className="w-full h-full object-cover absolute inset-0"
       />
 
-      <div className="absolute inset-0 bg-black/20"></div>
+      {/* Subtle overlay to ensure text readability */}
+      <div className="absolute inset-0 bg-black/10"></div>
 
-      {/* content  */}
+      {/* Content */}
       <div className="relative mx-auto max-w-7xl px-6 h-full flex items-center">
         <div className="max-w-xl text-white space-y-6">
-          <p className="text-xs tracking-[0.3rem] uppercase">
-            New Arrivals · Spring 2026
+          <p className="text-xs tracking-[0.25em] uppercase font-semibold text-white/90">
+            NEW ARRIVALS · SPRING 2026
           </p>
-          <h1 className="text-4xl md:text-6xl font-light">
-            {" "}
-            Skin that speaks for itself.
+          
+          <h1 
+            className="text-5xl md:text-7xl font-light leading-tight"
+            style={{ fontFamily: "'Cormorant Garamond', 'Georgia', serif" }}
+          >
+            Skin that speaks <br/> for itself.
           </h1>
-          <p className="text-sm md:text-base">
-            Clean formulations. Considered ingredients. Beauty that earns your
-            trust.
+          
+          <p className="text-base md:text-lg text-white/90 font-light max-w-sm">
+            Clean formulations. Considered ingredients. Beauty that earns your trust.
           </p>
-          <Link to="/shop" className="">
-            <Button variant="outline" className="rounded-none mt-4">
-              <p className="uppercase tracking-wider font-light">
+          
+          <div className="pt-4">
+            <Link to="/shop">
+              <Button 
+                variant="outline" 
+                className="rounded-none border-white text-white hover:bg-white hover:text-black transition-colors duration-300 h-12 px-8 uppercase tracking-widest text-xs font-semibold backdrop-blur-sm bg-transparent group"
+              >
                 Shop New Arrivals
-              </p>
-              <ArrowRight size="8" />
-            </Button>
-          </Link>
+                <ArrowRightIcon className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </section>

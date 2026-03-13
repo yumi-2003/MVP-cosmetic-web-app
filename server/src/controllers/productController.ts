@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Product from "../models/Product";
-import { ProductType } from "../types/Product";
+import type { ProductDocument as ProductType } from "../models/Product";
 
 //get all products
 export const getAllProducts = async (req: Request, res: Response) => {
@@ -26,15 +26,18 @@ export const getProductbyId = async (req: Request, res: Response) => {
 //create a new product
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { name, price, description, category } = req.body;
-    const imageUrl = req.file?.path;
+    const { name, price, description, category, brand, stock } = req.body;
+    const images = req.file?.path ? [req.file.path] : undefined;
 
-    const newProduct: ProductType = {
+    const newProduct: Pick<ProductType, "name" | "price" | "description" | "category" | "brand" | "stock" | "rating" | "images"> = {
       name,
       price,
       description,
       category,
-      imageUrl,
+      brand,
+      stock: Number(stock) || 0,
+      rating: 0,
+      images,
     };
     const product = new Product(newProduct);
     await product.save();
@@ -47,16 +50,18 @@ export const createProduct = async (req: Request, res: Response) => {
 //update a product
 export const updateProduct = async (req: Request, res: Response) => {
   try {
-    const { name, price, description, category } = req.body;
-    const imageUrl = req.file?.path;
+    const { name, price, description, category, brand, stock } = req.body;
+    const images = req.file?.path ? [req.file.path] : undefined;
 
     const updateFields: Partial<ProductType> = {
       name,
       price,
       description,
       category,
+      brand,
+      ...(stock !== undefined && { stock: Number(stock) }),
     };
-    if (imageUrl) updateFields.imageUrl = imageUrl;
+    if (images) updateFields.images = images;
     const updateProduct = await Product.findByIdAndUpdate(
       req.params.id,
       updateFields,

@@ -1,40 +1,38 @@
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { ShoppingBag, LogIn } from "lucide-react";
-import SearchBar from "./SearchBar";
 import { Link } from "react-router";
+import SearchBar from "./SearchBar";
+import { LoginIcon, CartIcon } from "@/components/icons";
 
 const Navactions = () => {
   const user = null;
+
   return (
-    <div className="flex items-center gap-4 text-light/80">
+    <div className="flex items-center gap-1">
+      {/* Search — contains its own trigger button + dropdown panel */}
       <SearchBar />
 
+      {/* Login / Avatar */}
       {user ? (
-        <Avatar className="w-8 h-8">
-          <AvatarImage src={user?.image} />
-        </Avatar>
+        <div className="w-8 h-8 rounded-full overflow-hidden border border-border">
+          {/* avatar image would go here */}
+        </div>
       ) : (
-        <Link to="/login">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="flex h-9 w-9 items-center justify-center"
-          >
-            <LogIn className="h-5 w-5" />
-            <span className="sr-only">Login</span>
-          </Button>
+        <Link
+          to="/login"
+          className="p-1.5 text-foreground/70 hover:text-foreground transition-colors"
+          aria-label="Login"
+        >
+          <LoginIcon className="w-[20px] h-[20px]" />
         </Link>
       )}
 
-      <Button
-        variant="ghost"
-        size="icon"
-        className="flex h-9 w-9 items-center justify-center"
+      {/* Cart */}
+      <Link
+        to="/cart"
+        className="p-1.5 text-foreground/70 hover:text-foreground transition-colors relative"
+        aria-label="Cart"
       >
-        <ShoppingBag className="h-5 w-5" />
-        <span className="sr-only">Cart</span>
-      </Button>
+        <CartIcon className="w-[20px] h-[20px]" />
+      </Link>
     </div>
   );
 };

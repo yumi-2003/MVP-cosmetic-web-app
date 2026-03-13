@@ -8,7 +8,7 @@ export interface Product {
   brand?: string;
   stock: number;
   rating: number;
-  numReviews?: number;
+  numReviews: number;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -17,4 +17,16 @@ export interface Category {
   _id: string;
   name: string;
   image: string;
+}
+
+export interface CartItem extends Product {
+  quantity: number;
+}
+
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  isAdmin?: boolean;
+  token?: string;
 }

@@ -5,7 +5,7 @@ import MobileNav from "./MobileNav";
 
 const Navbar = () => {
   return (
-    <header className="border-b bg-white">
+    <header className="relative z-50 border-b bg-white">
       <div className="mx-auto max-w-7xl px-4 flex items-center justify-between h-16">
         {/* logo  */}
         <Link to="/" className="text-xl tracking-widest font-light">

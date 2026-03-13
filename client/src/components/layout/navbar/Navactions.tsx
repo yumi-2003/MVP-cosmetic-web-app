@@ -1,12 +1,13 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, LogIn } from "lucide-react";
 import SearchBar from "./SearchBar";
+import { Link } from "react-router";
 
 const Navactions = () => {
   const user = null;
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4 text-light/80">
       <SearchBar />
 
       {user ? (
@@ -14,12 +15,26 @@ const Navactions = () => {
           <AvatarImage src={user?.image} />
         </Avatar>
       ) : (
-        <Button variant="ghost" size="icon">
-          Login
-        </Button>
+        <Link to="/login">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="flex h-9 w-9 items-center justify-center"
+          >
+            <LogIn className="h-5 w-5" />
+            <span className="sr-only">Login</span>
+          </Button>
+        </Link>
       )}
 
-      <ShoppingBag className="w-5 h-5 cursor-pointer" />
+      <Button
+        variant="ghost"
+        size="icon"
+        className="flex h-9 w-9 items-center justify-center"
+      >
+        <ShoppingBag className="h-5 w-5" />
+        <span className="sr-only">Cart</span>
+      </Button>
     </div>
   );
 };

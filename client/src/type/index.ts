@@ -9,6 +9,7 @@ export interface Product {
   stock: number;
   rating: number;
   numReviews: number;
+  tags?: string[];
   createdAt?: string;
   updatedAt?: string;
 }

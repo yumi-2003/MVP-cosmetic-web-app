@@ -1,13 +1,15 @@
 import type { Product } from "@/type";
 
 export const products: Product[] = [
-  // Best Sellers (first 4) - Match the screenshot style
+  // Best Sellers (first 4)
   {
     _id: "1",
     name: "Velvet Matte Lipstick",
     description: "Long-lasting matte lipstick with vibrant pigment.",
     price: 38,
-    images: ["https://images.unsplash.com/photo-1586495777744-4413f21062fa?q=80&w=800&auto=format&fit=crop"],
+    images: [
+      "https://images.unsplash.com/photo-1586495777744-4413f21062fa?q=80&w=800&auto=format&fit=crop",
+    ],
     category: "makeup",
     brand: "Lumina Beauty",
     stock: 20,
@@ -22,7 +24,9 @@ export const products: Product[] = [
     name: "Radiance Facial Serum",
     description: "Brightening vitamin C serum that reduces dark spots.",
     price: 89,
-    images: ["https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=800&auto=format&fit=crop"],
+    images: [
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=800&auto=format&fit=crop",
+    ],
     category: "skincare",
     brand: "Lumina Beauty",
     stock: 15,
@@ -37,7 +41,9 @@ export const products: Product[] = [
     name: "Warm Nude Eye Palette",
     description: "Highly pigmented nude eye shadow palette.",
     price: 64,
-    images: ["https://images.unsplash.com/photo-1512496115851-a1c8e04d2448?q=80&w=800&auto=format&fit=crop"],
+    images: [
+      "https://images.unsplash.com/photo-1512496115851-a1c8e04d2448?q=80&w=800&auto=format&fit=crop",
+    ],
     category: "makeup",
     brand: "Lumina Beauty",
     stock: 30,
@@ -52,7 +58,9 @@ export const products: Product[] = [
     name: "Luminous Barrier Cream",
     description: "Deep moisturizing skincare cream enriched with ceramides.",
     price: 72,
-    images: ["https://images.unsplash.com/photo-1620916297397-a4a5402a3c6c?q=80&w=800&auto=format&fit=crop"],
+    images: [
+      "https://images.unsplash.com/photo-1620916297397-a4a5402a3c6c?q=80&w=800&auto=format&fit=crop",
+    ],
     category: "skincare",
     brand: "Lumina Beauty",
     stock: 25,
@@ -62,14 +70,16 @@ export const products: Product[] = [
     createdAt: "2024-01-18T11:00:00.000Z",
     updatedAt: "2024-01-18T11:00:00.000Z",
   },
-  
+
   // Featured Products (next 4)
   {
     _id: "5",
     name: "Rose Water Toner",
     description: "Refreshing rose water toner that hydrates and balances pH.",
     price: 45,
-    images: ["https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=800&auto=format&fit=crop"],
+    images: [
+      "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=800&auto=format&fit=crop",
+    ],
     category: "skincare",
     brand: "Lumina Beauty",
     stock: 40,
@@ -84,7 +94,9 @@ export const products: Product[] = [
     name: "Argan Oil Hair Serum",
     description: "Nourishing argan oil serum that tames frizz and adds shine.",
     price: 52,
-    images: ["https://images.unsplash.com/photo-1526947425960-945c6e72858f?q=80&w=800&auto=format&fit=crop"],
+    images: [
+      "https://images.unsplash.com/photo-1526947425960-945c6e72858f?q=80&w=800&auto=format&fit=crop",
+    ],
     category: "haircare",
     brand: "SilkStrands",
     stock: 18,
@@ -97,9 +109,12 @@ export const products: Product[] = [
   {
     _id: "7",
     name: "SPF 50 Sunscreen Drops",
-    description: "Lightweight, non-greasy sunscreen with broad-spectrum SPF 50.",
+    description:
+      "Lightweight, non-greasy sunscreen with broad-spectrum SPF 50.",
     price: 48,
-    images: ["https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&auto=format&fit=crop"],
+    images: [
+      "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&auto=format&fit=crop",
+    ],
     category: "skincare",
     brand: "SunGuard",
     stock: 50,
@@ -114,7 +129,9 @@ export const products: Product[] = [
     name: "Liquid Foundation",
     description: "Medium-coverage foundation with a natural skin-like finish.",
     price: 55,
-    images: ["https://images.unsplash.com/photo-1596462502278-27bf85033c5a?q=80&w=800&auto=format&fit=crop"],
+    images: [
+      "https://images.unsplash.com/photo-1596462502278-27bf85033c5a?q=80&w=800&auto=format&fit=crop",
+    ],
     category: "makeup",
     brand: "BeautyPro",
     stock: 12,

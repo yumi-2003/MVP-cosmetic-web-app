@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { MenuIcon, XIcon, SearchIcon, LoginIcon, CartIcon } from "@/components/icons";
+import {
+  MenuIcon,
+  XIcon,
+  SearchIcon,
+  LoginIcon,
+  CartIcon,
+} from "@/components/icons";
 
 const navLinks = [
   { label: "SHOP ALL", to: "/shop" },
@@ -45,7 +51,7 @@ const MobileNav = () => {
             {/* Search */}
             <button className="flex items-center gap-2 text-sm text-foreground/70 hover:text-foreground transition-colors">
               <SearchIcon className="w-5 h-5" />
-              <span>Search</span>
+              <span className="sr-only">Search</span>
             </button>
             {/* Login */}
             <Link
@@ -54,7 +60,7 @@ const MobileNav = () => {
               onClick={() => setOpen(false)}
             >
               <LoginIcon className="w-5 h-5" />
-              <span>Login</span>
+              <span className="sr-only">Login</span>
             </Link>
             {/* Cart */}
             <Link
@@ -63,7 +69,7 @@ const MobileNav = () => {
               onClick={() => setOpen(false)}
             >
               <CartIcon className="w-5 h-5" />
-              <span>Cart</span>
+              <span className="sr-only">Cart</span>
             </Link>
           </div>
         </div>

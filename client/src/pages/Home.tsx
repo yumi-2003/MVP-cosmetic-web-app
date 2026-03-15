@@ -1,3 +1,4 @@
+import BrandcommimentSection from "@/components/BrandcommimentSection";
 import Hero from "@/components/layout/hero/Hero";
 import ProductGrid from "@/components/product/ProductGrid";
 import { products } from "@/data/products";
@@ -11,6 +12,7 @@ const Home = () => {
     <>
       <Hero />
       <ProductGrid title="Best Sellers" products={bestSellers} />
+      <BrandcommimentSection />
       <ProductGrid title="Featured Products" products={featured} />
     </>
   );

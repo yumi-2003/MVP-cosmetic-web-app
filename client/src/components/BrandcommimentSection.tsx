@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { Button } from "./ui/button";
+import { ArrowRightIcon } from "@/components/icons";
 
 const BrandcommimentSection = () => {
   return (
@@ -46,7 +47,7 @@ const BrandcommimentSection = () => {
                 to="/shop"
                 className="text-sm tracking-widest underline underline-offset-4"
               >
-                SHOP SKINCARE
+                SHOP SKINCARE <ArrowRightIcon className="w-4 h-4" />
               </Link>
             </Button>
           </div>

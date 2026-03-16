@@ -1,6 +1,8 @@
+import { footerLinks } from "@/data/footer-link";
+import { Link } from "react-router";
 const FooterLinks = () => {
   return (
-    <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4 hidden">
       {/* brand  */}
       <div className="space-y-4">
         <h3 className="font-serif text-2xl">JUSTAGIRL</h3>
@@ -10,38 +12,20 @@ const FooterLinks = () => {
       </div>
 
       {/* shop  */}
-      <div className="space-y-3">
-        <h4 className="text-xs tracking-widest text-neutral-500">SHOP</h4>
-        <ul className="space-y-2 text-sm">
-          <li className="">All Products</li>
-          <li className="">Skincare</li>
-          <li className="">Makeup</li>
-          <li className="">New Arrivals</li>
-          <li className="">Best Sellers</li>
-        </ul>
-      </div>
-
-      {/* company  */}
-      <div className="">
-        <h4 className="text-xs tracking-widest text-neutral-500">COMPANY</h4>
-        <ul className="space-y-2 text-sm">
-          <li className="">Our Story</li>
-          <li className="">Sustainability</li>
-          <li className="">Press</li>
-          <li className="">Careers</li>
-        </ul>
-      </div>
-
-      {/* support  */}
-      <div className="">
-        <h4 className="text-xs tracking-widest text-neutral-500">SUPPORT</h4>
-        <ul className="space-y-2 text-sm">
-          <li>FAQ</li>
-          <li>Shipping & Returns</li>
-          <li>Track Order</li>
-          <li>Contact Us</li>
-        </ul>
-      </div>
+      {footerLinks.map((section) => (
+        <div className="space-y-3" key={section.title}>
+          <h4 className="text-xs tracking-widest text-neutral-500">
+            {section.title}
+          </h4>
+          <ul className="space-y-2 text-sm">
+            {section.links.map((link) => (
+              <li key={link.label}>
+                <Link to={link.href}>{link.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 };

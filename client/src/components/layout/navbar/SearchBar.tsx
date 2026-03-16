@@ -35,7 +35,7 @@ const SearchBar = () => {
       {/* Full-width inline search bar that slides in below navbar */}
       <div
         className={cn(
-          "fixed left-0 right-0 bg-white border-b z-40 transition-all duration-300 ease-in-out overflow-hidden",
+          "fixed left-0 right-0 bg-white border-b z-[60] transition-all duration-300 ease-in-out overflow-hidden",
           open ? "top-16 opacity-100 h-14" : "top-16 opacity-0 h-0 pointer-events-none"
         )}
         ref={containerRef}

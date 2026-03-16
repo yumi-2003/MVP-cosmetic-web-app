@@ -1,12 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import {
-  MenuIcon,
-  XIcon,
-  SearchIcon,
-  LoginIcon,
-  CartIcon,
-} from "@/components/icons";
+import { MenuIcon, XIcon, LoginIcon, CartIcon } from "@/components/icons";
+import SearchBar from "./SearchBar";
 
 const navLinks = [
   { label: "SHOP ALL", to: "/shop" },
@@ -49,10 +44,7 @@ const MobileNav = () => {
 
           <div className="flex items-center gap-6 pt-2">
             {/* Search */}
-            <button className="flex items-center gap-2 text-sm text-foreground/70 hover:text-foreground transition-colors">
-              <SearchIcon className="w-5 h-5" />
-              <span className="sr-only">Search</span>
-            </button>
+            <SearchBar />
             {/* Login */}
             <Link
               to="/login"

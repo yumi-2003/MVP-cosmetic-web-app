@@ -12,7 +12,7 @@ const FooterAccordian = () => {
   return (
     <>
       {/* brand  */}
-      <div className="space-y-4">
+      <div className="space-y-4 md:hidden">
         <h3 className="font-serif text-2xl">JUSTAGIRL</h3>
         <p className="text-sm text-neutral-400">
           Clean, considered beauty for skin that speaks for itself.
@@ -28,7 +28,7 @@ const FooterAccordian = () => {
               <ul className="space-y-2 pb-4 text-sm">
                 {section.links.map((link) => (
                   <li className="" key={link.label}>
-                    <Link to={link.href} className="underline:none">
+                    <Link to={link.href} className="no-underline">
                       {link.label}
                     </Link>
                   </li>

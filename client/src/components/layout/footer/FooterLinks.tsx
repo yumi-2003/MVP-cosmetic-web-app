@@ -2,15 +2,14 @@ import { footerLinks } from "@/data/footer-link";
 import { Link } from "react-router";
 const FooterLinks = () => {
   return (
-    <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4 hidden">
-      {/* brand  */}
+    <div className="hidden gap-12 md:grid md:grid-cols-2 lg:grid-cols-4">
+      {/* brand */}
       <div className="space-y-4">
-        <h3 className="font-serif text-2xl">JUSTAGIRL</h3>
+        <h3 className="font-serif text-2xl">JUSTAGIRL</h3>{" "}
         <p className="text-sm text-neutral-400">
-          Clean, considered beauty for skin that speaks for itself.
+          Clean, considered beauty for skin that speaks for itself.{" "}
         </p>
       </div>
-
       {/* shop  */}
       {footerLinks.map((section) => (
         <div className="space-y-3" key={section.title}>
@@ -20,7 +19,9 @@ const FooterLinks = () => {
           <ul className="space-y-2 text-sm">
             {section.links.map((link) => (
               <li key={link.label}>
-                <Link to={link.href}>{link.label}</Link>
+                <Link to={link.href} className="no-underline">
+                  {link.label}
+                </Link>
               </li>
             ))}
           </ul>

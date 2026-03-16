@@ -1,19 +1,30 @@
 import { Router } from "express";
-import {
-  getAllProducts,
-  getProductbyId,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-} from "../controllers/productController";
-import parser from "../middleware/upload";
-import { protect } from "../middleware/protect";
+import { query, param } from "express-validator";
+import { getAllProducts, getProductBySlug } from "../controllers/productController";
+import validate from "../middleware/validate";
 
 const router = Router();
-router.get("/", getAllProducts);
-router.get("/:id", getProductbyId);
-router.post("/", protect, parser.single("image"), createProduct);
-router.put("/:id", protect, parser.single("image"), updateProduct);
-router.delete("/:id", protect, deleteProduct);
+
+router.get(
+  "/",
+  [
+    query("page").optional().isInt({ min: 1 }).toInt(),
+    query("limit").optional().isInt({ min: 1, max: 100 }).toInt(),
+    query("sort").optional().isString(),
+    query("category").optional().isString(),
+    query("tags").optional().isString(),
+    query("skinTypes").optional().isString(),
+    query("concerns").optional().isString(),
+  ],
+  validate,
+  getAllProducts
+);
+
+router.get(
+  "/:slug",
+  [param("slug").isString().trim().notEmpty()],
+  validate,
+  getProductBySlug
+);
 
 export default router;

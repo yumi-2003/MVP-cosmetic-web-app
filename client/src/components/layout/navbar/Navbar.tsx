@@ -29,7 +29,7 @@ const Navbar = () => {
         </div>
 
         {/* Actions — Right aligned */}
-        <div className="flex-1 flex justify-end sm:pl-4">
+        <div className="flex-1 justify-end sm:pl-4 hidden lg:flex">
           <Navactions />
         </div>
       </div>

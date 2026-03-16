@@ -1,3 +1,4 @@
+import Footer from "@/components/layout/footer/Footer";
 import Navbar from "@/components/layout/navbar/Navbar";
 import { Outlet } from "react-router";
 
@@ -8,7 +9,7 @@ const RootLayout = () => {
       <main className="flex-1">
         <Outlet />
       </main>
-      <footer className="">Footer</footer>
+      <Footer />
     </div>
   );
 };

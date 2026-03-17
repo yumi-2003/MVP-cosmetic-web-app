@@ -7,7 +7,8 @@ const router = Router();
 //sign up route
 router.post(
   "/signUp",
-  body("name").not().isEmpty().withMessage("Name is required"),
+  body("firstname").not().isEmpty().withMessage("First name is required"),
+  body("lastname").not().isEmpty().withMessage("Last name is required"),
   body("email").isEmail().withMessage("Please provide a valid email"),
   body("password")
     .isLength({ min: 6 })

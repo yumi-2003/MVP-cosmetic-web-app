@@ -1,6 +1,6 @@
-import mongoose, { Document, Schema, Types } from "mongoose";
+import mongoose, { HydratedDocument, Schema, Types } from "mongoose";
 
-export interface ProductDocument extends Document {
+export interface ProductProps {
   name: string;
   slug: string;
   description?: string;
@@ -19,7 +19,9 @@ export interface ProductDocument extends Document {
   isBestSeller: boolean;
 }
 
-const ProductSchema: Schema<ProductDocument> = new Schema(
+export type ProductDocument = HydratedDocument<ProductProps>;
+
+const ProductSchema = new Schema<ProductProps>(
   {
     name: { type: String, required: true, trim: true },
     slug: { type: String, required: true, unique: true, lowercase: true },
@@ -48,4 +50,4 @@ ProductSchema.index({ skinTypes: 1 });
 ProductSchema.index({ concerns: 1 });
 ProductSchema.index({ name: "text", description: "text" });
 
-export default mongoose.model<ProductDocument>("Product", ProductSchema);
+export default mongoose.model<ProductProps>("Product", ProductSchema);

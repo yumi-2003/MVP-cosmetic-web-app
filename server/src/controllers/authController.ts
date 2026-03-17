@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 
 const signUp = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body;
+    const { firstname, lastname, email, password } = req.body;
 
     //check if user aleardy exists
     const existingUser = await User.findOne({
@@ -20,7 +20,8 @@ const signUp = async (req: Request, res: Response) => {
 
     //create new user
     const newUser: IUser = new User({
-      name,
+      firstname,
+      lastname,
       email,
       password: hashedPassword,
     });
@@ -30,7 +31,8 @@ const signUp = async (req: Request, res: Response) => {
       token,
       user: {
         id: newUser._id,
-        name: newUser.name,
+        firstname: newUser.firstname,
+        lastname: newUser.lastname,
         email: newUser.email,
         // isAdmin: newUser.isAdmin,
       },

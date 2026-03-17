@@ -15,6 +15,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           alt={product.name}
           className="h-full w-full object-cover object-center"
         />
+        <div className="absolute right-0 top-0">fav</div>
         {/* Tags */}
         {product.tags && product.tags.length > 0 && (
           <div className="absolute bottom-3 left-3 flex gap-2">
@@ -34,7 +35,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between">
           <h3 className="font-serif text-lg text-gray-800">{product.name}</h3>
-          <span className="text-sm font-medium text-gray-900">${product.price}</span>
+          <span className="text-sm font-medium text-gray-900">
+            ${product.price}
+          </span>
         </div>
         <p className="text-sm text-gray-500">{product.brand}</p>
       </div>

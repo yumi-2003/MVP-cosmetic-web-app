@@ -5,7 +5,7 @@ import FooterAccordian from "./FooterAccordian";
 
 const Footer = () => {
   return (
-    <footer className="bg-card text-card-foreground border-t border-border">
+    <footer className="bg-muted/5 text-foreground">
       <Newsletter />
       <div className="mx-auto max-w-7xl px-6 py-16">
         <FooterAccordian />

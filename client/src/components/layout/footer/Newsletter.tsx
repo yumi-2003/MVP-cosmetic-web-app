@@ -1,7 +1,7 @@
 const Newsletter = () => {
   return (
-    <section className="border-b border-border">
-      <div className="mx-auto max-w-7xl px-6 py-16 grid gap-8 lg:grid-cols-2 lg:items-center">
+    <section className="">
+      <div className="mx-auto max-w-7xl px-6 py-12 grid gap-8 lg:grid-cols-2 lg:items-center">
         {/* left  */}
         <div className="">
           <p className="text-xs tracking-[0.3em] text-muted-foreground">
@@ -18,8 +18,8 @@ const Newsletter = () => {
             placeholder="your@email.com"
             className="flex-1 bg-background border border-input px-4 py-3 outline-none"
           />
-          <button className="bg-primary text-primary-foreground px-6 text-sm tracking-widest transition-all hover:bg-primary/90">
-            {" "}
+          <button className="bg-black text-white hover:bg-foreground/90 dark:bg-white dark:text-black dark:hover:bg-primary/90 px-6 text-sm tracking-widest transition-all">
+            
             SUBSCRIBE
           </button>
         </form>

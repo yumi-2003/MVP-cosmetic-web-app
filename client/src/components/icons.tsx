@@ -9,6 +9,9 @@ export {
   ChevronRightIcon as ArrowRightIcon,
   Cross1Icon as XIcon,
   HeartIcon as FavIcon,
+  PersonIcon as UserIcon,
+  ExitIcon as LogoutIcon,
+  GearIcon as SettingsIcon,
 } from "@radix-ui/react-icons";
 
 export { ShoppingBag as CartIcon } from "lucide-react";

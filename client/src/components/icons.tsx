@@ -8,6 +8,7 @@ export {
   HamburgerMenuIcon as MenuIcon,
   ChevronRightIcon as ArrowRightIcon,
   Cross1Icon as XIcon,
+  HeartIcon as FavIcon,
 } from "@radix-ui/react-icons";
 
 export { ShoppingBag as CartIcon } from "lucide-react";

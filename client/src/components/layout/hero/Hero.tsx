@@ -23,10 +23,7 @@ const Hero = () => {
             NEW ARRIVALS · SPRING 2026
           </p>
           
-          <h1 
-            className="text-5xl md:text-7xl font-light leading-tight"
-            style={{ fontFamily: "'Cormorant Garamond', 'Georgia', serif" }}
-          >
+          <h1 className="text-5xl md:text-7xl font-light leading-tight font-serif">
             Skin that speaks <br/> for itself.
           </h1>
           

@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import SearchBar from "./SearchBar";
 import { LoginIcon, CartIcon } from "@/components/icons";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const Navactions = () => {
   const user = null;
@@ -9,6 +10,7 @@ const Navactions = () => {
     <div className="flex items-center gap-1">
       {/* Search — contains its own trigger button + dropdown panel */}
       <SearchBar />
+      <ModeToggle />
 
       {/* Login / Avatar */}
       {user ? (

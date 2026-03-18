@@ -5,7 +5,7 @@ import MobileNav from "./MobileNav";
 
 const Navbar = () => {
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-border/60">
+    <header className="sticky top-0 z-50 bg-background border-b border-border/60">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 flex items-center h-16 relative">
         {/* Mobile Hamburger (Left on mobile) */}
         <div className="flex-1 lg:hidden">
@@ -16,8 +16,7 @@ const Navbar = () => {
         <div className="flex-1 lg:flex-none flex justify-center lg:justify-start">
           <Link
             to="/"
-            className="text-2xl tracking-[0.25em] font-light text-foreground select-none uppercase"
-            style={{ fontFamily: "'Cormorant Garamond', 'Georgia', serif" }}
+            className="text-2xl tracking-[0.25em] font-light font-serif text-foreground select-none uppercase"
           >
             JustaGirl
           </Link>

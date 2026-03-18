@@ -1,15 +1,19 @@
 import Footer from "@/components/layout/footer/Footer";
 import Navbar from "@/components/layout/navbar/Navbar";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 
 const RootLayout = () => {
+  const { pathname } = useLocation();
+  const hideChrome =
+    pathname.startsWith("/login") || pathname.startsWith("/signup");
+
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      {!hideChrome && <Navbar />}
       <main className="flex-1">
         <Outlet />
       </main>
-      <Footer />
+      {!hideChrome && <Footer />}
     </div>
   );
 };

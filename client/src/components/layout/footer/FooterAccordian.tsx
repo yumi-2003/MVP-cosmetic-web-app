@@ -14,7 +14,7 @@ const FooterAccordian = () => {
       {/* brand  */}
       <div className="space-y-4 md:hidden">
         <h3 className="font-serif text-2xl">JUSTAGIRL</h3>
-        <p className="text-sm text-neutral-400">
+        <p className="text-sm text-muted-foreground">
           Clean, considered beauty for skin that speaks for itself.
         </p>
       </div>

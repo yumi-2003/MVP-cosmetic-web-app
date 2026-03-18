@@ -6,14 +6,14 @@ const FooterLinks = () => {
       {/* brand */}
       <div className="space-y-4">
         <h3 className="font-serif text-2xl">JUSTAGIRL</h3>{" "}
-        <p className="text-sm text-neutral-400">
+        <p className="text-sm text-muted-foreground">
           Clean, considered beauty for skin that speaks for itself.{" "}
         </p>
       </div>
       {/* shop  */}
       {footerLinks.map((section) => (
         <div className="space-y-3" key={section.title}>
-          <h4 className="text-xs tracking-widest text-neutral-500">
+          <h4 className="text-xs tracking-widest text-muted-foreground">
             {section.title}
           </h4>
           <ul className="space-y-2 text-sm">

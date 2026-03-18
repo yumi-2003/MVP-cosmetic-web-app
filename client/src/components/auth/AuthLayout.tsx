@@ -37,8 +37,8 @@ export default function AuthLayout({ children }: Props) {
             "Beauty begins the moment you decide to be yourself."
           </p>
           <div className="flex items-center gap-3 mt-5">
-            <div className="h-[1px] w-8 bg-[#d4af37]"></div>
-            <p className="text-[10px] tracking-[0.2em] font-medium uppercase text-[#d4af37]">
+            <div className="h-[1px] w-8 bg-primary"></div>
+            <p className="text-[10px] tracking-[0.2em] font-medium uppercase text-primary">
               COCO CHANEL
             </p>
           </div>
@@ -46,30 +46,30 @@ export default function AuthLayout({ children }: Props) {
       </div>
 
       {/* RIGHT FORM */}
-      <div className="flex items-center justify-center p-6 bg-[#fffdfc] overflow-y-auto">
+      <div className="flex items-center justify-center p-6 bg-background overflow-y-auto">
         <div className="w-full max-w-[400px] py-8">
+          <div className="absolute right-0 top-3 left-4 text-foreground font-bold">
+            <Link to="/">JUSTAGIRL</Link>
+          </div>
           {/* LOGO Header */}
           <div className="flex flex-col items-center justify-center mb-10">
-            <h1 className="text-4xl font-serif tracking-[0.2em] text-[#2c2a29] uppercase mb-3">
-              JUSTAGIRL
-            </h1>
             <div className="flex items-center justify-center w-full max-w-[240px] gap-2">
-              <div className="h-px flex-1 bg-gray-300"></div>
-              <span className="text-[9px] tracking-[0.2em] font-medium text-gray-500 uppercase whitespace-nowrap">
+              <div className="h-px flex-1 bg-border"></div>
+              <span className="text-lg tracking-[0.2em] font-medium text-muted-foreground uppercase whitespace-nowrap">
                 Beauty & Skincare
               </span>
-              <div className="h-px flex-1 bg-gray-300"></div>
+              <div className="h-px flex-1 bg-border"></div>
             </div>
           </div>
 
           {/* TABS */}
-          <div className="flex justify-center border-b border-gray-200 mb-8 w-full gap-8 relative">
+          <div className="flex justify-center border-b border-border mb-8 w-full gap-8 relative">
             <Link
               to="/login"
               className={`pb-3 text-xs font-semibold tracking-widest uppercase transition-colors -mb-[1px] ${
                 isLogin
-                  ? "text-[#824f5a] border-b border-[#824f5a]"
-                  : "text-gray-400 hover:text-gray-600 border-b border-transparent"
+                  ? "text-primary border-b border-primary"
+                  : "text-muted-foreground hover:text-foreground border-b border-transparent"
               }`}
             >
               Sign In
@@ -78,8 +78,8 @@ export default function AuthLayout({ children }: Props) {
               to="/signup"
               className={`pb-3 text-xs font-semibold tracking-widest uppercase transition-colors -mb-[1px] ${
                 !isLogin
-                  ? "text-[#824f5a] border-b border-[#824f5a]"
-                  : "text-gray-400 hover:text-gray-600 border-b border-transparent"
+                  ? "text-primary border-b border-primary"
+                  : "text-muted-foreground hover:text-foreground border-b border-transparent"
               }`}
             >
               Create Account

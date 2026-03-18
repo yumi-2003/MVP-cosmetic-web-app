@@ -39,12 +39,12 @@ const Login = () => {
     <AuthLayout>
       {/* header  */}
       <div className="text-center mb-8">
-        <h2 className="text-xl font-serif text-[#2c2a29]">Welcome back</h2>
+        <h2 className="text-xl font-serif text-foreground">Welcome back</h2>
         <p className="text-xs text-muted-foreground mt-2">
           Sign in to your account to continue your beauty journey
         </p>
       </div>
-      
+
       {/* form  */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -54,13 +54,15 @@ const Login = () => {
             name="email"
             render={({ field }) => (
               <FormItem className="space-y-1.5">
-                <FormLabel className="text-sm font-semibold text-gray-700">Email Address</FormLabel>
+                <FormLabel className="text-sm font-semibold text-foreground">
+                  Email Address
+                </FormLabel>
                 <FormControl>
-                  <Input 
-                    type="email" 
-                    autoComplete="email" 
-                    className="rounded-sm border-gray-300 focus-visible:ring-[#824f5a] shadow-sm py-5 text-sm"
-                    {...field} 
+                  <Input
+                    type="email"
+                    autoComplete="email"
+                    className="rounded-sm shadow-sm py-5 text-sm"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -74,31 +76,35 @@ const Login = () => {
             name="password"
             render={({ field }) => (
               <FormItem className="space-y-1.5">
-                <FormLabel className="text-sm font-semibold text-gray-700">Password</FormLabel>
+                <FormLabel className="text-sm font-semibold text-foreground">
+                  Password
+                </FormLabel>
 
                 <div className="relative">
                   <FormControl>
                     <Input
                       type={showPassword ? "text" : "password"}
                       autoComplete="current-password"
-                      className="rounded-sm border-gray-300 focus-visible:ring-[#824f5a] shadow-sm py-5 text-sm pr-10"
+                      className="rounded-sm shadow-sm py-5 text-sm pr-10"
                       {...field}
                     />
                   </FormControl>
                   <button
                     type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    className="absolute right-3 top-2/3 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                     onClick={() => setShowPassword((prev) => !prev)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
-                
+
                 <div className="flex justify-end mt-1 pb-1">
                   <Link
                     to="/forgot-password"
-                    className="text-xs text-muted-foreground hover:text-[#824f5a] hover:underline"
+                    className="text-xs text-muted-foreground hover:text-primary hover:underline"
                   >
                     Forgot your password?
                   </Link>
@@ -110,32 +116,48 @@ const Login = () => {
           />
 
           {/* Button */}
-          <Button className="w-full bg-[#824f5a] hover:bg-[#6e414b] text-white tracking-widest text-sm py-6 rounded-sm mt-4 transition-colors">
+          <Button className="w-full tracking-widest text-sm py-6 rounded-sm mt-4">
             SIGN IN &rarr;
           </Button>
         </form>
       </Form>
 
       <p className="text-center text-sm mt-8 mb-2 text-muted-foreground">
-        New to JUSTAGIRL? <Link to="/signup" className="text-[#824f5a] font-medium hover:underline">Create an account</Link>
+        New to JUSTAGIRL?{" "}
+        <Link
+          to="/signup"
+          className="text-primary font-medium hover:underline"
+        >
+          Create an account
+        </Link>
       </p>
 
       {/* divider  */}
       <div className="flex items-center gap-3 my-8">
-        <div className="flex-1 h-px bg-gray-200"></div>
-        <span className="text-xs text-muted-foreground uppercase tracking-widest px-2">OR</span>
-        <div className="flex-1 h-px bg-gray-200"></div>
+        <div className="flex-1 h-px bg-border"></div>
+        <span className="text-xs text-muted-foreground uppercase tracking-widest px-2">
+          OR
+        </span>
+        <div className="flex-1 h-px bg-border"></div>
       </div>
 
       {/* social links  */}
       <div className="space-y-3">
-        <button className="w-full bg-white border border-gray-200 py-3.5 rounded-sm hover:bg-gray-50 flex items-center justify-center gap-3 text-sm font-medium text-gray-700 transition-colors shadow-sm">
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-4 h-4" />
+        <button className="w-full bg-background border border-border py-3.5 rounded-sm hover:bg-muted flex items-center justify-center gap-3 text-sm font-medium text-foreground transition-colors shadow-sm">
+          <img
+            src="https://www.svgrepo.com/show/475656/google-color.svg"
+            alt="Google"
+            className="w-4 h-4"
+          />
           Continue with Google
         </button>
-        <button className="w-full bg-white border border-gray-200 py-3.5 rounded-sm hover:bg-gray-50 flex items-center justify-center gap-3 text-sm font-medium text-gray-700 transition-colors shadow-sm">
-          <img src="https://www.svgrepo.com/show/512317/github-142.svg" alt="GitHub" className="w-4 h-4" />
-          Continue with GitHub
+        <button className="w-full bg-background border border-border py-3.5 rounded-sm hover:bg-muted flex items-center justify-center gap-3 text-sm font-medium text-foreground transition-colors shadow-sm">
+          <img
+            src="https://www.svgrepo.com/show/475647/facebook-color.svg"
+            alt="Facebook"
+            className="w-4 h-4"
+          />
+          Continue with Facebook
         </button>
       </div>
     </AuthLayout>

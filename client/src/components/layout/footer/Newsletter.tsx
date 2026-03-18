@@ -1,10 +1,10 @@
 const Newsletter = () => {
   return (
-    <section className="border-b border-neutral-800">
+    <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-6 py-16 grid gap-8 lg:grid-cols-2 lg:items-center">
         {/* left  */}
         <div className="">
-          <p className="text-xs tracking-[0.3em] text-neutral-500">
+          <p className="text-xs tracking-[0.3em] text-muted-foreground">
             STAY IN THE LOOP
           </p>
           <h2 className="font-serif text-3xl md:text-4xl mt-3">
@@ -16,9 +16,9 @@ const Newsletter = () => {
           <input
             type="email"
             placeholder="your@email.com"
-            className="flex-1 bg-transparent border border-neutral-700 px-4 py-3 outline-none"
+            className="flex-1 bg-background border border-input px-4 py-3 outline-none"
           />
-          <button className="bg-white text-black px-6 text-sm tracking-widest transition-all hover:bg-neutral-500 hover:text-white">
+          <button className="bg-primary text-primary-foreground px-6 text-sm tracking-widest transition-all hover:bg-primary/90">
             {" "}
             SUBSCRIBE
           </button>

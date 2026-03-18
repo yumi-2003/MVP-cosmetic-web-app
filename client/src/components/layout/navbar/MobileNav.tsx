@@ -28,7 +28,7 @@ const MobileNav = () => {
 
       {/* Mobile menu overlay */}
       {open && (
-        <div className="fixed inset-0 top-16 bg-white z-50 flex flex-col px-6 pt-8 gap-6">
+        <div className="fixed inset-0 top-16 bg-background z-50 flex flex-col px-6 pt-8 gap-6">
           <nav className="flex flex-col gap-6 text-sm tracking-widest font-normal border-b pb-8">
             {navLinks.map(({ label, to }) => (
               <Link

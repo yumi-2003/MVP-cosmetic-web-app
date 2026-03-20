@@ -1,6 +1,6 @@
 import type { Product } from "@/type";
 import { Button } from "@/components/ui/button";
-import { FavIcon, StarIcon } from "@/components/icons";
+import { FavIcon, StarIcon, CartIcon } from "@/components/icons";
 
 interface ProductCardProps {
   product: Product;
@@ -20,6 +20,16 @@ const ProductCard = ({ product }: ProductCardProps) => {
           className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
         />
         
+        {/* Add to Cart - Slide up on hover */}
+        <div className="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-10 px-4 pb-4">
+          <Button 
+            className="w-full bg-background/95 backdrop-blur-md text-foreground hover:bg-primary hover:text-primary-foreground border border-border/50 rounded-md py-6 shadow-2xl active:scale-[0.98] transition-all duration-300"
+          >
+            <CartIcon className="w-4 h-4 mr-2" />
+            <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Add to Cart</span>
+          </Button>
+        </div>
+
         {/* badges - Top Left */}
         {product.tags && product.tags.length > 0 && (
           <div className="absolute left-3 top-3 flex flex-col gap-2">

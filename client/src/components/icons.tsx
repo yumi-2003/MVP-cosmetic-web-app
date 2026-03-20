@@ -14,4 +14,9 @@ export {
   GearIcon as SettingsIcon,
 } from "@radix-ui/react-icons";
 
-export { ShoppingBag as CartIcon } from "lucide-react";
+export {
+  ShoppingBag as CartIcon,
+  Star as StarIcon,
+  ChevronLeft as ArrowLeftIcon,
+  ChevronRight as ChevronRightIcon,
+} from "lucide-react";

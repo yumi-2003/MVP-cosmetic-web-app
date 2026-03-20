@@ -18,8 +18,7 @@ const Newsletter = () => {
             placeholder="your@email.com"
             className="flex-1 bg-background border border-input px-4 py-3 outline-none"
           />
-          <button className="bg-black text-white hover:bg-foreground/90 dark:bg-white dark:text-black dark:hover:bg-primary/90 px-6 text-sm tracking-widest transition-all">
-            
+          <button className="bg-black text-white dark:bg-white dark:text-black hover:bg-black/90 dark:hover:bg-white/90 px-6 py-3 text-sm tracking-widest transition-all">
             SUBSCRIBE
           </button>
         </form>

@@ -23,7 +23,7 @@ const Shop = () => {
   const currentProducts = products.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-background min-h-screen text-foreground">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {/* Header */}
         <div className="flex flex-col gap-6 mb-8 md:mb-12">
@@ -35,7 +35,7 @@ const Shop = () => {
                 </svg>
                 <span className="text-[9px] md:text-[10px] font-bold tracking-[0.3em] uppercase">Premium Collection</span>
               </div>
-              <h1 className="font-serif text-3xl md:text-5xl text-black mb-3 md:mb-4">
+              <h1 className="font-serif text-3xl md:text-5xl text-foreground mb-3 md:mb-4">
                 Discover Your Skincare
               </h1>
               <p className="text-muted-foreground text-xs md:text-sm max-w-md">
@@ -44,7 +44,7 @@ const Shop = () => {
             </div>
             
             <div className="flex items-center gap-3">
-              <button className="flex items-center gap-2 px-4 md:px-6 py-2 md:py-2.5 border border-border hover:bg-gray-50 transition-colors">
+              <button className="flex items-center gap-2 px-4 md:px-6 py-2 md:py-2.5 border border-border hover:bg-accent transition-colors">
                 <FavIcon className="w-4 h-4" />
                 <span className="text-xs md:text-sm font-medium">Favorites</span>
               </button>
@@ -53,7 +53,7 @@ const Shop = () => {
               <div className="lg:hidden">
                 <Sheet>
                   <SheetTrigger asChild>
-                    <button className="flex items-center gap-2 px-4 py-2 border border-black bg-black text-white hover:bg-black/90 transition-colors">
+                    <button className="flex items-center gap-2 px-4 py-2 border border-primary bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
                       <MenuIcon className="w-4 h-4" />
                       <span className="text-xs font-medium uppercase tracking-wider">Filters</span>
                     </button>

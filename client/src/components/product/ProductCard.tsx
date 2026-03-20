@@ -13,7 +13,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <div className="group flex flex-col gap-4">
       {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-[#f5f5f5] transition-all">
+      <div className="relative aspect-square overflow-hidden bg-muted transition-all">
         <img
           src={product.images[0]}
           alt={product.name}
@@ -24,12 +24,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
         {product.tags && product.tags.length > 0 && (
           <div className="absolute left-3 top-3 flex flex-col gap-2">
             {product.tags.includes("NEW") && (
-              <span className="bg-black text-white px-3 py-1 text-[9px] font-bold tracking-wider uppercase">
+              <span className="bg-primary text-primary-foreground px-3 py-1 text-[9px] font-bold tracking-wider uppercase">
                 NEW
               </span>
             )}
             {product.tags.includes("BEST SELLER") && (
-              <span className="bg-white text-black px-3 py-1 text-[9px] font-bold tracking-wider uppercase shadow-sm">
+              <span className="bg-secondary text-secondary-foreground px-3 py-1 text-[9px] font-bold tracking-wider uppercase shadow-sm">
                 BEST SELLER
               </span>
             )}
@@ -39,7 +39,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <button
           type="button"
           aria-label="Add to favorites"
-          className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white text-black shadow-sm transition-colors hover:bg-black hover:text-white"
+          className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-background text-foreground shadow-sm transition-colors hover:bg-primary hover:text-primary-foreground"
         >
           <FavIcon className="h-4 w-4" />
         </button>
@@ -64,7 +64,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 key={i}
                 className={`h-3 w-3 ${
                   i < Math.floor(product.rating)
-                    ? "fill-black text-black"
+                    ? "fill-primary text-primary"
                     : "text-muted-foreground/30"
                 }`}
               />

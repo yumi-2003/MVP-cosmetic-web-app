@@ -8,12 +8,12 @@ const navLinks = [
 
 const DesktopNav = () => {
   return (
-    <nav className="hidden lg:flex gap-8 text-sm tracking-widest font-normal text-foreground/80">
+    <nav className="hidden lg:flex gap-10 text-[11px] tracking-[0.25em] font-medium text-foreground/70 uppercase">
       {navLinks.map(({ label, to }) => (
         <Link
           key={to}
           to={to}
-          className="relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-foreground after:transition-all after:duration-300 hover:after:w-full hover:text-foreground transition-colors duration-200"
+          className="relative py-1 after:absolute after:left-0 after:bottom-0 after:h-[1px] after:w-0 after:bg-primary after:transition-all after:duration-500 hover:after:w-full hover:text-foreground transition-colors duration-300"
         >
           {label}
         </Link>

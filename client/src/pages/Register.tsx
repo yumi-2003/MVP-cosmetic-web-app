@@ -66,7 +66,7 @@ export default function Register() {
                   <FormControl>
                     <Input
                       autoComplete="given-name"
-                      className="rounded-sm shadow-sm py-5 text-sm"
+                      className="rounded-lg border-border/50 focus:border-primary/50 focus:ring-primary/20 shadow-sm py-6 text-sm transition-all"
                       {...field}
                     />
                   </FormControl>
@@ -86,7 +86,7 @@ export default function Register() {
                   <FormControl>
                     <Input
                       autoComplete="family-name"
-                      className="rounded-sm shadow-sm py-5 text-sm"
+                      className="rounded-lg border-border/50 focus:border-primary/50 focus:ring-primary/20 shadow-sm py-6 text-sm transition-all"
                       {...field}
                     />
                   </FormControl>
@@ -109,7 +109,7 @@ export default function Register() {
                   <Input
                     type="email"
                     autoComplete="email"
-                    className="rounded-sm shadow-sm py-5 text-sm"
+                  className="rounded-lg border-border/50 focus:border-primary/50 focus:ring-primary/20 shadow-sm py-6 text-sm transition-all"
                     {...field}
                   />
                 </FormControl>
@@ -132,7 +132,7 @@ export default function Register() {
                     <Input
                       type={showPassword ? "text" : "password"}
                       autoComplete="new-password"
-                      className="rounded-sm shadow-sm py-5 text-sm pr-10"
+                      className="rounded-lg border-border/50 focus:border-primary/50 focus:ring-primary/20 shadow-sm py-6 text-sm pr-10 transition-all"
                       {...field}
                     />
                   </FormControl>
@@ -166,7 +166,7 @@ export default function Register() {
                     <Input
                       type={showConfirmPassword ? "text" : "password"}
                       autoComplete="new-password"
-                      className="rounded-sm shadow-sm py-5 text-sm pr-10"
+                      className="rounded-lg border-border/50 focus:border-primary/50 focus:ring-primary/20 shadow-sm py-6 text-sm pr-10 transition-all"
                       {...field}
                     />
                   </FormControl>
@@ -217,7 +217,7 @@ export default function Register() {
             </label>
           </div>
 
-          <Button className="w-full tracking-widest text-sm py-6 rounded-sm mt-4">
+          <Button className="w-full tracking-[0.2em] text-[11px] font-bold py-7 rounded-lg mt-6 shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all duration-300">
             CREATE ACCOUNT &rarr;
           </Button>
         </form>
@@ -234,31 +234,31 @@ export default function Register() {
       </p>
 
       {/* divider  */}
-      <div className="flex items-center gap-3 my-8">
-        <div className="flex-1 h-px bg-border"></div>
-        <span className="text-xs text-muted-foreground uppercase tracking-widest px-2">
+      <div className="flex items-center gap-4 my-10">
+        <div className="flex-1 h-[0.5px] bg-border/60"></div>
+        <span className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] px-2 font-medium">
           OR
         </span>
-        <div className="flex-1 h-px bg-border"></div>
+        <div className="flex-1 h-[0.5px] bg-border/60"></div>
       </div>
 
       {/* social links  */}
-      <div className="space-y-3">
-        <button className="w-full bg-background border border-border py-3.5 rounded-sm hover:bg-muted flex items-center justify-center gap-3 text-sm font-medium text-foreground transition-colors shadow-sm">
+      <div className="grid grid-cols-2 gap-4">
+        <button className="flex items-center justify-center gap-3 bg-background border border-border/50 py-3 rounded-md hover:bg-muted/50 hover:border-primary/20 transition-all duration-300 shadow-sm active:scale-95">
           <img
             src="https://www.svgrepo.com/show/475656/google-color.svg"
             alt="Google"
             className="w-4 h-4"
           />
-          Continue with Google
+          <span className="text-xs font-semibold text-foreground/80">Google</span>
         </button>
-        <button className="w-full bg-background border border-border py-3.5 rounded-sm hover:bg-muted flex items-center justify-center gap-3 text-sm font-medium text-foreground transition-colors shadow-sm">
+        <button className="flex items-center justify-center gap-3 bg-background border border-border/50 py-3 rounded-md hover:bg-muted/50 hover:border-primary/20 transition-all duration-300 shadow-sm active:scale-95">
           <img
             src="https://www.svgrepo.com/show/475647/facebook-color.svg"
             alt="Facebook"
             className="w-4 h-4"
           />
-          Continue with Facebook
+          <span className="text-xs font-semibold text-foreground/80">Facebook</span>
         </button>
       </div>
     </AuthLayout>

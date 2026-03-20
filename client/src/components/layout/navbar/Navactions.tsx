@@ -34,7 +34,7 @@ const Navactions = () => {
   };
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-5">
       {/* Search — contains its own trigger button + dropdown panel */}
       <SearchBar />
       <ModeToggle />
@@ -43,10 +43,10 @@ const Navactions = () => {
       {user ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="relative w-8 h-8 rounded-full overflow-hidden border border-border flex items-center justify-center hover:opacity-80 transition-opacity outline-none">
-              <Avatar className="w-8 h-8">
+            <button className="relative w-9 h-9 rounded-full overflow-hidden border border-border/50 flex items-center justify-center hover:ring-2 hover:ring-primary/20 transition-all outline-none">
+              <Avatar className="w-9 h-9">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="bg-muted text-xs font-medium uppercase text-muted-foreground">
+                <AvatarFallback className="bg-secondary text-[10px] font-bold uppercase text-secondary-foreground">
                   {user.name
                     .split(" ")
                     .map((n) => n[0])
@@ -55,58 +55,58 @@ const Navactions = () => {
               </Avatar>
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel className="font-normal">
+          <DropdownMenuContent align="end" className="w-60 mt-2 p-2">
+            <DropdownMenuLabel className="font-normal px-4 py-3">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">{user.name}</p>
-                <p className="text-xs leading-none text-muted-foreground">
+                <p className="text-sm font-semibold leading-none">{user.name}</p>
+                <p className="text-[11px] leading-none text-muted-foreground mt-1">
                   {user.email}
                 </p>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link to="/profile" className="cursor-pointer">
-                <UserIcon className="mr-2 h-4 w-4" />
-                <span>Profile</span>
+            <DropdownMenuSeparator className="mx-2" />
+            <DropdownMenuItem asChild className="px-4 py-2.5 rounded-md cursor-pointer transition-colors">
+              <Link to="/profile">
+                <UserIcon className="mr-3 h-4 w-4 opacity-70" />
+                <span className="text-sm">Profile</span>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/orders" className="cursor-pointer">
-                <CartIcon className="mr-2 h-4 w-4" />
-                <span>My Orders</span>
+            <DropdownMenuItem asChild className="px-4 py-2.5 rounded-md cursor-pointer transition-colors">
+              <Link to="/orders">
+                <CartIcon className="mr-3 h-4 w-4 opacity-70" />
+                <span className="text-sm">My Orders</span>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/settings" className="cursor-pointer">
-                <SettingsIcon className="mr-2 h-4 w-4" />
-                <span>Settings</span>
+            <DropdownMenuItem asChild className="px-4 py-2.5 rounded-md cursor-pointer transition-colors">
+              <Link to="/settings">
+                <SettingsIcon className="mr-3 h-4 w-4 opacity-70" />
+                <span className="text-sm">Settings</span>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="mx-2" />
             <DropdownMenuItem
-              className="text-destructive focus:text-destructive cursor-pointer"
+              className="text-destructive focus:text-destructive px-4 py-2.5 rounded-md cursor-pointer transition-colors"
               onClick={handleLogout}
             >
-              <LogoutIcon className="mr-2 h-4 w-4" />
-              <span>Log out</span>
+              <LogoutIcon className="mr-3 h-4 w-4 opacity-70" />
+              <span className="text-sm font-medium">Log out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
         <Link
           to="/login"
-          className="p-1.5 text-foreground/70 hover:text-foreground transition-colors"
+          className="p-2 text-foreground/60 hover:text-primary transition-all duration-300 hover:scale-110"
           aria-label="Login"
         >
-          <LoginIcon className="w-[20px] h-[20px]" />
+          <LoginIcon className="w-[18px] h-[18px]" />
         </Link>
       )}
 
       {/* Cart */}
       <Link
         to="/cart"
-        className="p-1.5 text-foreground/70 hover:text-foreground transition-colors relative"
+        className="p-2 text-foreground/60 hover:text-primary transition-all duration-300 hover:scale-110 relative"
         aria-label="Cart"
       >
         <CartIcon className="w-[20px] h-[20px]" />

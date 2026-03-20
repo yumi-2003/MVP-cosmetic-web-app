@@ -5,8 +5,8 @@ import MobileNav from "./MobileNav";
 
 const Navbar = () => {
   return (
-    <header className="sticky top-0 z-50 bg-background border-b border-border/60">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 flex items-center h-16 relative">
+    <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border/50 transition-all duration-300">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center h-20 relative">
         {/* Mobile Hamburger (Left on mobile) */}
         <div className="flex-1 lg:hidden">
           <MobileNav />
@@ -16,7 +16,7 @@ const Navbar = () => {
         <div className="flex-1 lg:flex-none flex justify-center lg:justify-start">
           <Link
             to="/"
-            className="text-2xl tracking-[0.25em] font-light font-serif text-foreground select-none uppercase"
+            className="text-2xl md:text-3xl tracking-[0.3em] font-light font-serif text-foreground select-none uppercase transition-opacity hover:opacity-80"
           >
             JustaGirl
           </Link>

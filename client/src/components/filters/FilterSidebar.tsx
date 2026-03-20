@@ -31,8 +31,8 @@ const FilterSidebar = () => {
         <div className="flex flex-col gap-3">
           {categories.map((item) => (
             <label key={item} className="flex items-center gap-3 cursor-pointer group">
-              <input type="checkbox" className="w-4 h-4 border-gray-300 rounded focus:ring-black" />
-              <span className="text-sm text-muted-foreground group-hover:text-black transition-colors">
+              <input type="checkbox" className="w-4 h-4 border-input rounded focus:ring-primary bg-background" />
+              <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
                 {item}
               </span>
             </label>

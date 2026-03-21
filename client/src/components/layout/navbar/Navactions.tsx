@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import SearchBar from "./SearchBar";
 import {
   LoginIcon,
@@ -26,6 +26,9 @@ const Navactions = () => {
   };
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isShopPage = location.pathname === "/shop";
 
   const handleLogout = () => {
     console.log("Logging out...");
@@ -36,7 +39,7 @@ const Navactions = () => {
   return (
     <div className="flex items-center gap-5">
       {/* Search — contains its own trigger button + dropdown panel */}
-      <SearchBar />
+      {isShopPage && <SearchBar />}
       <ModeToggle />
 
       {/* Login / Avatar */}

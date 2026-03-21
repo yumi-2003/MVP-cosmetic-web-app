@@ -15,7 +15,7 @@ export {
 } from "@radix-ui/react-icons";
 
 export {
-  ShoppingBag as CartIcon,
+  ShoppingCart as CartIcon,
   Star as StarIcon,
   ChevronLeft as ArrowLeftIcon,
   ChevronRight as ChevronRightIcon,

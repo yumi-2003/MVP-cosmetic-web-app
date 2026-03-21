@@ -23,7 +23,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// connect db (ONCE)
+// connect db
 connectDB();
 
 // routes

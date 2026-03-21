@@ -26,7 +26,9 @@ const Navactions = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
+  const { items } = useAppSelector((state) => state.cart || { items: [] });
 
+  const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
   const isShopPage = location.pathname === "/shop";
 
   const handleLogout = () => {
@@ -95,13 +97,21 @@ const Navactions = () => {
         </DropdownMenu>
       )}
 
-      {/* Cart */}
+      {/* Cart with Dynamic Badge & Enhancement */}
       <Link
         to="/cart"
-        className="p-2 text-foreground/60 hover:text-primary transition-all duration-300 hover:scale-110 relative"
+        className="group relative p-2.5 text-foreground/70 hover:text-primary transition-all duration-300 hover:scale-110 active:scale-95 bg-secondary/30 hover:bg-primary/10 rounded-full"
         aria-label="Cart"
       >
-        <CartIcon className="w-[20px] h-[20px]" />
+        <CartIcon className="w-[19px] h-[19px] transition-transform duration-300 group-hover:rotate-[15deg]" />
+        
+        {/* Aesthetic Animated Badge */}
+        {totalItems > 0 && (
+          <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-lg animate-in zoom-in duration-300">
+            <span className="absolute inset-0 rounded-full bg-primary animate-ping opacity-25"></span>
+            {totalItems}
+          </span>
+        )}
       </Link>
     </div>
   );

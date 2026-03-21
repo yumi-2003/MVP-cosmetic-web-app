@@ -36,11 +36,15 @@ export const login = createAsyncThunk(
     try {
       const response = await api.post("/auth/login", credentials);
       localStorage.setItem("token", response.data.token);
-      // Fetch user details after successful login
-      await dispatch(getMe());
+      
+      // If server returns user data directly, we can skip getMe() or use it as a verification
+      if (!response.data.user) {
+        await dispatch(getMe());
+      }
+      
       return response.data;
     } catch (err: any) {
-      return rejectWithValue(err.response?.data?.msg || "Login failed");
+      return rejectWithValue(err.response?.data?.message || err.response?.data?.msg || "Login failed");
     }
   }
 );
@@ -94,6 +98,9 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.token = action.payload.token;
+        if (action.payload.user) {
+          state.user = action.payload.user;
+        }
       })
       .addCase(login.rejected, (state, action) => {
         state.status = "failed";

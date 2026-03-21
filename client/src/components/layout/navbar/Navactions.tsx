@@ -17,24 +17,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { logout } from "@/redux/slices/authSlice";
+import { toast } from "sonner";
 
 const Navactions = () => {
-  const user = {
-    name: "Jane Doe",
-    email: "jane@example.com",
-    avatar: "", // empty for fallback
-  };
-
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
 
   const isShopPage = location.pathname === "/shop";
 
   const handleLogout = () => {
-    console.log("Logging out...");
-    // Mock logout logic here
+    dispatch(logout());
+    toast.success("Logged out successfully. See you soon!");
     navigate("/login");
   };
+
+  const userFullName = user ? `${user.firstname} ${user.lastname}` : "";
+  const userInitials = user ? `${user.firstname[0]}${user.lastname[0]}`.toUpperCase() : "";
 
   return (
     <div className="flex items-center gap-5">
@@ -42,18 +44,23 @@ const Navactions = () => {
       {isShopPage && <SearchBar />}
       <ModeToggle />
 
-      {/* Login / Avatar */}
-      {user ? (
+      {/* Authentication & User Profile */}
+      {!user ? (
+        <Link
+          to="/login"
+          className="relative text-foreground/80 hover:text-primary transition-colors p-2"
+          aria-label="Login"
+        >
+          <LoginIcon className="w-5 h-5" />
+        </Link>
+      ) : (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="relative w-9 h-9 rounded-full overflow-hidden border border-border/50 flex items-center justify-center hover:ring-2 hover:ring-primary/20 transition-all outline-none">
               <Avatar className="w-9 h-9">
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage src={""} alt={userFullName} />
                 <AvatarFallback className="bg-secondary text-[10px] font-bold uppercase text-secondary-foreground">
-                  {user.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
+                  {userInitials}
                 </AvatarFallback>
               </Avatar>
             </button>
@@ -61,49 +68,31 @@ const Navactions = () => {
           <DropdownMenuContent align="end" className="w-60 mt-2 p-2">
             <DropdownMenuLabel className="font-normal px-4 py-3">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-semibold leading-none">{user.name}</p>
+                <p className="text-sm font-semibold leading-none">{userFullName}</p>
                 <p className="text-[11px] leading-none text-muted-foreground mt-1">
-                  {user.email}
+                  {user?.email}
                 </p>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator className="mx-2" />
-            <DropdownMenuItem asChild className="px-4 py-2.5 rounded-md cursor-pointer transition-colors">
-              <Link to="/profile">
-                <UserIcon className="mr-3 h-4 w-4 opacity-70" />
-                <span className="text-sm">Profile</span>
-              </Link>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="cursor-pointer py-2.5">
+              <UserIcon className="mr-2 h-4 w-4" />
+              <span>My Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="px-4 py-2.5 rounded-md cursor-pointer transition-colors">
-              <Link to="/orders">
-                <CartIcon className="mr-3 h-4 w-4 opacity-70" />
-                <span className="text-sm">My Orders</span>
-              </Link>
+            <DropdownMenuItem className="cursor-pointer py-2.5">
+              <SettingsIcon className="mr-2 h-4 w-4" />
+              <span>Settings</span>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="px-4 py-2.5 rounded-md cursor-pointer transition-colors">
-              <Link to="/settings">
-                <SettingsIcon className="mr-3 h-4 w-4 opacity-70" />
-                <span className="text-sm">Settings</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="mx-2" />
+            <DropdownMenuSeparator />
             <DropdownMenuItem
-              className="text-destructive focus:text-destructive px-4 py-2.5 rounded-md cursor-pointer transition-colors"
+              className="cursor-pointer text-destructive focus:text-destructive py-2.5"
               onClick={handleLogout}
             >
-              <LogoutIcon className="mr-3 h-4 w-4 opacity-70" />
-              <span className="text-sm font-medium">Log out</span>
+              <LogoutIcon className="mr-2 h-4 w-4" />
+              <span>Log out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      ) : (
-        <Link
-          to="/login"
-          className="p-2 text-foreground/60 hover:text-primary transition-all duration-300 hover:scale-110"
-          aria-label="Login"
-        >
-          <LoginIcon className="w-[18px] h-[18px]" />
-        </Link>
       )}
 
       {/* Cart */}

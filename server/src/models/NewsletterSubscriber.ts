@@ -13,7 +13,7 @@ const NewsletterSubscriberSchema: Schema<NewsletterSubscriberDocument> = new Sch
   { timestamps: true }
 );
 
-NewsletterSubscriberSchema.index({ email: 1 });
+// No explicit index needed for email as unique: true already creates one
 
 export default mongoose.model<NewsletterSubscriberDocument>(
   "NewsletterSubscriber",

@@ -1,9 +1,13 @@
 import AuthLayout from "@/components/auth/AuthLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/lib/validators";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { login, clearError } from "@/redux/slices/authSlice";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 import {
   Form,
@@ -17,12 +21,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 type LoginValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { status, error, user } = useAppSelector((state) => state.auth);
+
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -31,9 +39,28 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (data: LoginValues) => {
-    console.log(data); //later api
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
+
+  const onSubmit = async (data: LoginValues) => {
+    const resultAction = await dispatch(login(data));
+    if (login.fulfilled.match(resultAction)) {
+      toast.success("Welcome back! Login successful.");
+    }
   };
+
+  const isLoading = status === "loading";
+
 
   return (
     <AuthLayout>
@@ -116,8 +143,18 @@ const Login = () => {
           />
 
           {/* Button */}
-          <Button className="w-full tracking-[0.2em] text-[11px] font-bold py-7 rounded-lg mt-6 shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all duration-300">
-            SIGN IN &rarr;
+          <Button 
+            disabled={isLoading}
+            className="w-full tracking-[0.2em] text-[11px] font-bold py-7 rounded-lg mt-6 shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all duration-300"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                SIGNING IN...
+              </>
+            ) : (
+              "SIGN IN →"
+            )}
           </Button>
         </form>
       </Form>

@@ -43,9 +43,8 @@ const ProductSchema = new Schema<ProductProps>(
   { timestamps: true }
 );
 
-ProductSchema.index({ slug: 1 });
+// No explicit index needed for slug as unique: true already creates one
 ProductSchema.index({ category: 1 });
-ProductSchema.index({ tags: 1 });
 ProductSchema.index({ skinTypes: 1 });
 ProductSchema.index({ concerns: 1 });
 ProductSchema.index({ name: "text", description: "text" });

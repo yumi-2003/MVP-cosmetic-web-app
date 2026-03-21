@@ -1,10 +1,14 @@
 // pages/Register.tsx
 import AuthLayout from "@/components/auth/AuthLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/lib/validators";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { signUp, clearError } from "@/redux/slices/authSlice";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 import {
   Form,
@@ -19,13 +23,17 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 type RegisterValues = z.infer<typeof registerSchema>;
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { status, error, user } = useAppSelector((state) => state.auth);
+
   const form = useForm<RegisterValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -37,9 +45,33 @@ export default function Register() {
     },
   });
 
-  const onSubmit = (data: RegisterValues) => {
-    console.log(data);
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
+
+  const onSubmit = async (data: RegisterValues) => {
+    const backendData = {
+      firstname: data.firstName,
+      lastname: data.lastName,
+      email: data.email,
+      password: data.password,
+    };
+    const resultAction = await dispatch(signUp(backendData));
+    if (signUp.fulfilled.match(resultAction)) {
+      toast.success("Welcome aboard! Your account has been created.");
+    }
   };
+
+  const isLoading = status === "loading";
 
   return (
     <AuthLayout>
@@ -217,8 +249,18 @@ export default function Register() {
             </label>
           </div>
 
-          <Button className="w-full tracking-[0.2em] text-[11px] font-bold py-7 rounded-lg mt-6 shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all duration-300">
-            CREATE ACCOUNT &rarr;
+          <Button 
+            disabled={isLoading}
+            className="w-full tracking-[0.2em] text-[11px] font-bold py-7 rounded-lg mt-6 shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all duration-300"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                CREATING ACCOUNT...
+              </>
+            ) : (
+              "CREATE ACCOUNT →"
+            )}
           </Button>
         </form>
       </Form>

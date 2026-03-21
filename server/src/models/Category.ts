@@ -15,6 +15,6 @@ const CategorySchema: Schema<CategoryDocument> = new Schema(
   { timestamps: true }
 );
 
-CategorySchema.index({ slug: 1 });
+// No explicit index needed for slug as unique: true already creates one
 
 export default mongoose.model<CategoryDocument>("Category", CategorySchema);

@@ -58,7 +58,7 @@ const Shop = () => {
                       <span className="text-xs font-medium uppercase tracking-wider">Filters</span>
                     </button>
                   </SheetTrigger>
-                  <SheetContent side="left" className="w-[300px] sm:w-[400px] overflow-y-auto">
+                  <SheetContent side="left" className="w-[300px] sm:w-[400px] overflow-y-auto pl-4">
                     <SheetHeader className="border-b pb-4 mb-6">
                       <SheetTitle className="text-left font-serif text-2xl uppercase tracking-tighter">Filters</SheetTitle>
                     </SheetHeader>

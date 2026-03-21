@@ -1,8 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./slices/authSlice";
 import productReducer from "./slices/productSlice";
-// Import other reducers here as you create them
-// import authReducer from "./slices/authSlice";
-// import cartReducer from "./slices/cartSlice";
+import cartReducer from "./slices/cartSlice";
+import categoryReducer from "./slices/categorySlice";
+import orderReducer from "./slices/orderSlice";
+import reviewReducer from "./slices/reviewSlice";
+import commonReducer from "./slices/commonSlice";
 
 /**
  * Configure Redux Store
@@ -12,12 +15,14 @@ import productReducer from "./slices/productSlice";
  */
 export const store = configureStore({
   reducer: {
+    auth: authReducer,
     products: productReducer,
-    // auth: authReducer,
-    // cart: cartReducer,
+    cart: cartReducer,
+    categories: categoryReducer,
+    orders: orderReducer,
+    reviews: reviewReducer,
+    common: commonReducer,
   },
-  // Adding custom middleware if needed
-  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiMiddleware),
 });
 
 /**

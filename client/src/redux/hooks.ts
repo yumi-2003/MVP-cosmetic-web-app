@@ -10,7 +10,7 @@ import type { RootState, AppDispatch } from "./store";
  */
 
 // Use throughout your app instead of plain `useDispatch`
-export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppDispatch: () => AppDispatch = useDispatch;
 
 // Use throughout your app instead of plain `useSelector`
 export const useAppSelector: <T>(selector: (state: RootState) => T) => T = useSelector;

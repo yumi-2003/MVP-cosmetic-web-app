@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import type { IProduct } from "@/redux/types";
 import { Button } from "@/components/ui/button";
 import { FavIcon, StarIcon, CartIcon } from "@/components/icons";
@@ -13,6 +14,7 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [isAdding, setIsAdding] = useState(false);
 
   const hasDiscount = product.comparePrice && product.comparePrice > product.price;
@@ -22,7 +24,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
     try {
       setIsAdding(true);
       await dispatch(addToCart({ productId: product._id, quantity: 1 })).unwrap();
-      toast.success(`${product.name} added to cart!`);
+      toast.success(`${product.name} added to cart!`, {
+        action: {
+          label: "View Cart",
+          onClick: () => navigate("/cart"),
+        },
+        duration: 4000,
+      });
     } catch (error: any) {
       toast.error(error || "Failed to add item to cart");
     } finally {

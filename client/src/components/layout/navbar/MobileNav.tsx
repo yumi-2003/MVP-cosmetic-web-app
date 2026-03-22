@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
 import {
   MenuIcon,
@@ -42,6 +42,16 @@ const MobileNav = () => {
   
   const { user } = useAppSelector((state) => state.auth);
   const isShopPage = location.pathname === "/shop";
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024 && open) {
+        setOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [open]);
 
   const handleLogout = () => {
     dispatch(logout());

@@ -5,6 +5,7 @@ import CartPage from "@/pages/Cart";
 import CheckoutPage from "@/pages/Checkout";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import ErrorPage from "@/pages/Error";
 import { createBrowserRouter } from "react-router";
 import RootLayout from "@/layouts/RootLayout";
 import shopLoader from "./loaders/shopLoader";
@@ -14,6 +15,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     Component: RootLayout,
+    ErrorBoundary: ErrorPage,
     children: [
       {
         index: true,

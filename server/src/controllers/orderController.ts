@@ -22,11 +22,13 @@ const getOwnerFromRequest = (req: Request) => {
 export const placeOrder = asyncHandler(async (req: Request, res: Response) => {
   const owner = getOwnerFromRequest(req);
   const items = (req.body?.items || []) as { productId: string; quantity: number }[];
+  const shippingAddress = req.body?.shippingAddress;
+  const distanceKm = req.body?.distanceKm || 0;
 
   const order =
     items.length > 0
-      ? await createOrder(owner, items)
-      : await createOrderFromCart(owner);
+      ? await createOrder(owner, items, shippingAddress, distanceKm)
+      : await createOrderFromCart(owner, shippingAddress, distanceKm);
 
   res.status(201).json(order);
 });

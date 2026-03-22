@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getMe } from "@/redux/slices/authSlice";
+import { fetchCart } from "@/redux/slices/cartSlice";
 
 const RootLayout = () => {
   const { pathname } = useLocation();
@@ -15,6 +16,7 @@ const RootLayout = () => {
     if (token && !user) {
       dispatch(getMe());
     }
+    dispatch(fetchCart());
   }, [token, user, dispatch]);
 
   const hideChrome =

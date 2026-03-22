@@ -22,9 +22,8 @@ export const fetchProducts = createAsyncThunk(
   async (params: any, { rejectWithValue }) => {
     try {
       const response = await api.get("/products", { params });
-      // The backend seems to return an object with a products array or just the array
-      // Let's assume response.data.products based on my design
-      return response.data.products || response.data;
+      // The backend returns an object { data, page, limit, total, totalPages }
+      return response.data.data || response.data.products || (Array.isArray(response.data) ? response.data : []);
     } catch (err: any) {
       return rejectWithValue(err.response?.data?.message || "Failed to fetch products");
     }

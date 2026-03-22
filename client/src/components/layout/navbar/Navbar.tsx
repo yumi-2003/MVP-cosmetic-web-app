@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import DesktopNav from "./DesktopNav";
 import Navactions from "./Navactions";
 import MobileNav from "./MobileNav";
+import CartButton from "./CartButton";
 
 const Navbar = () => {
   return (
@@ -28,9 +29,12 @@ const Navbar = () => {
         </div>
 
         {/* Actions — Right aligned */}
-        <div className="flex-1 flex justify-end items-center sm:pl-4">
+        <div className="flex-1 flex justify-end items-center sm:pl-4 gap-2">
           <div className="hidden lg:flex">
             <Navactions />
+          </div>
+          <div className="flex lg:hidden">
+            <CartButton />
           </div>
         </div>
       </div>

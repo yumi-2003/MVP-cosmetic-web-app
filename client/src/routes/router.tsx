@@ -6,10 +6,12 @@ import CheckoutPage from "@/pages/Checkout";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import ErrorPage from "@/pages/Error";
+import TrackingPage from "@/pages/TrackingPage";
 import { createBrowserRouter } from "react-router";
 import RootLayout from "@/layouts/RootLayout";
 import shopLoader from "./loaders/shopLoader";
 import productLaoder from "./loaders/productLaoder";
+import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -33,11 +35,27 @@ export const router = createBrowserRouter([
       },
       {
         path: "/cart",
-        Component: CartPage,
+        element: (
+          <ProtectedRoute>
+            <CartPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/checkout",
-        Component: CheckoutPage,
+        element: (
+          <ProtectedRoute>
+            <CheckoutPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/tracking/:orderId",
+        element: (
+          <ProtectedRoute>
+            <TrackingPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/login",

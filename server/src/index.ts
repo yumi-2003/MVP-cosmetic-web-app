@@ -12,6 +12,7 @@ import orderRoutes from "./routes/order";
 import skinAdvisorRoutes from "./routes/skinAdvisor";
 import newsletterRoutes from "./routes/newsletter";
 import authRoutes from "./routes/authRoute";
+import shippingRoutes from "./routes/shipping";
 import { errorHandler, notFound } from "./middleware/errorHandler";
 
 dotenv.config();
@@ -35,6 +36,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/skin-advisor", skinAdvisorRoutes);
 app.use("/api/newsletter", newsletterRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/shipping", shippingRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

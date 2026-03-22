@@ -25,11 +25,33 @@ const api = axios.create({
  */
 api.interceptors.request.use(
   (config) => {
+    // Generate or retrieve persistent Session ID for guest carts
+    let sessionId = localStorage.getItem("x-session-id");
+    if (!sessionId) {
+      sessionId = crypto.randomUUID();
+      localStorage.setItem("x-session-id", sessionId);
+    }
+    config.headers["x-session-id"] = sessionId;
+
     // You can retrieve the token from local storage or persistent state here
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // Try to extract user ID if Redux state is persisted
+    try {
+      const persistedState = localStorage.getItem("persist:root");
+      if (persistedState) {
+        const auth = JSON.parse(JSON.parse(persistedState).auth);
+        if (auth?.user?._id) {
+          config.headers["x-user-id"] = auth.user._id;
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+
     return config;
   },
   (error) => {

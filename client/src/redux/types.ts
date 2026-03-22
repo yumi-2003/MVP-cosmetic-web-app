@@ -36,8 +36,11 @@ export interface ICategory {
 }
 
 export interface ICartItem {
-  productId: string | IProduct;
+  product: string;
+  name: string;
+  price: number;
   quantity: number;
+  image?: string;
 }
 
 export interface ICart {
@@ -52,7 +55,7 @@ export interface ICart {
 export interface IOrder {
   _id: string;
   user: string | IUser;
-  items: { product: string | IProduct; quantity: number; price: number }[];
+  items: { product: string | IProduct; name: string; quantity: number; price: number; image?: string; }[];
   totalAmount: number;
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   shippingAddress: string;

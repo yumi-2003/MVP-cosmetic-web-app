@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { products } from "@/data/products";
+import React, { useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchProducts } from "@/redux/slices/productSlice";
 import ProductCard from "@/components/product/ProductCard";
 import FilterSidebar from "@/components/filters/FilterSidebar";
 import Pagination from "@/components/ui/Pagination";
 import { FavIcon, MenuIcon } from "@/components/icons";
+import { Loader2 } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -15,9 +17,16 @@ import {
 const ITEMS_PER_PAGE = 6;
 
 const Shop = () => {
+  const dispatch = useAppDispatch();
+  const { items, status } = useAppSelector((state) => state.products || { items: [], status: "idle" });
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    dispatch(fetchProducts({}));
+  }, [dispatch]);
   
-  // Simple pagination logic
+  // Simple frontend pagination logic until backend pagination is passed up
+  const products = items || [];
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentProducts = products.slice(startIndex, startIndex + ITEMS_PER_PAGE);

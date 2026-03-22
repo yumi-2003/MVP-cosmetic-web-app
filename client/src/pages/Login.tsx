@@ -7,7 +7,7 @@ import { loginSchema } from "@/lib/validators";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { login, clearError } from "@/redux/slices/authSlice";
 import { toast } from "sonner";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 
 import {
   Form,
@@ -29,6 +29,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
   const { status, error, user } = useAppSelector((state) => state.auth);
 
   const form = useForm<LoginValues>({
@@ -41,9 +43,9 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate(redirectTo);
     }
-  }, [user, navigate]);
+  }, [user, navigate, redirectTo]);
 
   useEffect(() => {
     if (error) {

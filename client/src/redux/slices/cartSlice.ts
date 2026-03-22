@@ -82,19 +82,23 @@ const cartSlice = createSlice({
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.items = action.payload;
-        // Total amount calculation could also be handled by backend
       })
       .addCase(fetchCart.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       })
-      .addMatcher(
-        (action) => [addToCart.fulfilled, removeFromCart.fulfilled, updateCartItem.fulfilled].includes(action.payload),
-        (state, action: PayloadAction<ICartItem[]>) => {
-          state.status = "succeeded";
-          state.items = action.payload;
-        }
-      );
+      .addCase(addToCart.fulfilled, (state, action: PayloadAction<ICartItem[]>) => {
+        state.status = "succeeded";
+        state.items = action.payload;
+      })
+      .addCase(removeFromCart.fulfilled, (state, action: PayloadAction<ICartItem[]>) => {
+        state.status = "succeeded";
+        state.items = action.payload;
+      })
+      .addCase(updateCartItem.fulfilled, (state, action: PayloadAction<ICartItem[]>) => {
+        state.status = "succeeded";
+        state.items = action.payload;
+      });
   },
 });
 

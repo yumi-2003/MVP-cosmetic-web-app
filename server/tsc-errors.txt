@@ -1,0 +1,11 @@
+src/controllers/categoryController.ts(4,10): error TS2395: Individual declarations in merged declaration 'getCategoryBySlug' must be all exported or all local.
+src/controllers/categoryController.ts(4,10): error TS2440: Import declaration conflicts with local declaration of 'getCategoryBySlug'.
+src/controllers/categoryController.ts(13,14): error TS2395: Individual declarations in merged declaration 'getCategoryBySlug' must be all exported or all local.
+src/controllers/categoryController.ts(15,28): error TS2554: Expected 3 arguments, but got 1.
+src/models/Shipping.ts(73,3): error TS2349: This expression is not callable.
+  Type 'SaveOptions' has no call signatures.
+src/services/productService.ts(80,13): error TS2345: Argument of type 'Record<string, 1 | -1> | { createdAt: number; }' is not assignable to parameter of type 'string | Record<string, SortOrder | { $meta: any; }> | [string, SortOrder][] | null | undefined'.
+  Type '{ createdAt: number; }' is not assignable to type 'string | Record<string, SortOrder | { $meta: any; }> | [string, SortOrder][] | null | undefined'.
+    Type '{ createdAt: number; }' is not assignable to type 'Record<string, SortOrder | { $meta: any; }>'.
+      Property 'createdAt' is incompatible with index signature.
+        Type 'number' is not assignable to type 'SortOrder | { $meta: any; }'.

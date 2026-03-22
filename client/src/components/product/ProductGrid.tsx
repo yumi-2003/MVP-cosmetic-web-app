@@ -1,10 +1,10 @@
 import { Link } from "react-router";
 import ProductCard from "./ProductCard";
-import type { Product } from "@/type";
+import type { IProduct } from "@/redux/types";
 
 interface ProductGridProps {
   title: string;
-  products: Product[];
+  products: IProduct[];
 }
 
 const ProductGrid = ({ title, products }: ProductGridProps) => {

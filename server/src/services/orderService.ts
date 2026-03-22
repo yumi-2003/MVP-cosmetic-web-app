@@ -1,4 +1,5 @@
 import Order, { OrderItem } from "../models/Order";
+import Shipping, { IShippingAddress } from "../models/Shipping";
 import Product from "../models/Product";
 import ApiError from "../utils/ApiError";
 import { calculateTotals } from "../utils/calculateTotals";
@@ -10,16 +11,34 @@ const ownerFilter = (owner: CartOwner) => {
   return {};
 };
 
-export const createOrderFromCart = async (owner: CartOwner) => {
+export const createOrderFromCart = async (
+  owner: CartOwner,
+  shippingAddress?: IShippingAddress,
+  distanceKm: number = 0
+) => {
   const filter = ownerFilter(owner);
   const cart = await Order.findOne({ ...filter, status: "cart" });
   if (!cart || cart.items.length === 0) {
     throw new ApiError(400, "Cart is empty");
   }
 
+  const totals = calculateTotals(cart.items, distanceKm);
+
+  cart.subtotal = totals.subtotal;
+  cart.tax = totals.tax;
+  cart.shipping = totals.shipping;
+  cart.total = totals.total;
   cart.status = "placed";
   cart.placedAt = new Date();
   await cart.save();
+
+  if (shippingAddress) {
+    await Shipping.create({
+      order: cart._id,
+      address: shippingAddress,
+      distanceKm,
+    });
+  }
 
   return cart;
 };
@@ -50,12 +69,14 @@ const buildOrderItems = async (
 
 export const createOrder = async (
   owner: CartOwner,
-  items: { productId: string; quantity: number }[]
+  items: { productId: string; quantity: number }[],
+  shippingAddress?: IShippingAddress,
+  distanceKm: number = 0
 ) => {
   if (!items.length) throw new ApiError(400, "Order items are required");
 
   const orderItems = await buildOrderItems(items);
-  const totals = calculateTotals(orderItems);
+  const totals = calculateTotals(orderItems, distanceKm);
 
   const order = await Order.create({
     ...ownerFilter(owner),
@@ -67,6 +88,14 @@ export const createOrder = async (
     shipping: totals.shipping,
     total: totals.total,
   });
+
+  if (shippingAddress) {
+    await Shipping.create({
+      order: order._id,
+      address: shippingAddress,
+      distanceKm,
+    });
+  }
 
   return order;
 };

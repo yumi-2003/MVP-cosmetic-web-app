@@ -6,6 +6,7 @@ import categoryReducer from "./slices/categorySlice";
 import orderReducer from "./slices/orderSlice";
 import reviewReducer from "./slices/reviewSlice";
 import commonReducer from "./slices/commonSlice";
+import trackingReducer from "./slices/trackingSlice";
 
 /**
  * Configure Redux Store
@@ -22,6 +23,7 @@ export const store = configureStore({
     orders: orderReducer,
     reviews: reviewReducer,
     common: commonReducer,
+    tracking: trackingReducer,
   },
 });
 

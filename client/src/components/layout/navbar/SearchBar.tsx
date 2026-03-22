@@ -2,12 +2,18 @@ import { useEffect, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { SearchIcon, CloseIcon } from "@/components/icons";
 
-const SearchBar = () => {
+interface SearchBarProps {
+  isInline?: boolean;
+}
+
+const SearchBar = ({ isInline = false }: SearchBarProps) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (isInline) return;
+    
     const handleClickOutside = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setOpen(false);
@@ -15,11 +21,24 @@ const SearchBar = () => {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isInline]);
 
   useEffect(() => {
-    if (open) inputRef.current?.focus();
-  }, [open]);
+    if (open && !isInline) inputRef.current?.focus();
+  }, [open, isInline]);
+
+  if (isInline) {
+    return (
+      <div className="flex items-center gap-3 w-full bg-secondary/30 border border-border/50 rounded-full px-4 py-2.5 outline-none focus-within:ring-1 focus-within:ring-primary/30 transition-shadow">
+        <SearchIcon className="w-[18px] h-[18px] text-foreground/50 shrink-0" />
+        <input
+          type="text"
+          placeholder="Search products..."
+          className="flex-1 bg-transparent text-[15px] font-light text-foreground placeholder:text-foreground/40 outline-none border-none min-w-0"
+        />
+      </div>
+    );
+  }
 
   return (
     <>

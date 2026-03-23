@@ -1,42 +1,112 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchCategories } from "@/redux/slices/categorySlice";
+import { X } from "lucide-react";
 
-const categories = [
-  "Face Wash",
-  "Serums",
-  "Masks",
-  "Moisturizers",
-  "Treatments",
-  "Eye Care",
-  "Sun Care",
-  "Toners",
-  "Essences",
+const skinTypes = [
+  { label: "All", value: "all" },
+  { label: "Dry", value: "dry" },
+  { label: "Oily", value: "oily" },
+  { label: "Combination", value: "combination" },
+  { label: "Sensitive", value: "sensitive" },
+  { label: "Normal", value: "normal" },
 ];
 
-const skinTypes = ["Dry", "Oily", "Combination", "Sensitive", "All"];
-
 const concerns = [
-  "Hydration",
-  "Brightening",
-  "Aging",
-  "Acne",
-  "Sensitivity",
+  { label: "Hydration", value: "dehydration" },
+  { label: "Brightening", value: "dullness" },
+  { label: "Aging", value: "aging" },
+  { label: "Acne", value: "acne" },
+  { label: "Sensitivity", value: "sensitivity" },
+  { label: "Sun Protection", value: "sun protection" },
+  { label: "Redness", value: "redness" },
 ];
 
 const FilterSidebar = () => {
+  const dispatch = useAppDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { categories, status: catStatus } = useAppSelector((state) => state.categories);
+
+  useEffect(() => {
+    if (catStatus === "idle") {
+      dispatch(fetchCategories());
+    }
+  }, [dispatch, catStatus]);
+
+  const currentCategory = searchParams.get("category");
+  const currentSkinTypes = searchParams.get("skinTypes")?.split(",") || [];
+  const currentConcerns = searchParams.get("concerns")?.split(",") || [];
+
+  const handleCategoryChange = (slug: string) => {
+    if (currentCategory === slug) {
+      searchParams.delete("category");
+    } else {
+      searchParams.set("category", slug);
+    }
+    setSearchParams(searchParams);
+  };
+
+  const handleArrayFilterChange = (type: "skinTypes" | "concerns", value: string, currentValues: string[]) => {
+    let newValues = [...currentValues];
+    if (newValues.includes(value)) {
+      newValues = newValues.filter(v => v !== value);
+    } else {
+      newValues.push(value);
+    }
+
+    if (newValues.length > 0) {
+      searchParams.set(type, newValues.join(","));
+    } else {
+      searchParams.delete(type);
+    }
+    setSearchParams(searchParams);
+  };
+
+  const handleClearAll = () => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete("category");
+    newParams.delete("skinTypes");
+    newParams.delete("concerns");
+    setSearchParams(newParams);
+  };
+
+  const hasFilters = currentCategory || currentSkinTypes.length > 0 || currentConcerns.length > 0;
+
   return (
     <div className="w-full flex flex-col gap-8">
+      {/* Clear All */}
+      {hasFilters && (
+        <button 
+          onClick={handleClearAll}
+          className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-primary hover:text-primary/80 transition-colors mb-2"
+        >
+          <X className="w-3 h-3" />
+          Clear All Filters
+        </button>
+      )}
+
       {/* Category */}
       <div>
         <h3 className="text-xs font-bold tracking-widest uppercase mb-4">Category</h3>
         <div className="flex flex-col gap-3">
-          {categories.map((item) => (
-            <label key={item} className="flex items-center gap-3 cursor-pointer group">
-              <input type="checkbox" className="w-4 h-4 border-input rounded focus:ring-primary bg-background" />
-              <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
-                {item}
-              </span>
-            </label>
-          ))}
+          {catStatus === "loading" && <span className="text-xs text-muted-foreground italic">Loading...</span>}
+          {categories.map((cat) => {
+            const isChecked = currentCategory === cat.slug;
+            return (
+              <label key={cat._id} className="flex items-center gap-3 cursor-pointer group">
+                <input 
+                  type="checkbox" 
+                  checked={isChecked}
+                  onChange={() => handleCategoryChange(cat.slug)}
+                  className="w-4 h-4 border-input rounded focus:ring-primary bg-background" 
+                />
+                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                  {cat.name}
+                </span>
+              </label>
+            );
+          })}
         </div>
       </div>
 
@@ -44,14 +114,22 @@ const FilterSidebar = () => {
       <div>
         <h3 className="text-xs font-bold tracking-widest uppercase mb-4">Skin Type</h3>
         <div className="flex flex-col gap-3">
-          {skinTypes.map((item) => (
-            <label key={item} className="flex items-center gap-3 cursor-pointer group">
-              <input type="checkbox" className="w-4 h-4 border-gray-300 rounded focus:ring-black" />
-              <span className="text-sm text-muted-foreground group-hover:text-black transition-colors">
-                {item}
-              </span>
-            </label>
-          ))}
+          {skinTypes.map((item) => {
+            const isChecked = currentSkinTypes.includes(item.value);
+            return (
+              <label key={item.value} className="flex items-center gap-3 cursor-pointer group">
+                <input 
+                  type="checkbox" 
+                  checked={isChecked}
+                  onChange={() => handleArrayFilterChange("skinTypes", item.value, currentSkinTypes)}
+                  className="w-4 h-4 border-gray-300 rounded focus:ring-black" 
+                />
+                <span className="text-sm text-muted-foreground group-hover:text-black transition-colors">
+                  {item.label}
+                </span>
+              </label>
+            );
+          })}
         </div>
       </div>
 
@@ -59,14 +137,22 @@ const FilterSidebar = () => {
       <div>
         <h3 className="text-xs font-bold tracking-widest uppercase mb-4">Concerns</h3>
         <div className="flex flex-col gap-3">
-          {concerns.map((item) => (
-            <label key={item} className="flex items-center gap-3 cursor-pointer group">
-              <input type="checkbox" className="w-4 h-4 border-gray-300 rounded focus:ring-black" />
-              <span className="text-sm text-muted-foreground group-hover:text-black transition-colors">
-                {item}
-              </span>
-            </label>
-          ))}
+          {concerns.map((item) => {
+            const isChecked = currentConcerns.includes(item.value);
+            return (
+              <label key={item.value} className="flex items-center gap-3 cursor-pointer group">
+                <input 
+                  type="checkbox" 
+                  checked={isChecked}
+                  onChange={() => handleArrayFilterChange("concerns", item.value, currentConcerns)}
+                  className="w-4 h-4 border-gray-300 rounded focus:ring-black" 
+                />
+                <span className="text-sm text-muted-foreground group-hover:text-black transition-colors">
+                  {item.label}
+                </span>
+              </label>
+            );
+          })}
         </div>
       </div>
     </div>

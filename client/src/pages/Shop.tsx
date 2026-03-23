@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProducts } from "@/redux/slices/productSlice";
 import ProductCard from "@/components/product/ProductCard";
@@ -18,12 +19,20 @@ const ITEMS_PER_PAGE = 6;
 
 const Shop = () => {
   const dispatch = useAppDispatch();
+  const [searchParams] = useSearchParams();
   const { items, status } = useAppSelector((state) => state.products || { items: [], status: "idle" });
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchProducts({}));
-  }, [dispatch]);
+    const category = searchParams.get("category") || undefined;
+    const skinTypes = searchParams.get("skinTypes") || undefined;
+    const concerns = searchParams.get("concerns") || undefined;
+    
+    setCurrentPage(1); // Reset page on filter change
+    
+    // Pass limit: 100 to fetch more products for the frontend pagination
+    dispatch(fetchProducts({ category, skinTypes, concerns, limit: 100 }));
+  }, [dispatch, searchParams]);
   
   // Simple frontend pagination logic until backend pagination is passed up
   const products = items || [];
@@ -87,22 +96,42 @@ const Shop = () => {
 
           {/* Main Content */}
           <main className="flex-1">
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-4 md:gap-x-8 gap-y-10 md:gap-y-12">
-              {currentProducts.map((product) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
-            </div>
+            {status === "loading" ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="w-10 h-10 animate-spin text-primary/40" />
+              </div>
+            ) : currentProducts.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-4 md:gap-x-8 gap-y-10 md:gap-y-12">
+                  {currentProducts.map((product) => (
+                    <ProductCard key={product._id} product={product} />
+                  ))}
+                </div>
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <Pagination 
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={(page) => {
-                  setCurrentPage(page);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-              />
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <Pagination 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={(page) => {
+                      setCurrentPage(page);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  />
+                )}
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-20 px-4 text-center border border-dashed border-border rounded-lg bg-accent/30">
+                <div className="bg-background w-16 h-16 rounded-full flex items-center justify-center mb-6 shadow-sm">
+                  <svg className="w-8 h-8 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+                <h3 className="font-serif text-2xl mb-2">No Matching Products</h3>
+                <p className="text-muted-foreground text-sm max-w-sm">
+                  We couldn't find anything matching your filters. Try selecting different criteria or clear your filters to start over.
+                </p>
+              </div>
             )}
           </main>
         </div>

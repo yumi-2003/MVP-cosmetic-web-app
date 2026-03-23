@@ -19,6 +19,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logout } from "@/redux/slices/authSlice";
+import { clearCart } from "@/redux/slices/cartSlice";
 import { toast } from "sonner";
 import CartButton from "./CartButton";
 
@@ -29,11 +30,17 @@ const Navactions = () => {
   const { user } = useAppSelector((state) => state.auth);
   const { items } = useAppSelector((state) => state.cart || { items: [] });
 
-  const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
+  const totalItems = items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
   const isShopPage = location.pathname === "/shop";
 
   const handleLogout = () => {
     dispatch(logout());
+    // Clear cart state immediately
+    dispatch(clearCart());
+    
+    // Rotate guest session ID so the next guest cart is empty
+    localStorage.removeItem("x-session-id");
+    
     toast.success("Logged out successfully. See you soon!");
     navigate("/login");
   };

@@ -3,8 +3,9 @@ import { CartIcon } from "@/components/icons";
 import { useAppSelector } from "@/redux/hooks";
 
 const CartButton = () => {
+  const { user } = useAppSelector((state) => state.auth);
   const { items } = useAppSelector((state) => state.cart || { items: [] });
-  const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
+  const totalItems = user ? (items?.reduce((acc, item) => acc + item.quantity, 0) || 0) : 0;
 
   return (
     <Link

@@ -4,14 +4,14 @@ import ApiError from "../utils/ApiError";
 import { calculateTotals } from "../utils/calculateTotals";
 
 export interface CartOwner {
-  userId?: string;
-  sessionId?: string;
+  userId: string;
 }
 
 const ownerFilter = (owner: CartOwner) => {
-  if (owner.userId) return { user: owner.userId };
-  if (owner.sessionId) return { sessionId: owner.sessionId };
-  throw new ApiError(400, "Cart owner is required");
+  if (!owner.userId) {
+    throw new ApiError(401, "User authentication required");
+  }
+  return { user: owner.userId };
 };
 
 const getCart = async (owner: CartOwner) => {
@@ -53,6 +53,16 @@ export const addItemToCart = async (
   const cart = await getOrCreateCart(owner);
   const existing = cart.items.find((item) => item.product.toString() === productId);
 
+  const totalRequested = (existing?.quantity || 0) + quantity;
+  const stock = product.countInStock || 0;
+
+  if (totalRequested > stock) {
+    throw new ApiError(
+      400,
+      `Only ${stock} items available in stock`
+    );
+  }
+
   if (existing) {
     existing.quantity += quantity;
   } else {
@@ -74,6 +84,17 @@ export const updateCartItem = async (
   productId: string,
   quantity: number
 ) => {
+  const product = await Product.findById(productId).lean();
+  if (!product) throw new ApiError(404, "Product not found");
+
+  const stock = product.countInStock || 0;
+  if (quantity > stock) {
+    throw new ApiError(
+      400, 
+      `Only ${stock} items available in stock`
+    );
+  }
+
   const cart = await getOrCreateCart(owner);
   const item = cart.items.find((entry) => entry.product.toString() === productId);
   if (!item) throw new ApiError(404, "Cart item not found");

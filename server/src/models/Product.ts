@@ -17,6 +17,7 @@ export interface ProductProps {
   reviewCount: number;
   isNew: boolean;
   isBestSeller: boolean;
+  countInStock: number;
 }
 
 export type ProductDocument = HydratedDocument<ProductProps>;
@@ -39,6 +40,7 @@ const ProductSchema = new Schema<ProductProps>(
     reviewCount: { type: Number, default: 0 },
     isNew: { type: Boolean, default: false },
     isBestSeller: { type: Boolean, default: false },
+    countInStock: { type: Number, required: true, default: 0, min: 0 },
   },
   { timestamps: true }
 );

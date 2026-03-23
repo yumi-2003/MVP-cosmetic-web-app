@@ -25,6 +25,7 @@ export interface IProduct {
   reviewCount: number;
   isNew: boolean;
   isBestSeller: boolean;
+  countInStock: number;
 }
 
 export interface ICategory {

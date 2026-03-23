@@ -9,7 +9,7 @@ import axios from "axios";
 const api = axios.create({
   // The base URL for all API requests. In a real-world scenario, 
   // this would typically be stored in an environment variable (e.g., import.meta.env.VITE_API_URL).
-  baseURL: "http://localhost:3000/api",
+  baseURL: "http://localhost:5050/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -39,18 +39,8 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // Try to extract user ID if Redux state is persisted
-    try {
-      const persistedState = localStorage.getItem("persist:root");
-      if (persistedState) {
-        const auth = JSON.parse(JSON.parse(persistedState).auth);
-        if (auth?.user?._id) {
-          config.headers["x-user-id"] = auth.user._id;
-        }
-      }
-    } catch (e) {
-      // ignore
-    }
+    // x-user-id is now derived from JWT on server for security.
+    // persist:root parsing is removed to prevent stale data usage.
 
     return config;
   },

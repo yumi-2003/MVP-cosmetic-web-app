@@ -7,25 +7,19 @@ import {
   updateCartItemQuantity,
 } from "../controllers/cartController";
 import validate from "../middleware/validate";
+import { protect } from "../middleware/protect";
 
 const router = Router();
 
-const cartOwnerValidators = [
-  oneOf(
-    [
-      header("x-user-id").isMongoId(),
-      header("x-session-id").isString().trim().notEmpty(),
-    ],
-    { message: "x-user-id or x-session-id header is required" }
-  ),
-];
+// For cart routes, we now STRICTLY require authentication.
+// No extra headers like x-user-id or x-session-id are needed for security.
 
-router.get("/", cartOwnerValidators, validate, getCart);
+router.get("/", protect, getCart);
 
 router.post(
   "/items",
   [
-    ...cartOwnerValidators,
+    protect,
     body("productId").isMongoId(),
     body("quantity").isInt({ min: 1 }).toInt(),
   ],
@@ -36,7 +30,7 @@ router.post(
 router.patch(
   "/items/:productId",
   [
-    ...cartOwnerValidators,
+    protect,
     param("productId").isMongoId(),
     body("quantity").isInt({ min: 0 }).toInt(),
   ],
@@ -46,7 +40,7 @@ router.patch(
 
 router.delete(
   "/items/:productId",
-  [...cartOwnerValidators, param("productId").isMongoId()],
+  [protect, param("productId").isMongoId()],
   validate,
   removeCartItemByProduct
 );

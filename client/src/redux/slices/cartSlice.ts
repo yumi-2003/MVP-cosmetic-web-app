@@ -98,7 +98,16 @@ const cartSlice = createSlice({
       .addCase(updateCartItem.fulfilled, (state, action: PayloadAction<ICartItem[]>) => {
         state.status = "succeeded";
         state.items = action.payload;
-      });
+      })
+      .addMatcher(
+        (action) => action.type === "auth/logout",
+        (state) => {
+          state.items = [];
+          state.totalAmount = 0;
+          state.status = "idle";
+          state.error = null;
+        }
+      );
   },
 });
 

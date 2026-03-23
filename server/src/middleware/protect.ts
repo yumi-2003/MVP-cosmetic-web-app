@@ -18,10 +18,14 @@ export const protect = async (
     req.headers.authorization.startsWith("Bearer")
   ) {
       try {
-      const token = req.headers.authorization.split(" ")[1];
+      token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, JWT_SECRET!) as JwtPayload & { _id?: string };
       if (decoded && decoded._id) {
-        req.user = await User.findById(decoded._id).select("-password");
+        const user = await User.findById(decoded._id).select("-password");
+        if (!user) {
+          return res.status(401).json({ message: "Not authorized, user not found" });
+        }
+        req.user = user;
         next();
       } else {
         res.status(401).json({ message: "Not authorized, token failed" });
@@ -32,4 +36,27 @@ export const protect = async (
   } else {
     res.status(401).json({ message: "Not authorized, no token" });
   }
+};
+
+export const optionalProtect = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const JWT_SECRET = process.env.JWT_SECRET;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    try {
+      const token = req.headers.authorization.split(" ")[1];
+      const decoded = jwt.verify(token, JWT_SECRET!) as JwtPayload & { _id?: string };
+      if (decoded && decoded._id) {
+        req.user = await User.findById(decoded._id).select("-password");
+      }
+    } catch (err) {
+      // Ignore errors for optional protect
+    }
+  }
+  next();
 };

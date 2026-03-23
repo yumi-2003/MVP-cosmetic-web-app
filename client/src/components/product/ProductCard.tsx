@@ -20,7 +20,19 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const hasDiscount = product.comparePrice && product.comparePrice > product.price;
   const discountAmount = hasDiscount ? product.comparePrice! - product.price : 0;
 
+  const { user } = useAppSelector((state) => state.auth);
+
   const handleAddToCart = async () => {
+    if (!user) {
+      toast.error("Please log in to add items to your cart", {
+        action: {
+          label: "Login",
+          onClick: () => navigate("/login"),
+        },
+      });
+      return;
+    }
+
     try {
       setIsAdding(true);
       await dispatch(addToCart({ productId: product._id, quantity: 1 })).unwrap();
@@ -54,35 +66,44 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-10 px-4 pb-4">
           <Button 
             onClick={handleAddToCart}
-            disabled={isAdding}
-            className="w-full bg-background/95 backdrop-blur-md text-foreground hover:bg-primary hover:text-primary-foreground border border-border/50 rounded-lg py-6 shadow-xl active:scale-[0.98] transition-all duration-300 group/btn"
+            disabled={isAdding || (product.countInStock ?? 0) === 0}
+            className="w-full bg-background/95 backdrop-blur-md text-foreground hover:bg-primary hover:text-primary-foreground border border-border/50 rounded-lg py-6 shadow-xl active:scale-[0.98] transition-all duration-300 group/btn disabled:opacity-80 disabled:bg-muted disabled:text-muted-foreground"
           >
             {isAdding ? (
               <Loader2 className="w-4 h-4 mr-2 animate-spin text-primary group-hover/btn:text-primary-foreground" />
+            ) : (product.countInStock ?? 0) === 0 ? (
+              null
             ) : (
               <CartIcon className="w-4 h-4 mr-2 text-primary group-hover/btn:text-primary-foreground transition-transform duration-300 group-hover/btn:scale-110 group-hover/btn:rotate-[-10deg]" />
             )}
             <span className="text-[10px] font-bold tracking-[0.2em] uppercase">
-              {isAdding ? "Adding..." : "Add to Cart"}
+              {isAdding ? "Adding..." : (product.countInStock ?? 0) === 0 ? "Out of Stock" : "Add to Cart"}
             </span>
           </Button>
         </div>
 
         {/* badges - Top Left */}
-        {product.tags && product.tags.length > 0 && (
-          <div className="absolute left-3 top-3 flex flex-col gap-2">
-            {product.tags.includes("NEW") && (
-              <span className="bg-primary text-primary-foreground px-3 py-1 text-[9px] font-bold tracking-wider uppercase rounded-sm shadow-sm">
-                NEW
-              </span>
-            )}
-            {product.tags.includes("BEST SELLER") && (
-              <span className="bg-amber-500 text-white px-3 py-1 text-[9px] font-bold tracking-wider uppercase shadow-md rounded-sm">
-                BEST SELLER
-              </span>
-            )}
-          </div>
-        )}
+        <div className="absolute left-3 top-3 flex flex-col gap-2">
+          {(product.countInStock ?? 0) === 0 && (
+            <span className="bg-destructive text-destructive-foreground px-3 py-1 text-[9px] font-bold tracking-wider uppercase rounded-sm shadow-sm">
+              OUT OF STOCK
+            </span>
+          )}
+          {product.tags && product.tags.length > 0 && (
+            <>
+              {product.tags.includes("NEW") && (
+                <span className="bg-primary text-primary-foreground px-3 py-1 text-[9px] font-bold tracking-wider uppercase rounded-sm shadow-sm">
+                  NEW
+                </span>
+              )}
+              {product.tags.includes("BEST SELLER") && (
+                <span className="bg-amber-500 text-white px-3 py-1 text-[9px] font-bold tracking-wider uppercase shadow-md rounded-sm">
+                  BEST SELLER
+                </span>
+              )}
+            </>
+          )}
+        </div>
 
         <button
           type="button"
@@ -104,8 +125,21 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </h3>
         </div>
 
+        {/* Stock Status */}
+        <div className="flex items-center gap-2 mt-0.5">
+          {(product.countInStock ?? 0) > 0 ? (
+            <span className={`text-[10px] font-medium ${(product.countInStock ?? 0) < 10 ? 'text-amber-600' : 'text-emerald-600'}`}>
+              {(product.countInStock ?? 0) < 10 ? `Only ${product.countInStock} left` : `${product.countInStock} in stock`}
+            </span>
+          ) : (
+            <span className="text-[10px] font-medium text-destructive">
+              Currently Unavailable
+            </span>
+          )}
+        </div>
+
         {/* Rating */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 mt-0.5">
           <div className="flex items-center">
             {[...Array(5)].map((_, i) => (
               <StarIcon

@@ -16,7 +16,9 @@ const RootLayout = () => {
     if (token && !user) {
       dispatch(getMe());
     }
-    dispatch(fetchCart());
+    if (user) {
+      dispatch(fetchCart());
+    }
   }, [token, user, dispatch]);
 
   const hideChrome =

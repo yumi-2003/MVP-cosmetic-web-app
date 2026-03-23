@@ -9,15 +9,14 @@ import {
   type CartOwner,
 } from "../services/cartService";
 
-const getOwnerFromRequest = (req: Request): CartOwner => {
-  const userId = req.header("x-user-id") || undefined;
-  const sessionId = req.header("x-session-id") || undefined;
-
-  if (!userId && !sessionId) {
-    throw new ApiError(400, "x-user-id or x-session-id header is required");
+const getOwnerFromRequest = (req: any): CartOwner => {
+  const userId = req.user?._id?.toString();
+  
+  if (!userId) {
+    throw new ApiError(401, "User authentication required for cart operations");
   }
 
-  return { userId, sessionId };
+  return { userId };
 };
 
 export const getCart = asyncHandler(async (req: Request, res: Response) => {

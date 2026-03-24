@@ -131,9 +131,25 @@ export const getOrderById = async (orderId: string) => {
 };
 
 export const getOrdersByUser = async (userId: string) => {
-  return Order.find({ user: userId, status: { $ne: "cart" } })
+  const orders = await Order.find({ user: userId, status: { $ne: "cart" } })
     .sort({ createdAt: -1 })
     .lean();
+
+  if (orders.length === 0) return orders;
+
+  const orderIds = orders.map((order) => order._id);
+  const deliveries = await Shipping.find({ order: { $in: orderIds } })
+    .select("order status trackingNumber estimatedDelivery actualDelivery")
+    .lean();
+
+  const deliveryMap = new Map(
+    deliveries.map((delivery) => [delivery.order.toString(), delivery])
+  );
+
+  return orders.map((order) => ({
+    ...order,
+    delivery: deliveryMap.get(order._id.toString()) || null,
+  }));
 };
 
 export const updateOrderStatus = async (orderId: string, status: string) => {

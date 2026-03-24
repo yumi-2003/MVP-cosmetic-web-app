@@ -55,13 +55,35 @@ export interface ICart {
 
 export interface IOrder {
   _id: string;
-  user: string | IUser;
-  items: { product: string | IProduct; name: string; quantity: number; price: number; image?: string; }[];
-  totalAmount: number;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-  shippingAddress: string;
+  user?: string | IUser;
+  items: {
+    product: string | IProduct;
+    name: string;
+    quantity: number;
+    price: number;
+    image?: string;
+  }[];
+  status: "cart" | "placed" | "paid" | "shipped" | "delivered" | "cancelled";
+  subtotal: number;
+  tax: number;
+  shipping: number;
+  total: number;
+  placedAt?: string;
   createdAt: string;
   updatedAt: string;
+  delivery?: {
+    status:
+      | "pending"
+      | "processing"
+      | "shipped"
+      | "out_for_delivery"
+      | "delivered"
+      | "failed"
+      | "returned";
+    trackingNumber?: string;
+    estimatedDelivery?: string;
+    actualDelivery?: string;
+  } | null;
 }
 
 export interface IReview {

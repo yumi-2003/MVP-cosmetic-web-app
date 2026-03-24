@@ -35,13 +35,48 @@ const Shop = () => {
     
     // Pass limit: 100 to fetch more products for the frontend pagination
     dispatch(fetchProducts({ category, skinTypes, concerns, minPrice, maxPrice, inStock, limit: 100 }));
-  }, [dispatch, searchParams]);
+  }, [dispatch,
+    searchParams.get("category"),
+    searchParams.get("skinTypes"),
+    searchParams.get("concerns"),
+    searchParams.get("minPrice"),
+    searchParams.get("maxPrice"),
+    searchParams.get("inStock"),
+  ]);
   
   // Simple frontend pagination logic until backend pagination is passed up
   const products = items || [];
-  const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
+  const query = (searchParams.get("q") || "").trim().toLowerCase();
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query]);
+  const filteredProducts = query
+    ? products.filter((product) => {
+        const name = product.name?.toLowerCase() || "";
+        const category =
+          typeof product.category === "string"
+            ? product.category.toLowerCase()
+            : product.category?.name?.toLowerCase() || "";
+        const skinTypes = (product.skinTypes || [])
+          .map((t) => t.toLowerCase())
+          .join(" ");
+        const concerns = (product.concerns || [])
+          .map((c) => c.toLowerCase())
+          .join(" ");
+
+        return (
+          name.includes(query) ||
+          category.includes(query) ||
+          skinTypes.includes(query) ||
+          concerns.includes(query)
+        );
+      })
+    : products;
+
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentProducts = products.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const currentProducts = filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
     <div className="bg-background min-h-screen text-foreground">

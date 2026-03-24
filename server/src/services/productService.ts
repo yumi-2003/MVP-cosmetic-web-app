@@ -9,6 +9,9 @@ export interface ProductQuery {
   tags?: string;
   skinTypes?: string;
   concerns?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  inStock?: string;
 }
 
 const parseList = (value?: string) => {
@@ -72,12 +75,25 @@ export const listProducts = async (query: ProductQuery) => {
   const concerns = parseList(query.concerns);
   if (concerns.length) filter.concerns = { $in: concerns };
 
+  if (query.minPrice || query.maxPrice) {
+    const priceFilter: Record<string, unknown> = {};
+    if (query.minPrice) priceFilter.$gte = Number(query.minPrice);
+    if (query.maxPrice) priceFilter.$lte = Number(query.maxPrice);
+    filter.price = priceFilter;
+  }
+
+  if (query.inStock === "true") {
+    filter.countInStock = { $gt: 0 };
+  } else if (query.inStock === "false") {
+    filter.countInStock = { $eq: 0 };
+  }
+
   const sort = parseSort(query.sort);
 
   const [data, total] = await Promise.all([
     Product.find(filter)
       .populate("category", "name slug")
-      .sort(sort)
+      .sort(sort as any)
       .skip(skip)
       .limit(limit)
       .lean(),

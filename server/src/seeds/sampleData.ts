@@ -45,6 +45,7 @@ export const products = [
     reviewCount: 10,
     isNew: false,
     isBestSeller: true,
+    countInStock: 25,
   },
   {
     name: "Radiance Facial Serum",
@@ -64,6 +65,7 @@ export const products = [
     reviewCount: 8,
     isNew: true,
     isBestSeller: true,
+    countInStock: 20,
   },
   {
     name: "Warm Nude Eye Palette",
@@ -83,6 +85,7 @@ export const products = [
     reviewCount: 22,
     isNew: false,
     isBestSeller: true,
+    countInStock: 15,
   },
   {
     name: "Luminous Barrier Cream",
@@ -102,6 +105,7 @@ export const products = [
     reviewCount: 14,
     isNew: false,
     isBestSeller: false,
+    countInStock: 8,
   },
   {
     name: "Rose Water Toner",
@@ -121,6 +125,7 @@ export const products = [
     reviewCount: 19,
     isNew: true,
     isBestSeller: false,
+    countInStock: 30,
   },
   {
     name: "Argan Oil Hair Serum",
@@ -140,6 +145,7 @@ export const products = [
     reviewCount: 11,
     isNew: false,
     isBestSeller: false,
+    countInStock: 20,
   },
   {
     name: "SPF 50 Sunscreen Drops",
@@ -159,6 +165,7 @@ export const products = [
     reviewCount: 35,
     isNew: true,
     isBestSeller: true,
+    countInStock: 50,
   },
   {
     name: "Liquid Foundation",
@@ -178,6 +185,7 @@ export const products = [
     reviewCount: 17,
     isNew: false,
     isBestSeller: false,
+    countInStock: 22,
   },
   {
     name: "Hydrating Aloe Gel Cleanser",
@@ -197,6 +205,7 @@ export const products = [
     reviewCount: 16,
     isNew: true,
     isBestSeller: false,
+    countInStock: 40,
   },
   {
     name: "Cloud Skin Moisturizer",
@@ -216,6 +225,7 @@ export const products = [
     reviewCount: 12,
     isNew: true,
     isBestSeller: false,
+    countInStock: 20,
   },
   {
     name: "Mineral Blush Stick",
@@ -235,6 +245,7 @@ export const products = [
     reviewCount: 9,
     isNew: false,
     isBestSeller: false,
+    countInStock: 18,
   },
   {
     name: "Brow Sculpting Gel",
@@ -254,6 +265,7 @@ export const products = [
     reviewCount: 18,
     isNew: false,
     isBestSeller: true,
+    countInStock: 28,
   },
   {
     name: "Repairing Hair Mask",
@@ -273,6 +285,7 @@ export const products = [
     reviewCount: 21,
     isNew: true,
     isBestSeller: false,
+    countInStock: 12,
   },
   {
     name: "Sea Salt Body Scrub",
@@ -292,6 +305,7 @@ export const products = [
     reviewCount: 7,
     isNew: false,
     isBestSeller: false,
+    countInStock: 10,
   },
   {
     name: "Silk Touch Body Lotion",
@@ -311,6 +325,7 @@ export const products = [
     reviewCount: 5,
     isNew: false,
     isBestSeller: false,
+    countInStock: 14,
   },
   {
     name: "Noir Bloom Eau de Parfum",
@@ -330,5 +345,6 @@ export const products = [
     reviewCount: 26,
     isNew: true,
     isBestSeller: true,
+    countInStock: 20,
   },
 ];

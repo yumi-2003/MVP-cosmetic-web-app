@@ -37,6 +37,9 @@ const FilterSidebar = () => {
   const currentCategory = searchParams.get("category");
   const currentSkinTypes = searchParams.get("skinTypes")?.split(",") || [];
   const currentConcerns = searchParams.get("concerns")?.split(",") || [];
+  const currentMinPrice = searchParams.get("minPrice") || "";
+  const currentMaxPrice = searchParams.get("maxPrice") || "";
+  const currentInStock = searchParams.get("inStock") || "";
 
   const handleCategoryChange = (slug: string) => {
     if (currentCategory === slug) {
@@ -68,10 +71,31 @@ const FilterSidebar = () => {
     newParams.delete("category");
     newParams.delete("skinTypes");
     newParams.delete("concerns");
+    newParams.delete("minPrice");
+    newParams.delete("maxPrice");
+    newParams.delete("inStock");
     setSearchParams(newParams);
   };
 
-  const hasFilters = currentCategory || currentSkinTypes.length > 0 || currentConcerns.length > 0;
+  const handlePriceChange = (type: "minPrice" | "maxPrice", value: string) => {
+    if (value) {
+      searchParams.set(type, value);
+    } else {
+      searchParams.delete(type);
+    }
+    setSearchParams(searchParams);
+  };
+
+  const handleStockChange = (value: string) => {
+    if (currentInStock === value) {
+      searchParams.delete("inStock");
+    } else {
+      searchParams.set("inStock", value);
+    }
+    setSearchParams(searchParams);
+  };
+
+  const hasFilters = currentCategory || currentSkinTypes.length > 0 || currentConcerns.length > 0 || currentMinPrice || currentMaxPrice || currentInStock;
 
   return (
     <div className="w-full flex flex-col gap-8">
@@ -107,6 +131,57 @@ const FilterSidebar = () => {
               </label>
             );
           })}
+        </div>
+      </div>
+
+      {/* Price Range */}
+      <div>
+        <h3 className="text-xs font-bold tracking-widest uppercase mb-4">Price Range</h3>
+        <div className="flex items-center gap-2">
+          <input 
+            type="number" 
+            placeholder="Min"
+            value={currentMinPrice}
+            onChange={(e) => handlePriceChange("minPrice", e.target.value)}
+            className="w-full px-3 py-2 text-sm border border-input rounded focus:outline-none focus:ring-1 focus:ring-primary bg-background"
+          />
+          <span className="text-muted-foreground">-</span>
+          <input 
+            type="number" 
+            placeholder="Max"
+            value={currentMaxPrice}
+            onChange={(e) => handlePriceChange("maxPrice", e.target.value)}
+            className="w-full px-3 py-2 text-sm border border-input rounded focus:outline-none focus:ring-1 focus:ring-primary bg-background"
+          />
+        </div>
+      </div>
+
+      {/* Availability */}
+      <div>
+        <h3 className="text-xs font-bold tracking-widest uppercase mb-4">Availability</h3>
+        <div className="flex flex-col gap-3">
+          <label className="flex items-center gap-3 cursor-pointer group">
+            <input 
+              type="checkbox" 
+              checked={currentInStock === "true"}
+              onChange={() => handleStockChange("true")}
+              className="w-4 h-4 border-input rounded focus:ring-primary bg-background" 
+            />
+            <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+              In Stock
+            </span>
+          </label>
+          <label className="flex items-center gap-3 cursor-pointer group">
+            <input 
+              type="checkbox" 
+              checked={currentInStock === "false"}
+              onChange={() => handleStockChange("false")}
+              className="w-4 h-4 border-input rounded focus:ring-primary bg-background" 
+            />
+            <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+              Out of Stock
+            </span>
+          </label>
         </div>
       </div>
 

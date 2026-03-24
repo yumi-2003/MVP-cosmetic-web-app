@@ -63,7 +63,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         />
         
         {/* Add to Cart - Slide up on hover */}
-        <div className="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-10 px-4 pb-4">
+        <div className="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-10 px-4 pb-4 flex flex-col gap-2">
           <Button 
             onClick={handleAddToCart}
             disabled={isAdding || (product.countInStock ?? 0) === 0}

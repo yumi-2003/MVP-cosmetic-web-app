@@ -4,27 +4,41 @@ import ApiError from "../utils/ApiError";
 import { calculateTotals } from "../utils/calculateTotals";
 
 export interface CartOwner {
-  userId: string;
+  userId?: string;
+  sessionId?: string;
 }
 
 const ownerFilter = (owner: CartOwner) => {
-  if (!owner.userId) {
-    throw new ApiError(401, "User authentication required");
-  }
-  return { user: owner.userId };
+  if (owner.userId) return { user: owner.userId };
+  if (owner.sessionId) return { sessionId: owner.sessionId };
+  throw new ApiError(401, "User authentication or session ID required");
 };
 
 const getCart = async (owner: CartOwner) => {
-  const filter = ownerFilter(owner);
-  return Order.findOne({ ...filter, status: "cart" });
+  const filter = { ...ownerFilter(owner), status: "cart" };
+  const carts = await Order.find(filter).sort({ createdAt: -1 });
+  
+  if (carts.length > 1) {
+    // Self-healing: Merge or Delete duplicates. Taking the most recent one.
+    const [latest, ...others] = carts;
+    await Order.deleteMany({ _id: { $in: others.map(c => c._id) } });
+    return latest;
+  }
+  
+  return carts[0] || null;
 };
 
 const getOrCreateCart = async (owner: CartOwner) => {
-  const existing = await getCart(owner);
-  if (existing) return existing;
+  const filter = { ...ownerFilter(owner), status: "cart" };
+  
+  // Atomic findOneAndUpdate with upsert ensures only one cart is created/returned
+  let cart = await Order.findOneAndUpdate(
+    filter,
+    { $setOnInsert: { items: [], subtotal: 0, tax: 0, shipping: 0, total: 0 } },
+    { upsert: true, new: true, setDefaultsOnInsert: true }
+  );
 
-  const filter = ownerFilter(owner);
-  return Order.create({ ...filter, status: "cart", items: [] });
+  return cart;
 };
 
 const recalcTotals = async (cart: OrderDocument) => {
@@ -37,9 +51,42 @@ const recalcTotals = async (cart: OrderDocument) => {
   return cart;
 };
 
+const cleanCart = async (cart: OrderDocument) => {
+  if (cart.items.length === 0) return cart;
+
+  const productIds = cart.items.map((item) => item.product);
+  const existingProducts = await Product.find({ _id: { $in: productIds } }).lean();
+  const productMap = new Map(
+    existingProducts.map((p) => [p._id.toString(), p])
+  );
+
+  let changed = false;
+  const originalCount = cart.items.length;
+
+  cart.items = cart.items.filter((item) => {
+    const p = productMap.get(item.product.toString());
+    if (!p) {
+      changed = true;
+      return false;
+    }
+    // Optional: Update name/image if they changed in DB
+    if (item.name !== p.name || item.image !== p.images?.[0]) {
+      item.name = p.name;
+      item.image = p.images?.[0];
+      changed = true;
+    }
+    return true;
+  });
+
+  if (changed || cart.items.length !== originalCount) {
+    await recalcTotals(cart);
+  }
+  return cart;
+};
+
 export const getCartForOwner = async (owner: CartOwner) => {
   const cart = await getOrCreateCart(owner);
-  return cart;
+  return cleanCart(cart);
 };
 
 export const addItemToCart = async (
@@ -84,8 +131,14 @@ export const updateCartItem = async (
   productId: string,
   quantity: number
 ) => {
+  const cart = await getOrCreateCart(owner);
   const product = await Product.findById(productId).lean();
-  if (!product) throw new ApiError(404, "Product not found");
+  
+  if (!product) {
+    // Product gone? Remove it from cart
+    cart.items = cart.items.filter((entry) => entry.product.toString() !== productId);
+    return recalcTotals(cart);
+  }
 
   const stock = product.countInStock || 0;
   if (quantity > stock) {
@@ -95,7 +148,6 @@ export const updateCartItem = async (
     );
   }
 
-  const cart = await getOrCreateCart(owner);
   const item = cart.items.find((entry) => entry.product.toString() === productId);
   if (!item) throw new ApiError(404, "Cart item not found");
 
@@ -114,4 +166,9 @@ export const removeCartItem = async (owner: CartOwner, productId: string) => {
   const cart = await getOrCreateCart(owner);
   cart.items = cart.items.filter((entry) => entry.product.toString() !== productId);
   return recalcTotals(cart);
+};
+
+export const clearCartForOwner = async (owner: CartOwner) => {
+  const filter = ownerFilter(owner);
+  await Order.deleteMany({ ...filter, status: "cart" });
 };

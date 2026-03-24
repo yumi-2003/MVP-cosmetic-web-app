@@ -6,17 +6,21 @@ import {
   createOrderFromCart,
   getOrderById,
   getOrdersByUser,
+  updateOrderStatus,
 } from "../services/orderService";
 
-const getOwnerFromRequest = (req: Request) => {
-  const userId = req.header("x-user-id") || undefined;
+const getOwnerFromRequest = (req: any) => {
+  const userId =
+    req.user?._id?.toString() ||
+    req.header("x-user-id") ||
+    undefined;
   const sessionId = req.header("x-session-id") || undefined;
 
   if (!userId && !sessionId) {
     throw new ApiError(400, "x-user-id or x-session-id header is required");
   }
 
-  return { userId, sessionId };
+  return { userId, sessionId: userId ? undefined : sessionId };
 };
 
 export const placeOrder = asyncHandler(async (req: Request, res: Response) => {
@@ -42,4 +46,12 @@ export const getOrder = asyncHandler(async (req: Request, res: Response) => {
 export const getUserOrders = asyncHandler(async (req: Request, res: Response) => {
   const orders = await getOrdersByUser(req.params.userId);
   res.status(200).json(orders);
+});
+
+export const updateStatus = asyncHandler(async (req: Request, res: Response) => {
+  const { status } = req.body;
+  if (!status) throw new ApiError(400, "Status is required");
+
+  const order = await updateOrderStatus(req.params.id, status);
+  res.status(200).json(order);
 });

@@ -4,6 +4,7 @@ import Product from "../models/Product";
 import ApiError from "../utils/ApiError";
 import { calculateTotals } from "../utils/calculateTotals";
 import type { CartOwner } from "./cartService";
+import { clearCartForOwner } from "./cartService";
 
 const ownerFilter = (owner: CartOwner) => {
   if (owner.userId) return { user: owner.userId };
@@ -21,6 +22,24 @@ export const createOrderFromCart = async (
   if (!cart || cart.items.length === 0) {
     throw new ApiError(400, "Cart is empty");
   }
+
+  // Synchronize cart items with valid products
+  const productIds = cart.items.map((item) => item.product.toString());
+  const products = await Product.find({ _id: { $in: productIds } }).lean();
+  const productMap = new Map(products.map((p) => [p._id.toString(), p]));
+
+  cart.items = (cart.items as any).filter((item: any) => productMap.has(item.product.toString()));
+  if (cart.items.length === 0) {
+    throw new ApiError(400, "All items in your cart are no longer available");
+  }
+
+  // Update name/image/price to match current DB
+  cart.items.forEach((item) => {
+    const p = productMap.get(item.product.toString())!;
+    item.name = p.name;
+    item.price = p.price;
+    item.image = p.images?.[0];
+  });
 
   const totals = calculateTotals(cart.items, distanceKm);
 
@@ -51,18 +70,22 @@ const buildOrderItems = async (
 
   const productMap = new Map(products.map((product) => [product._id.toString(), product]));
 
-  const orderItems: OrderItem[] = items.map((item) => {
-    const product = productMap.get(item.productId);
-    if (!product) throw new ApiError(404, `Product not found: ${item.productId}`);
+  const orderItems: OrderItem[] = (
+    await Promise.all(
+      items.map(async (item) => {
+        const product = productMap.get(item.productId);
+        if (!product) return null;
 
-    return {
-      product: product._id,
-      name: product.name,
-      price: product.price,
-      quantity: item.quantity,
-      image: product.images?.[0],
-    };
-  });
+        return {
+          product: product._id,
+          name: product.name,
+          price: product.price,
+          quantity: item.quantity,
+          image: product.images?.[0],
+        } as OrderItem;
+      })
+    )
+  ).filter((item): item is OrderItem => item !== null);
 
   return orderItems;
 };
@@ -97,6 +120,9 @@ export const createOrder = async (
     });
   }
 
+  // Clear existing cart document for this owner
+  await clearCartForOwner(owner);
+
   return order;
 };
 
@@ -108,4 +134,27 @@ export const getOrdersByUser = async (userId: string) => {
   return Order.find({ user: userId, status: { $ne: "cart" } })
     .sort({ createdAt: -1 })
     .lean();
+};
+
+export const updateOrderStatus = async (orderId: string, status: string) => {
+  const order = await Order.findById(orderId);
+  if (!order) throw new ApiError(404, "Order not found");
+
+  const oldStatus = order.status;
+  const newStatus = status as any;
+
+  // Decrease stock only when transitioning TO delivered from any other status
+  if (newStatus === "delivered" && oldStatus !== "delivered") {
+    for (const item of order.items) {
+      const product = await Product.findById(item.product);
+      if (product) {
+        product.countInStock = Math.max(0, product.countInStock - item.quantity);
+        await product.save();
+      }
+    }
+  }
+
+  order.status = newStatus;
+  await order.save();
+  return order;
 };

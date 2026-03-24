@@ -51,7 +51,13 @@ const OrderSchema: Schema<OrderDocument> = new Schema(
   { timestamps: true }
 );
 
-OrderSchema.index({ user: 1, status: 1 });
-OrderSchema.index({ sessionId: 1, status: 1 });
+OrderSchema.index(
+  { user: 1, status: 1 },
+  { unique: true, partialFilterExpression: { status: "cart" } }
+);
+OrderSchema.index(
+  { sessionId: 1, status: 1 },
+  { unique: true, partialFilterExpression: { status: "cart" } }
+);
 
 export default mongoose.model<OrderDocument>("Order", OrderSchema);

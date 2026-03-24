@@ -4,8 +4,10 @@ import {
   getOrder,
   getUserOrders,
   placeOrder,
+  updateStatus,
 } from "../controllers/orderController";
 import validate from "../middleware/validate";
+import { optionalProtect } from "../middleware/protect";
 
 const router = Router();
 
@@ -14,13 +16,15 @@ const ownerValidators = [
     [
       header("x-user-id").isMongoId(),
       header("x-session-id").isString().trim().notEmpty(),
+      header("authorization").custom((value) => typeof value === "string" && value.startsWith("Bearer ")),
     ],
-    { message: "x-user-id or x-session-id header is required" }
+    { message: "x-user-id, x-session-id, or Authorization header is required" }
   ),
 ];
 
 router.post(
   "/",
+  optionalProtect,
   [
     ...ownerValidators,
     body("items").optional().isArray(),
@@ -43,6 +47,16 @@ router.get(
   [param("userId").isMongoId()],
   validate,
   getUserOrders
+);
+
+router.patch(
+  "/:id/status",
+  [
+    param("id").isMongoId(),
+    body("status").isString().trim().notEmpty(),
+  ],
+  validate,
+  updateStatus
 );
 
 export default router;

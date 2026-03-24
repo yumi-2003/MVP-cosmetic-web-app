@@ -27,11 +27,14 @@ const Shop = () => {
     const category = searchParams.get("category") || undefined;
     const skinTypes = searchParams.get("skinTypes") || undefined;
     const concerns = searchParams.get("concerns") || undefined;
+    const minPrice = searchParams.get("minPrice") || undefined;
+    const maxPrice = searchParams.get("maxPrice") || undefined;
+    const inStock = searchParams.get("inStock") || undefined;
     
     setCurrentPage(1); // Reset page on filter change
     
     // Pass limit: 100 to fetch more products for the frontend pagination
-    dispatch(fetchProducts({ category, skinTypes, concerns, limit: 100 }));
+    dispatch(fetchProducts({ category, skinTypes, concerns, minPrice, maxPrice, inStock, limit: 100 }));
   }, [dispatch, searchParams]);
   
   // Simple frontend pagination logic until backend pagination is passed up

@@ -42,6 +42,7 @@ const seed = async () => {
         reviewCount: product.reviewCount,
         isNew: product.isNew,
         isBestSeller: product.isBestSeller,
+        countInStock: product.countInStock || 0,
       };
     });
 

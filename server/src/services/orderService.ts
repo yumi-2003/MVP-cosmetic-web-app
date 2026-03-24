@@ -41,6 +41,8 @@ export const createOrderFromCart = async (
     item.image = p.images?.[0];
   });
 
+  await reserveStockForItems(cart.items);
+
   const totals = calculateTotals(cart.items, distanceKm);
 
   cart.subtotal = totals.subtotal;
@@ -99,6 +101,9 @@ export const createOrder = async (
   if (!items.length) throw new ApiError(400, "Order items are required");
 
   const orderItems = await buildOrderItems(items);
+  if (!orderItems.length) throw new ApiError(400, "Order items are invalid");
+
+  await reserveStockForItems(orderItems);
   const totals = calculateTotals(orderItems, distanceKm);
 
   const order = await Order.create({
@@ -156,21 +161,42 @@ export const updateOrderStatus = async (orderId: string, status: string) => {
   const order = await Order.findById(orderId);
   if (!order) throw new ApiError(404, "Order not found");
 
-  const oldStatus = order.status;
   const newStatus = status as any;
-
-  // Decrease stock only when transitioning TO delivered from any other status
-  if (newStatus === "delivered" && oldStatus !== "delivered") {
-    for (const item of order.items) {
-      const product = await Product.findById(item.product);
-      if (product) {
-        product.countInStock = Math.max(0, product.countInStock - item.quantity);
-        await product.save();
-      }
-    }
-  }
 
   order.status = newStatus;
   await order.save();
   return order;
+};
+
+const reserveStockForItems = async (items: OrderItem[]) => {
+  const adjusted: Array<{ product: OrderItem["product"]; quantity: number }> = [];
+  try {
+    for (const item of items) {
+      const updated = await Product.findOneAndUpdate(
+        { _id: item.product, countInStock: { $gte: item.quantity } },
+        { $inc: { countInStock: -item.quantity } },
+        { new: true }
+      );
+
+      if (!updated) {
+        const product = await Product.findById(item.product).lean();
+        const available = product?.countInStock ?? 0;
+        const name = product?.name ?? "this product";
+        throw new ApiError(400, `Only ${available} items available in stock for ${name}`);
+      }
+
+      adjusted.push({ product: item.product, quantity: item.quantity });
+    }
+  } catch (err) {
+    if (adjusted.length) {
+      await Promise.all(
+        adjusted.map((item) =>
+          Product.findByIdAndUpdate(item.product, {
+            $inc: { countInStock: item.quantity },
+          })
+        )
+      );
+    }
+    throw err;
+  }
 };

@@ -28,9 +28,9 @@ const Navactions = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  const { items } = useAppSelector((state) => state.cart || { items: [] });
+  // const { items } = useAppSelector((state) => state.cart || { items: [] });
 
-  const totalItems = items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
+  // const totalItems = items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
   const isShopPage = location.pathname === "/shop";
 
   const handleLogout = () => {

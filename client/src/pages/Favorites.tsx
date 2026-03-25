@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { fetchFavorites } from "@/redux/slices/favoriteSlice";
+import { fetchFavorites, toggleFavorite } from "@/redux/slices/favoriteSlice";
 import ProductCard from "@/components/product/ProductCard";
 import { Link, Navigate } from "react-router";
 import { Loader2 } from "lucide-react";
@@ -43,7 +43,7 @@ export default function Favorites() {
   }
 
   return (
-    <div className="min-h-screen pt-32 pb-16 bg-background">
+    <div className="min-h-screen pt-16 pb-16 bg-background">
       <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 flex flex-col items-center text-center">
           <h1 className="font-serif text-4xl md:text-5xl text-foreground tracking-tight relative pb-4 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-16 after:h-[2px] after:bg-primary">
@@ -65,7 +65,7 @@ export default function Favorites() {
             </p>
             <Link
               to="/shop"
-              className="bg-foreground py-3.5 px-8 text-xs font-bold uppercase tracking-[0.2em] text-background transition-transform hover:scale-105 active:scale-95 shadow-md"
+              className="bg-muted-foreground py-3.5 px-8 text-xs font-bold uppercase tracking-[0.2em] text-white transition-transform hover:scale-105 active:scale-95 shadow-md"
             >
               Continue Shopping
             </Link>
@@ -73,7 +73,15 @@ export default function Favorites() {
         ) : (
           <div className="grid grid-cols-1 gap-y-12 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {items.map((product) => (
-              <ProductCard key={product._id} product={product} />
+              <div key={product._id} className="flex flex-col relative">
+                <ProductCard product={product} />
+                <button
+                  onClick={() => dispatch(toggleFavorite(product))}
+                  className="mt-6 mx-auto w-max text-[11px] font-bold uppercase tracking-wider text-muted-foreground hover:text-destructive border-b border-transparent hover:border-destructive transition-colors duration-300"
+                >
+                  Remove Item
+                </button>
+              </div>
             ))}
           </div>
         )}

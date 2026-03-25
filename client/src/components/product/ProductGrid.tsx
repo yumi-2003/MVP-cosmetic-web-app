@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { ArrowRight } from "lucide-react";
 import ProductCard from "./ProductCard";
 import type { IProduct } from "@/redux/types";
 
@@ -14,9 +15,13 @@ const ProductGrid = ({ title, products }: ProductGridProps) => {
         <h2 className="font-serif text-3xl text-foreground">{title}</h2>
         <Link
           to="/shop"
-          className="text-sm border-b border-foreground/60 pb-0.5 text-foreground uppercase tracking-wider hover:text-muted-foreground hover:border-muted-foreground transition-colors"
+          className="group flex items-center gap-2 text-sm font-medium uppercase tracking-[0.2em] text-foreground transition-all duration-300 hover:text-primary"
         >
-          Shop All
+          <span className="relative pb-1">
+            Shop All
+            <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-primary transition-all duration-300 group-hover:w-full"></span>
+          </span>
+          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
         </Link>
       </div>
 

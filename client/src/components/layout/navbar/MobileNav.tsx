@@ -5,6 +5,7 @@ import {
   CartIcon,
   LogoutIcon,
   UserIcon,
+  FavIcon,
 } from "@/components/icons";
 import SearchBar from "./SearchBar";
 import { useTheme } from "@/components/theme-provider";
@@ -181,6 +182,13 @@ const MobileNav = () => {
                         onClick={() => setOpen(false)}
                       >
                         <UserIcon className="w-3 h-3 mr-1" /> View Profile
+                      </Link>
+                      <Link
+                        to="/favorites"
+                        className="text-[11px] text-muted-foreground hover:text-primary transition-colors flex items-center mt-1"
+                        onClick={() => setOpen(false)}
+                      >
+                        <FavIcon className="w-3 h-3 mr-1" /> Favorites
                       </Link>
                     </div>
                   </div>

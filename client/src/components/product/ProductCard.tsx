@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { FavIcon, StarIcon, CartIcon } from "@/components/icons";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addToCart } from "@/redux/slices/cartSlice";
+import { toggleFavorite } from "@/redux/slices/favoriteSlice";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
@@ -21,6 +22,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const discountAmount = hasDiscount ? product.comparePrice! - product.price : 0;
 
   const { user } = useAppSelector((state) => state.auth);
+  const { itemIds, status } = useAppSelector((state) => state.favorites);
+  
+  const isFavorited = itemIds.includes(product._id);
+  const [isFavoriting, setIsFavoriting] = useState(false);
 
   const handleAddToCart = async () => {
     if (!user) {
@@ -47,6 +52,35 @@ const ProductCard = ({ product }: ProductCardProps) => {
       toast.error(error || "Failed to add item to cart");
     } finally {
       setIsAdding(false);
+    }
+  };
+
+  const handleToggleFavorite = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (!user) {
+      toast.error("Please log in to manage your favorites", {
+        action: {
+          label: "Login",
+          onClick: () => navigate("/login"),
+        },
+      });
+      return;
+    }
+
+    try {
+      setIsFavoriting(true);
+      const res = await dispatch(toggleFavorite(product)).unwrap();
+      if (res.message === "Product added to favorites") {
+        toast.success(`${product.name} added to favorites!`);
+      } else {
+        toast.info(`${product.name} removed from favorites`);
+      }
+    } catch (error: any) {
+      toast.error(error || "Failed to update favorites");
+    } finally {
+      setIsFavoriting(false);
     }
   };
 
@@ -106,11 +140,17 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </div>
 
         <button
+          onClick={handleToggleFavorite}
+          disabled={isFavoriting || status === "loading"}
           type="button"
-          aria-label="Add to favorites"
-          className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-background/80 backdrop-blur-sm text-foreground shadow-sm transition-all hover:bg-rose-500 hover:text-white hover:scale-110"
+          aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
+          className={`absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-background/80 backdrop-blur-sm shadow-sm transition-all hover:scale-110 disabled:opacity-50 ${
+            isFavorited
+              ? "text-rose-500 hover:bg-background/90"
+              : "text-foreground hover:bg-rose-500 hover:text-white"
+          }`}
         >
-          <FavIcon className="h-4 w-4" />
+          <FavIcon className={`h-4 w-4 transition-colors ${isFavorited ? "fill-rose-500 text-rose-500" : ""}`} />
         </button>
       </div>
 

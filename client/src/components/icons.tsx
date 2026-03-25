@@ -8,7 +8,6 @@ export {
   HamburgerMenuIcon as MenuIcon,
   ChevronRightIcon as ArrowRightIcon,
   Cross1Icon as XIcon,
-  HeartIcon as FavIcon,
   PersonIcon as UserIcon,
   ExitIcon as LogoutIcon,
   GearIcon as SettingsIcon,
@@ -19,6 +18,7 @@ export {
   Star as StarIcon,
   ChevronLeft as ArrowLeftIcon,
   ChevronRight as ChevronRightIcon,
+  Heart as FavIcon,
 } from "lucide-react";
 
 // Custom delivery bicycle courier icon

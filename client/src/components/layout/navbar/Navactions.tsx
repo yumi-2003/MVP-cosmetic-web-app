@@ -5,6 +5,7 @@ import {
   UserIcon,
   LogoutIcon,
   SettingsIcon,
+  FavIcon,
 } from "@/components/icons";
 import { Package } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -92,6 +93,13 @@ const Navactions = () => {
             <DropdownMenuItem className="cursor-pointer py-2.5">
               <UserIcon className="mr-2 h-4 w-4" />
               <span>My Profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer py-2.5"
+              onClick={() => navigate("/favorites")}
+            >
+              <FavIcon className="mr-2 h-4 w-4" />
+              <span>Favorites</span>
             </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer py-2.5"

@@ -5,7 +5,9 @@ import { useAppSelector } from "@/redux/hooks";
 const CartButton = () => {
   const { user } = useAppSelector((state) => state.auth);
   const { items } = useAppSelector((state) => state.cart || { items: [] });
-  const totalItems = user ? (items?.reduce((acc, item) => acc + item.quantity, 0) || 0) : 0;
+  const totalItems = user
+    ? items?.reduce((acc, item) => acc + item.quantity, 0) || 0
+    : 0;
 
   return (
     <Link
@@ -14,12 +16,17 @@ const CartButton = () => {
       aria-label="Cart"
     >
       <CartIcon className="w-[19px] h-[19px] transition-transform duration-300 group-hover:rotate-[15deg]" />
-      
+
       {/* Aesthetic Animated Badge */}
-      {totalItems > 0 && (
+      {totalItems > 0 ? (
         <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-lg animate-in zoom-in duration-300">
           <span className="absolute inset-0 rounded-full bg-primary animate-ping opacity-25"></span>
           {totalItems}
+        </span>
+      ) : (
+        <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-lg animate-in zoom-in duration-300">
+          <span className="absolute inset-0 rounded-full bg-primary animate-ping opacity-25"></span>
+          0
         </span>
       )}
     </Link>

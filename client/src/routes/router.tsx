@@ -8,6 +8,7 @@ import Register from "@/pages/Register";
 import ErrorPage from "@/pages/Error";
 import TrackingPage from "@/pages/TrackingPage";
 import OrdersPage from "@/pages/Orders";
+import FavoritesPage from "@/pages/Favorites";
 import { createBrowserRouter } from "react-router";
 import RootLayout from "@/layouts/RootLayout";
 import shopLoader from "./loaders/shopLoader";
@@ -47,6 +48,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <CheckoutPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/favorites",
+        element: (
+          <ProtectedRoute>
+            <FavoritesPage />
           </ProtectedRoute>
         ),
       },

@@ -7,6 +7,7 @@ import orderReducer from "./slices/orderSlice";
 import reviewReducer from "./slices/reviewSlice";
 import commonReducer from "./slices/commonSlice";
 import trackingReducer from "./slices/trackingSlice";
+import favoriteReducer from "./slices/favoriteSlice";
 
 /**
  * Configure Redux Store
@@ -24,6 +25,7 @@ export const store = configureStore({
     reviews: reviewReducer,
     common: commonReducer,
     tracking: trackingReducer,
+    favorites: favoriteReducer,
   },
 });
 

@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getMe } from "@/redux/slices/authSlice";
 import { fetchCart } from "@/redux/slices/cartSlice";
+import { fetchFavorites } from "@/redux/slices/favoriteSlice";
 
 const RootLayout = () => {
   const { pathname } = useLocation();
@@ -18,6 +19,7 @@ const RootLayout = () => {
     }
     if (user) {
       dispatch(fetchCart());
+      dispatch(fetchFavorites());
     }
   }, [token, user, dispatch]);
 

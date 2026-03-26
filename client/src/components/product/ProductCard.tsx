@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import type { IProduct } from "@/redux/types";
 import { Button } from "@/components/ui/button";
 import { FavIcon, StarIcon, CartIcon } from "@/components/icons";
@@ -89,7 +89,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <div className="group flex flex-col gap-4">
       {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-muted transition-all rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+      <Link to={`/product/${product.slug}`} className="block relative aspect-square overflow-hidden bg-muted transition-all rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
         <img
           src={product.images[0]}
           alt={product.name}
@@ -152,7 +152,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         >
           <FavIcon className={`h-4 w-4 transition-colors ${isFavorited ? "fill-rose-500 text-rose-500" : ""}`} />
         </button>
-      </div>
+      </Link>
 
       {/* Product Details */}
       <div className="flex flex-col gap-1.5 px-1">
@@ -160,9 +160,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <span className="text-[10px] font-bold tracking-[0.15em] text-primary/70 uppercase">
             {categoryName}
           </span>
-          <h3 className="font-serif text-base text-foreground mt-1 group-hover:text-primary transition-colors line-clamp-1">
-            {product.name}
-          </h3>
+          <Link to={`/product/${product.slug}`}>
+            <h3 className="font-serif text-base text-foreground mt-1 group-hover:text-primary transition-colors line-clamp-1">
+              {product.name}
+            </h3>
+          </Link>
         </div>
 
         {/* Stock Status */}

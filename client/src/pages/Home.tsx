@@ -4,7 +4,6 @@ import { fetchProducts } from "@/redux/slices/productSlice";
 import BrandcommimentSection from "@/components/BrandcommimentSection";
 import Hero from "@/components/layout/hero/Hero";
 import ProductGrid from "@/components/product/ProductGrid";
-import { Loader2 } from "lucide-react";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -18,16 +17,16 @@ const Home = () => {
 
 
 
-  // First 4 items as best sellers, next 4 as featured
-  const bestSellers = items.slice(0, 4);
-  const featured = items.slice(4, 8);
+  // First 8 items as best sellers, next 8 as featured
+  const bestSellers = items.slice(0, 8);
+  const featured = items.slice(4, 12);
 
   return (
     <>
       <Hero />
-      <ProductGrid title="Best Sellers" products={bestSellers} isLoading={status === "loading"} />
+      <ProductGrid title="Best Sellers" subtitle="Our Top Picks" products={bestSellers} isLoading={status === "loading"} />
       <BrandcommimentSection />
-      <ProductGrid title="Featured Products" products={featured} isLoading={status === "loading"} />
+      <ProductGrid title="Featured Products" subtitle="Curated For You" products={featured} isLoading={status === "loading"} />
     </>
   );
 };

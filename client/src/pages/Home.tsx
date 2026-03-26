@@ -16,13 +16,7 @@ const Home = () => {
     }
   }, [status, dispatch]);
 
-  if (status === "loading") {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
-  }
+
 
   // First 4 items as best sellers, next 4 as featured
   const bestSellers = items.slice(0, 4);
@@ -31,9 +25,9 @@ const Home = () => {
   return (
     <>
       <Hero />
-      <ProductGrid title="Best Sellers" products={bestSellers} />
+      <ProductGrid title="Best Sellers" products={bestSellers} isLoading={status === "loading"} />
       <BrandcommimentSection />
-      <ProductGrid title="Featured Products" products={featured} />
+      <ProductGrid title="Featured Products" products={featured} isLoading={status === "loading"} />
     </>
   );
 };

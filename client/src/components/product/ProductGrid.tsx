@@ -1,14 +1,16 @@
 import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
 import ProductCard from "./ProductCard";
+import ProductCardSkeleton from "./ProductCardSkeleton";
 import type { IProduct } from "@/redux/types";
 
 interface ProductGridProps {
   title: string;
   products: IProduct[];
+  isLoading?: boolean;
 }
 
-const ProductGrid = ({ title, products }: ProductGridProps) => {
+const ProductGrid = ({ title, products, isLoading }: ProductGridProps) => {
   return (
     <section className="mx-auto max-w-8xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="mb-8 flex items-center justify-between">
@@ -26,9 +28,11 @@ const ProductGrid = ({ title, products }: ProductGridProps) => {
       </div>
 
       <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-        {products.map((product) => (
-          <ProductCard key={product._id} product={product} />
-        ))}
+        {isLoading
+          ? [...Array(4)].map((_, i) => <ProductCardSkeleton key={i} />)
+          : products.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
       </div>
     </section>
   );

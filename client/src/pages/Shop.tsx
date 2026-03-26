@@ -3,6 +3,7 @@ import { useSearchParams, Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProducts } from "@/redux/slices/productSlice";
 import ProductCard from "@/components/product/ProductCard";
+import ProductCardSkeleton from "@/components/product/ProductCardSkeleton";
 import FilterSidebar from "@/components/filters/FilterSidebar";
 import Pagination from "@/components/ui/Pagination";
 import { FavIcon, MenuIcon } from "@/components/icons";
@@ -105,9 +106,13 @@ const Shop = () => {
             <div className="flex items-center gap-3">
               <Link to="/favorites" className="flex items-center relative">
                 <FavIcon className="w-5 h-5" />
-                {favoritesCount > 0 && (
+                {favoritesCount > 0 ? (
                   <span className="absolute -top-1/2 -right-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground border-2 border-background">
                     {favoritesCount}
+                  </span>
+                ) : (
+                  <span className="absolute -top-1/2 -right-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground border-2 border-background">
+                    0
                   </span>
                 )}
               </Link>
@@ -142,8 +147,10 @@ const Shop = () => {
           {/* Main Content */}
           <main className="flex-1">
             {status === "loading" ? (
-              <div className="flex items-center justify-center py-20">
-                <Loader2 className="w-10 h-10 animate-spin text-primary/40" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-4 md:gap-x-8 gap-y-10 md:gap-y-12">
+                {[...Array(6)].map((_, i) => (
+                  <ProductCardSkeleton key={i} />
+                ))}
               </div>
             ) : currentProducts.length > 0 ? (
               <>

@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchFavorites, toggleFavorite } from "@/redux/slices/favoriteSlice";
 import ProductCard from "@/components/product/ProductCard";
+import ProductCardSkeleton from "@/components/product/ProductCardSkeleton";
 import { Link, Navigate } from "react-router";
-import { Loader2 } from "lucide-react";
 
 export default function Favorites() {
   const dispatch = useAppDispatch();
@@ -20,13 +20,6 @@ export default function Favorites() {
     return <Navigate to="/login" replace />;
   }
 
-  if (status === "loading") {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
 
   if (status === "failed") {
     return (
@@ -50,11 +43,17 @@ export default function Favorites() {
             WISHLIST
           </h1>
           <p className="text-muted-foreground text-xs uppercase tracking-[0.3em] font-medium mt-6">
-            {items.length} {items.length === 1 ? 'ITEM' : 'ITEMS'}
+            {status === "loading" ? "..." : `${items.length} ${items.length === 1 ? 'ITEM' : 'ITEMS'}`}
           </p>
         </div>
 
-        {items.length === 0 ? (
+        {status === "loading" ? (
+          <div className="grid grid-cols-1 gap-y-12 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+            {[...Array(4)].map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : items.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-6 py-12 md:py-24 max-w-md mx-auto text-center">
             <div className="rounded-full bg-pink-200 p-8 border border-border/50 w-10 h-10 flex items-center justify-center">
               <span className="text-5xl text-pink-500 block leading-none">♡</span>

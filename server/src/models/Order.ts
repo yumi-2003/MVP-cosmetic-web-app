@@ -1,5 +1,16 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
 
+export const ORDER_STATUSES = [
+  "cart",
+  "placed",
+  "paid",
+  "shipped",
+  "delivered",
+  "cancelled",
+] as const;
+
+export type OrderStatus = (typeof ORDER_STATUSES)[number];
+
 export interface OrderItem {
   product: Types.ObjectId;
   name: string;
@@ -12,7 +23,7 @@ export interface OrderDocument extends Document {
   user?: Types.ObjectId;
   sessionId?: string;
   items: OrderItem[];
-  status: "cart" | "placed" | "paid" | "shipped" | "delivered" | "cancelled";
+  status: OrderStatus;
   subtotal: number;
   tax: number;
   shipping: number;
@@ -38,7 +49,7 @@ const OrderSchema: Schema<OrderDocument> = new Schema(
     items: { type: [OrderItemSchema], default: [] },
     status: {
       type: String,
-      enum: ["cart", "placed", "paid", "shipped", "delivered", "cancelled"],
+      enum: ORDER_STATUSES,
       default: "cart",
       index: true,
     },

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProducts } from "@/redux/slices/productSlice";
 import ProductCard from "@/components/product/ProductCard";
@@ -14,6 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import type { IProduct } from "@/redux/types";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -21,6 +22,8 @@ const Shop = () => {
   const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
   const { items, status } = useAppSelector((state) => state.products || { items: [], status: "idle" });
+  const favoriteItems = useAppSelector((state) => state.favorites?.items || []);
+  const favoritesCount = favoriteItems.length;
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -45,14 +48,14 @@ const Shop = () => {
   ]);
   
   // Simple frontend pagination logic until backend pagination is passed up
-  const products = items || [];
+  const products: IProduct[] = items || [];
   const query = (searchParams.get("q") || "").trim().toLowerCase();
 
   useEffect(() => {
     setCurrentPage(1);
   }, [query]);
   const filteredProducts = query
-    ? products.filter((product) => {
+    ? products.filter((product: IProduct) => {
         const name = product.name?.toLowerCase() || "";
         const category =
           typeof product.category === "string"
@@ -100,10 +103,14 @@ const Shop = () => {
             </div>
             
             <div className="flex items-center gap-3">
-              <button className="flex items-center gap-2 px-4 md:px-6 py-2 md:py-2.5 border border-border hover:bg-accent transition-colors">
-                <FavIcon className="w-4 h-4" />
-                <span className="text-xs md:text-sm font-medium">Favorites</span>
-              </button>
+              <Link to="/favorites" className="flex items-center relative">
+                <FavIcon className="w-5 h-5" />
+                {favoritesCount > 0 && (
+                  <span className="absolute -top-1/2 -right-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground border-2 border-background">
+                    {favoritesCount}
+                  </span>
+                )}
+              </Link>
 
               {/* Mobile Filter Button */}
               <div className="lg:hidden">

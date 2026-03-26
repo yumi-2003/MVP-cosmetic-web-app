@@ -1,5 +1,9 @@
 import mongoose, { ClientSession } from "mongoose";
-import Order, { OrderItem } from "../models/Order";
+import Order, {
+  ORDER_STATUSES,
+  OrderItem,
+  OrderStatus,
+} from "../models/Order";
 import Shipping, { IShippingAddress } from "../models/Shipping";
 import Product from "../models/Product";
 import ApiError from "../utils/ApiError";
@@ -12,6 +16,36 @@ const ownerFilter = (owner: CartOwner) => {
   if (owner.userId) return { user: owner.userId };
   if (owner.sessionId) return { sessionId: owner.sessionId };
   return {};
+};
+
+const ORDER_STATUS_TRANSITIONS: Record<OrderStatus, readonly OrderStatus[]> = {
+  cart: ["placed"],
+  placed: ["paid", "cancelled"],
+  paid: ["shipped", "cancelled"],
+  shipped: ["delivered"],
+  delivered: [],
+  cancelled: [],
+};
+
+const isOrderStatus = (status: string): status is OrderStatus =>
+  ORDER_STATUSES.includes(status as OrderStatus);
+
+const assertValidOrderStatusTransition = (
+  currentStatus: OrderStatus,
+  nextStatus: OrderStatus,
+) => {
+  if (currentStatus === nextStatus) return;
+
+  const allowedTransitions = ORDER_STATUS_TRANSITIONS[currentStatus];
+  if (allowedTransitions.includes(nextStatus)) return;
+
+  const allowedLabel =
+    allowedTransitions.length > 0 ? allowedTransitions.join(", ") : "none";
+
+  throw new ApiError(
+    400,
+    `Invalid order status transition from ${currentStatus} to ${nextStatus}. Allowed next statuses: ${allowedLabel}.`,
+  );
 };
 
 const withMongoTransaction = async <T>(
@@ -203,8 +237,15 @@ export const updateOrderStatus = async (orderId: string, status: string) => {
   const order = await Order.findById(orderId);
   if (!order) throw new ApiError(404, "Order not found");
 
-  const newStatus = status as any;
+  if (!isOrderStatus(status)) {
+    throw new ApiError(
+      400,
+      `Invalid order status: ${status}. Valid statuses: ${ORDER_STATUSES.join(", ")}.`,
+    );
+  }
 
+  const newStatus = status as OrderStatus;
+  assertValidOrderStatusTransition(order.status, newStatus);
   order.status = newStatus;
   await order.save();
   return order;

@@ -1,3 +1,4 @@
+import mongoose, { ClientSession } from "mongoose";
 import Order, { OrderItem } from "../models/Order";
 import Shipping, { IShippingAddress } from "../models/Shipping";
 import Product from "../models/Product";
@@ -6,71 +7,108 @@ import { calculateTotals } from "../utils/calculateTotals";
 import type { CartOwner } from "./cartService";
 import { clearCartForOwner } from "./cartService";
 
+//owen filter to make sure this cart is made by logged-in user or guest user
 const ownerFilter = (owner: CartOwner) => {
   if (owner.userId) return { user: owner.userId };
   if (owner.sessionId) return { sessionId: owner.sessionId };
   return {};
 };
 
+const withMongoTransaction = async <T>(
+  operation: (session: ClientSession) => Promise<T>,
+) => {
+  const session = await mongoose.startSession();
+
+  try {
+    let result!: T;
+
+    await session.withTransaction(async () => {
+      result = await operation(session);
+    });
+
+    return result;
+  } finally {
+    await session.endSession();
+  }
+};
+
+//create real order from cart
 export const createOrderFromCart = async (
   owner: CartOwner,
   shippingAddress?: IShippingAddress,
-  distanceKm: number = 0
+  distanceKm: number = 0,
 ) => {
-  const filter = ownerFilter(owner);
-  const cart = await Order.findOne({ ...filter, status: "cart" });
-  if (!cart || cart.items.length === 0) {
-    throw new ApiError(400, "Cart is empty");
-  }
+  return withMongoTransaction(async (session) => {
+    //get cart owener
+    const filter = ownerFilter(owner);
+    //get cart status that is only active
+    const cart = await Order.findOne({ ...filter, status: "cart" }).session(
+      session,
+    );
+    //prevent empty cart
+    if (!cart || cart.items.length === 0) {
+      throw new ApiError(400, "Cart is empty");
+    }
 
-  // Synchronize cart items with valid products
-  const productIds = cart.items.map((item) => item.product.toString());
-  const products = await Product.find({ _id: { $in: productIds } }).lean();
-  const productMap = new Map(products.map((p) => [p._id.toString(), p]));
+    // Synchronize cart items with valid products
+    const productIds = cart.items.map((item) => item.product.toString());
+    const products = await Product.find({ _id: { $in: productIds } })
+      .session(session)
+      .lean();
+    const productMap = new Map(products.map((p) => [p._id.toString(), p]));
 
-  cart.items = (cart.items as any).filter((item: any) => productMap.has(item.product.toString()));
-  if (cart.items.length === 0) {
-    throw new ApiError(400, "All items in your cart are no longer available");
-  }
+    cart.items = (cart.items as any).filter((item: any) =>
+      productMap.has(item.product.toString()),
+    );
+    if (cart.items.length === 0) {
+      throw new ApiError(400, "All items in your cart are no longer available");
+    }
 
-  // Update name/image/price to match current DB
-  cart.items.forEach((item) => {
-    const p = productMap.get(item.product.toString())!;
-    item.name = p.name;
-    item.price = p.price;
-    item.image = p.images?.[0];
-  });
-
-  await reserveStockForItems(cart.items);
-
-  const totals = calculateTotals(cart.items, distanceKm);
-
-  cart.subtotal = totals.subtotal;
-  cart.tax = totals.tax;
-  cart.shipping = totals.shipping;
-  cart.total = totals.total;
-  cart.status = "placed";
-  cart.placedAt = new Date();
-  await cart.save();
-
-  if (shippingAddress) {
-    await Shipping.create({
-      order: cart._id,
-      address: shippingAddress,
-      distanceKm,
+    // Update name/image/price to match current DB
+    cart.items.forEach((item) => {
+      const p = productMap.get(item.product.toString())!;
+      item.name = p.name;
+      item.price = p.price;
+      item.image = p.images?.[0];
     });
-  }
 
-  return cart;
+    await reserveStockForItems(cart.items, session);
+
+    const totals = calculateTotals(cart.items, distanceKm);
+
+    cart.subtotal = totals.subtotal;
+    cart.tax = totals.tax;
+    cart.shipping = totals.shipping;
+    cart.total = totals.total;
+    cart.status = "placed";
+    cart.placedAt = new Date();
+    await cart.save({ session });
+
+    if (shippingAddress) {
+      const shipping = new Shipping({
+        order: cart._id,
+        address: shippingAddress,
+        distanceKm,
+      });
+      await shipping.save({ session });
+    }
+
+    return cart;
+  });
 };
 
 const buildOrderItems = async (
-  items: { productId: string; quantity: number }[]
+  items: { productId: string; quantity: number }[],
+  session: ClientSession,
 ) => {
   const productIds = items.map((item) => item.productId);
-  const products = await Product.find({ _id: { $in: productIds } }).lean();
+  const products = await Product.find({ _id: { $in: productIds } })
+    .session(session)
+    .lean();
 
-  const productMap = new Map(products.map((product) => [product._id.toString(), product]));
+  const productMap = new Map(
+    products.map((product) => [product._id.toString(), product]),
+  );
 
   const orderItems: OrderItem[] = (
     await Promise.all(
@@ -85,7 +123,7 @@ const buildOrderItems = async (
           quantity: item.quantity,
           image: product.images?.[0],
         } as OrderItem;
-      })
+      }),
     )
   ).filter((item): item is OrderItem => item !== null);
 
@@ -96,39 +134,43 @@ export const createOrder = async (
   owner: CartOwner,
   items: { productId: string; quantity: number }[],
   shippingAddress?: IShippingAddress,
-  distanceKm: number = 0
+  distanceKm: number = 0,
 ) => {
   if (!items.length) throw new ApiError(400, "Order items are required");
 
-  const orderItems = await buildOrderItems(items);
-  if (!orderItems.length) throw new ApiError(400, "Order items are invalid");
+  return withMongoTransaction(async (session) => {
+    const orderItems = await buildOrderItems(items, session);
+    if (!orderItems.length) throw new ApiError(400, "Order items are invalid");
 
-  await reserveStockForItems(orderItems);
-  const totals = calculateTotals(orderItems, distanceKm);
+    await reserveStockForItems(orderItems, session);
+    const totals = calculateTotals(orderItems, distanceKm);
 
-  const order = await Order.create({
-    ...ownerFilter(owner),
-    items: orderItems,
-    status: "placed",
-    placedAt: new Date(),
-    subtotal: totals.subtotal,
-    tax: totals.tax,
-    shipping: totals.shipping,
-    total: totals.total,
-  });
-
-  if (shippingAddress) {
-    await Shipping.create({
-      order: order._id,
-      address: shippingAddress,
-      distanceKm,
+    const order = new Order({
+      ...ownerFilter(owner),
+      items: orderItems,
+      status: "placed",
+      placedAt: new Date(),
+      subtotal: totals.subtotal,
+      tax: totals.tax,
+      shipping: totals.shipping,
+      total: totals.total,
     });
-  }
+    await order.save({ session });
 
-  // Clear existing cart document for this owner
-  await clearCartForOwner(owner);
+    if (shippingAddress) {
+      const shipping = new Shipping({
+        order: order._id,
+        address: shippingAddress,
+        distanceKm,
+      });
+      await shipping.save({ session });
+    }
 
-  return order;
+    // Clear existing cart document for this owner
+    await clearCartForOwner(owner, session);
+
+    return order;
+  });
 };
 
 export const getOrderById = async (orderId: string) => {
@@ -148,7 +190,7 @@ export const getOrdersByUser = async (userId: string) => {
     .lean();
 
   const deliveryMap = new Map(
-    deliveries.map((delivery) => [delivery.order.toString(), delivery])
+    deliveries.map((delivery) => [delivery.order.toString(), delivery]),
   );
 
   return orders.map((order) => ({
@@ -168,35 +210,25 @@ export const updateOrderStatus = async (orderId: string, status: string) => {
   return order;
 };
 
-const reserveStockForItems = async (items: OrderItem[]) => {
-  const adjusted: Array<{ product: OrderItem["product"]; quantity: number }> = [];
-  try {
-    for (const item of items) {
-      const updated = await Product.findOneAndUpdate(
-        { _id: item.product, countInStock: { $gte: item.quantity } },
-        { $inc: { countInStock: -item.quantity } },
-        { new: true }
-      );
+const reserveStockForItems = async (
+  items: OrderItem[],
+  session: ClientSession,
+) => {
+  for (const item of items) {
+    const updated = await Product.findOneAndUpdate(
+      { _id: item.product, countInStock: { $gte: item.quantity } },
+      { $inc: { countInStock: -item.quantity } },
+      { new: true, session },
+    );
 
-      if (!updated) {
-        const product = await Product.findById(item.product).lean();
-        const available = product?.countInStock ?? 0;
-        const name = product?.name ?? "this product";
-        throw new ApiError(400, `Only ${available} items available in stock for ${name}`);
-      }
-
-      adjusted.push({ product: item.product, quantity: item.quantity });
-    }
-  } catch (err) {
-    if (adjusted.length) {
-      await Promise.all(
-        adjusted.map((item) =>
-          Product.findByIdAndUpdate(item.product, {
-            $inc: { countInStock: item.quantity },
-          })
-        )
+    if (!updated) {
+      const product = await Product.findById(item.product).session(session).lean();
+      const available = product?.countInStock ?? 0;
+      const name = product?.name ?? "this product";
+      throw new ApiError(
+        400,
+        `Only ${available} items available in stock for ${name}`,
       );
     }
-    throw err;
   }
 };

@@ -114,7 +114,7 @@ export const products = [
     comparePrice: 55,
     categorySlug: "skincare",
     images: [
-      "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1601065873952-f999b9a62da7?q=80&w=800&auto=format&fit=crop",
     ],
     tags: ["clean", "vegan"],
     skinTypes: ["normal", "dry"],
@@ -154,7 +154,7 @@ export const products = [
     comparePrice: 56,
     categorySlug: "skincare",
     images: [
-      "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1689414480286-aae7c21fe1e2?q=80&w=800&auto=format&fit=crop",
     ],
     tags: ["vegan", "clean"],
     skinTypes: ["all"],
@@ -174,7 +174,7 @@ export const products = [
     comparePrice: 65,
     categorySlug: "makeup",
     images: [
-      "https://images.unsplash.com/photo-1596462502278-27bf85033c5a?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1557205465-f3762edea6d3?q=80&w=800&auto=format&fit=crop",
     ],
     tags: ["cruelty-free"],
     skinTypes: ["normal", "combination"],
@@ -194,7 +194,7 @@ export const products = [
     comparePrice: 42,
     categorySlug: "skincare",
     images: [
-      "https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1763622499218-37fdfc7a590a?q=80&w=800&auto=format&fit=crop",
     ],
     tags: ["clean", "vegan"],
     skinTypes: ["dry", "sensitive"],
@@ -214,7 +214,7 @@ export const products = [
     comparePrice: 68,
     categorySlug: "skincare",
     images: [
-      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1584091825078-752292c7763a?q=80&w=800&auto=format&fit=crop",
     ],
     tags: ["cruelty-free", "clean"],
     skinTypes: ["normal", "combination", "oily"],
@@ -274,7 +274,7 @@ export const products = [
     comparePrice: 54,
     categorySlug: "haircare",
     images: [
-      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1732861612355-c81b32c70075?q=80&w=800&auto=format&fit=crop",
     ],
     tags: ["clean", "cruelty-free"],
     skinTypes: ["all"],
@@ -294,7 +294,7 @@ export const products = [
     comparePrice: 46,
     categorySlug: "bodycare",
     images: [
-      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1683944433023-027a3f443ae4?q=80&w=800&auto=format&fit=crop",
     ],
     tags: ["vegan"],
     skinTypes: ["all"],
@@ -334,7 +334,7 @@ export const products = [
     comparePrice: 110,
     categorySlug: "fragrance",
     images: [
-      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1774280347574-95bb74dea7b9?q=80&w=800&auto=format&fit=crop",
     ],
     tags: ["cruelty-free"],
     skinTypes: ["all"],

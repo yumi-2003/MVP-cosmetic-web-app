@@ -1,3 +1,4 @@
+import { ClientSession } from "mongoose";
 import Order, { OrderDocument, OrderItem } from "../models/Order";
 import Product from "../models/Product";
 import ApiError from "../utils/ApiError";
@@ -168,7 +169,10 @@ export const removeCartItem = async (owner: CartOwner, productId: string) => {
   return recalcTotals(cart);
 };
 
-export const clearCartForOwner = async (owner: CartOwner) => {
+export const clearCartForOwner = async (
+  owner: CartOwner,
+  session?: ClientSession,
+) => {
   const filter = ownerFilter(owner);
-  await Order.deleteMany({ ...filter, status: "cart" });
+  await Order.deleteMany({ ...filter, status: "cart" }, { session });
 };

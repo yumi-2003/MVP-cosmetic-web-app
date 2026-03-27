@@ -466,18 +466,18 @@ const ProductDetail = () => {
               <div className="flex items-center overflow-hidden rounded-xl border border-border/60">
                 <button
                   onClick={() => setQuantity((value) => Math.max(1, value - 1))}
-                  className="flex h-12 w-10 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  className="flex h-14 sm:h-12 w-12 sm:w-10 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                 >
                   -
                 </button>
-                <span className="w-10 text-center font-medium">{quantity}</span>
+                <span className="w-12 sm:w-10 text-center font-medium">{quantity}</span>
                 <button
                   onClick={() =>
                     setQuantity((value) =>
                       Math.min(product.countInStock ?? 99, value + 1)
                     )
                   }
-                  className="flex h-12 w-10 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  className="flex h-14 sm:h-12 w-12 sm:w-10 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                 >
                   +
                 </button>
@@ -486,7 +486,7 @@ const ProductDetail = () => {
               <Button
                 onClick={handleAddToCart}
                 disabled={isAdding || !inStock}
-                className="h-12 flex-1 rounded-xl text-sm font-bold uppercase tracking-widest shadow-md"
+                className="h-14 sm:h-12 flex-1 rounded-xl px-12 sm:px-8 text-sm font-bold uppercase tracking-widest shadow-md"
               >
                 {isAdding ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -504,7 +504,7 @@ const ProductDetail = () => {
                     ? "Remove from favorites"
                     : "Add to favorites"
                 }
-                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border transition-all duration-200 hover:scale-105 disabled:opacity-50 ${
+                className={`flex h-14 sm:h-12 w-14 sm:w-12 shrink-0 items-center justify-center rounded-xl border transition-all duration-200 hover:scale-105 disabled:opacity-50 ${
                   isFavorited
                     ? "border-rose-400 bg-rose-50 text-rose-500 dark:bg-rose-950"
                     : "border-border hover:border-rose-400 hover:text-rose-500"

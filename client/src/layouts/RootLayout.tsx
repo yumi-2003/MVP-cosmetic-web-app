@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getMe } from "@/redux/slices/authSlice";
 import { fetchCart } from "@/redux/slices/cartSlice";
 import { fetchFavorites } from "@/redux/slices/favoriteSlice";
+import { fetchCategories } from "@/redux/slices/categorySlice";
 
 const RootLayout = () => {
   const { pathname } = useLocation();
@@ -14,6 +15,7 @@ const RootLayout = () => {
   const { user, token } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
+    dispatch(fetchCategories());
     if (token && !user) {
       dispatch(getMe());
     }

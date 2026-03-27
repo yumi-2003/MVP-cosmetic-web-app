@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/sheet";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logout } from "@/redux/slices/authSlice";
+import { fetchCategories } from "@/redux/slices/categorySlice";
 import { toast } from "sonner";
 
 const navLinks = {
@@ -26,11 +27,6 @@ const navLinks = {
     { label: "Shop All", to: "/shop" },
     { label: "Best Sellers", to: "/best-sellers" },
     { label: "New Arrivals", to: "/new-arrivals" },
-  ],
-  categories: [
-    { label: "Skincare", to: "/category/skincare" },
-    { label: "Makeup", to: "/category/makeup" },
-    { label: "Haircare", to: "/category/haircare" },
   ],
 };
 
@@ -42,7 +38,14 @@ const MobileNav = () => {
   const dispatch = useAppDispatch();
   
   const { user } = useAppSelector((state) => state.auth);
+  const { categories } = useAppSelector((state) => state.categories || { categories: [] });
   const isShopPage = location.pathname === "/shop";
+
+  useEffect(() => {
+    if (categories.length === 0) {
+      dispatch(fetchCategories());
+    }
+  }, [dispatch, categories.length]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -122,14 +125,18 @@ const MobileNav = () => {
                   Categories
                 </h3>
                 <div className="flex flex-col gap-5">
-                  {navLinks.categories.map(({ label, to }) => (
+                  {categories.map((cat) => (
                     <Link
-                      key={to}
-                      to={to}
-                      className="text-[17px] font-light tracking-wide text-foreground/80 hover:text-primary transition-colors flex items-center"
+                      key={cat._id}
+                      to={`/category/${cat.slug}`}
+                      className={`text-[17px] font-light tracking-wide hover:text-primary transition-colors flex items-center ${
+                        location.pathname === `/category/${cat.slug}`
+                          ? "text-primary font-medium"
+                          : "text-foreground/80"
+                      }`}
                       onClick={() => setOpen(false)}
                     >
-                      {label}
+                      {cat.name}
                     </Link>
                   ))}
                 </div>

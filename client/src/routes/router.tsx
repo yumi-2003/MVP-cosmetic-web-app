@@ -1,6 +1,7 @@
 import Home from "@/pages/Home";
 import Shop from "@/pages/Shop";
 import ProductDetailPage from "@/pages/ProductDetail";
+import CategoryPage from "@/pages/CategoryPage";
 import CartPage from "@/pages/Cart";
 import CheckoutPage from "@/pages/Checkout";
 import Login from "@/pages/Login";
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
         path: "/product/:id",
         Component: ProductDetailPage,
         loader: productLaoder,
+      },
+      {
+        path: "/category/:slug",
+        Component: CategoryPage,
       },
       {
         path: "/cart",

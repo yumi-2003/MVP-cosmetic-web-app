@@ -46,6 +46,7 @@ const reviewSlice = createSlice({
     builder
       .addCase(fetchReviewsByProductId.pending, (state) => {
         state.status = "loading";
+        state.error = null;
       })
       .addCase(fetchReviewsByProductId.fulfilled, (state, action) => {
         state.status = "succeeded";
@@ -55,11 +56,21 @@ const reviewSlice = createSlice({
         state.status = "failed";
         state.error = action.payload as string;
       })
+      .addCase(addReview.pending, (state) => {
+        state.error = null;
+      })
       .addCase(addReview.fulfilled, (state, action) => {
+        state.status = "succeeded";
         const review = action.payload;
         if (state.productReviews[review.product]) {
-          state.productReviews[review.product].push(review);
+          state.productReviews[review.product].unshift(review);
+        } else {
+          state.productReviews[review.product] = [review];
         }
+      })
+      .addCase(addReview.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
       });
   },
 });

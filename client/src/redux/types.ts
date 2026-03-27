@@ -1,5 +1,6 @@
 export interface IUser {
   _id: string;
+  id?: string;
   firstname: string;
   lastname: string;
   email: string;
@@ -88,9 +89,10 @@ export interface IOrder {
 
 export interface IReview {
   _id: string;
-  user: string | IUser;
+  user?: string | IUser;
   product: string | IProduct;
   rating: number;
-  comment: string;
+  comment?: string;
+  name?: string;
   createdAt: string;
 }

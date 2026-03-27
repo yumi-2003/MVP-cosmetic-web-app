@@ -4,6 +4,7 @@ import {
   createReview,
   listReviewsByProduct,
 } from "../controllers/reviewController";
+import { protect } from "../middleware/protect";
 import validate from "../middleware/validate";
 
 const router = Router();
@@ -21,9 +22,8 @@ router.post(
     param("productId").isMongoId(),
     body("rating").isFloat({ min: 1, max: 5 }).toFloat(),
     body("comment").optional().isString().trim(),
-    body("name").optional().isString().trim(),
-    body("userId").optional().isMongoId(),
   ],
+  protect,
   validate,
   createReview
 );

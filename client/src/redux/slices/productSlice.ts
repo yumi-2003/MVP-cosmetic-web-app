@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
 import api from "../api";
 import type { IProduct } from "../types";
+import { addReview } from "./reviewSlice";
 
 interface ProductState {
   items: IProduct[];
@@ -73,6 +73,33 @@ const productSlice = createSlice({
       .addCase(fetchProductBySlug.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
+      })
+      .addCase(addReview.fulfilled, (state, action) => {
+        const review = action.payload as { product: string; rating: number };
+
+        const updateProductStats = (product?: IProduct | null) => {
+          if (!product || product._id !== review.product) return;
+
+          const nextReviewCount = product.reviewCount + 1;
+          const nextRating =
+            nextReviewCount === 1
+              ? review.rating
+              : Math.round(
+                  (((product.rating * product.reviewCount) + review.rating) /
+                    nextReviewCount) *
+                    10
+                ) / 10;
+
+          product.reviewCount = nextReviewCount;
+          product.rating = nextRating;
+        };
+
+        updateProductStats(state.selectedProduct);
+
+        const listProduct = state.items.find((item) => item._id === review.product);
+        if (listProduct) {
+          updateProductStats(listProduct);
+        }
       });
   },
 });

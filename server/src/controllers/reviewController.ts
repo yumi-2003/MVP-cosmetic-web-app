@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { AuthRequest } from "../middleware/protect";
 import { asyncHandler } from "../utils/asyncHandler";
 import {
   addReviewToProduct,
@@ -12,19 +13,23 @@ export const listReviewsByProduct = asyncHandler(
   }
 );
 
-export const createReview = asyncHandler(async (req: Request, res: Response) => {
-  const { rating, comment, name, userId } = req.body as {
+export const createReview = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const currentUser = req.user;
+  const { rating, comment } = req.body as {
     rating: number;
     comment?: string;
-    name?: string;
-    userId?: string;
   };
+
+  if (!currentUser) {
+    res.status(401).json({ message: "Not authorized" });
+    return;
+  }
 
   const review = await addReviewToProduct(req.params.productId, {
     rating,
     comment,
-    name,
-    userId,
+    name: `${currentUser.firstname} ${currentUser.lastname}`.trim(),
+    userId: currentUser._id.toString(),
   });
 
   res.status(201).json(review);

@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import ApiError from "../utils/ApiError";
-import { getCategoryBySlug, listCategories } from "../services/categoryService";
+import {
+  getCategoryBySlug as getCategoryBySlugService,
+  listCategories,
+} from "../services/categoryService";
 
 export const getAllCategories = asyncHandler(
   async (_req: Request, res: Response) => {
@@ -12,7 +15,7 @@ export const getAllCategories = asyncHandler(
 
 export const getCategoryBySlug = asyncHandler(
   async (req: Request, res: Response) => {
-    const category = await getCategoryBySlug(req.params.slug);
+    const category = await getCategoryBySlugService(req.params.slug);
     if (!category) throw new ApiError(404, "Category not found");
     res.status(200).json(category);
   }

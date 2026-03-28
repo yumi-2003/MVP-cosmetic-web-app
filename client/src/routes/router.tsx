@@ -10,6 +10,7 @@ import ErrorPage from "@/pages/Error";
 import TrackingPage from "@/pages/TrackingPage";
 import OrdersPage from "@/pages/Orders";
 import FavoritesPage from "@/pages/Favorites";
+import ProfilePage from "@/pages/Profile";
 import { createBrowserRouter } from "react-router";
 import RootLayout from "@/layouts/RootLayout";
 import shopLoader from "./loaders/shopLoader";
@@ -77,6 +78,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <OrdersPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/profile",
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
           </ProtectedRoute>
         ),
       },

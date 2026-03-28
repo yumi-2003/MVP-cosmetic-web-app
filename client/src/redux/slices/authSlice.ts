@@ -61,6 +61,25 @@ export const getMe = createAsyncThunk(
   }
 );
 
+export const updateProfile = createAsyncThunk(
+  "auth/updateProfile",
+  async (userData: FormData | Partial<IUser>, { rejectWithValue }) => {
+    try {
+      const isFormData = userData instanceof FormData;
+      const response = await api.put("/users/profile", userData, {
+        headers: {
+          "Content-Type": isFormData ? "multipart/form-data" : "application/json",
+        },
+      });
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to update profile"
+      );
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -119,6 +138,18 @@ const authSlice = createSlice({
         state.token = null;
         state.user = null;
         localStorage.removeItem("token");
+      })
+      // UpdateProfile
+      .addCase(updateProfile.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
       });
   },
 });

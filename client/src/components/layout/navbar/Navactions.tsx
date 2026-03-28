@@ -71,7 +71,7 @@ const Navactions = () => {
           <DropdownMenuTrigger asChild>
             <button className="relative w-9 h-9 rounded-full overflow-hidden border border-border/50 flex items-center justify-center hover:ring-2 hover:ring-primary/20 transition-all outline-none">
               <Avatar className="w-9 h-9">
-                <AvatarImage src={""} alt={userFullName} />
+                <AvatarImage src={user?.profileImage || ""} alt={userFullName} className="object-cover" />
                 <AvatarFallback className="bg-secondary text-[10px] font-bold uppercase text-secondary-foreground">
                   {userInitials}
                 </AvatarFallback>
@@ -90,27 +90,29 @@ const Navactions = () => {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer py-2.5">
-              <UserIcon className="mr-2 h-4 w-4" />
-              <span>My Profile</span>
+            <DropdownMenuItem asChild className="cursor-pointer py-2.5">
+              <Link to="/profile" className="flex items-center w-full">
+                <UserIcon className="mr-2 h-4 w-4" />
+                <span>My Profile</span>
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer py-2.5"
-              onClick={() => navigate("/favorites")}
-            >
-              <FavIcon className="mr-2 h-4 w-4" />
-              <span>Favorites</span>
+            <DropdownMenuItem asChild className="cursor-pointer py-2.5">
+              <Link to="/favorites" className="flex items-center w-full">
+                <FavIcon className="mr-2 h-4 w-4" />
+                <span>Favorites</span>
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer py-2.5"
-              onClick={() => navigate("/orders")}
-            >
-              <Package className="mr-2 h-4 w-4" />
-              <span>My Orders</span>
+            <DropdownMenuItem asChild className="cursor-pointer py-2.5">
+              <Link to="/orders" className="flex items-center w-full">
+                <Package className="mr-2 h-4 w-4" />
+                <span>My Orders</span>
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer py-2.5">
-              <SettingsIcon className="mr-2 h-4 w-4" />
-              <span>Settings</span>
+            <DropdownMenuItem asChild className="cursor-pointer py-2.5">
+              <Link to="/profile" className="flex items-center w-full">
+                <SettingsIcon className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem

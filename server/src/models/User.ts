@@ -7,6 +7,7 @@ export interface IUser extends Document {
   password: string;
   // isAdmin: boolean;
   favorites: mongoose.Types.ObjectId[];
+  profileImage: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -18,6 +19,7 @@ const userSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     // isAdmin: { type: Boolean, default: false },
+    profileImage: { type: String, default: "" },
     favorites: [{ type: Schema.Types.ObjectId, ref: "Product" }],
   },
   { timestamps: true }

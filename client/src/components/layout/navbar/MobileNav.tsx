@@ -178,9 +178,13 @@ const MobileNav = () => {
               {user ? (
                 <div className="flex items-center justify-between bg-secondary/20 p-3 rounded-2xl border border-border/30">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium text-sm border border-primary/20">
-                      {userInitials}
-                    </div>
+                    {user.profileImage ? (
+                      <img src={user.profileImage} alt={user.firstname} className="w-10 h-10 rounded-full object-cover border border-primary/20" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium text-sm border border-primary/20">
+                        {userInitials}
+                      </div>
+                    )}
                     <div className="flex flex-col">
                       <span className="text-sm font-medium leading-none mb-1">{user.firstname} {user.lastname}</span>
                       <Link

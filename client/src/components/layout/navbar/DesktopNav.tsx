@@ -105,6 +105,15 @@ const DesktopNav = () => {
           </div>
         )}
       </div>
+
+      <Link
+        to="/blog"
+        className={`relative py-1 after:absolute after:left-0 after:bottom-0 after:h-[1px] after:w-0 after:bg-primary after:transition-all after:duration-500 hover:after:w-full hover:text-foreground transition-colors duration-300 ${
+          isActivePath("/blog") ? "text-foreground after:w-full" : ""
+        }`}
+      >
+        Blog
+      </Link>
     </nav>
   );
 };

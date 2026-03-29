@@ -5,7 +5,7 @@ import { fetchProducts } from "@/redux/slices/productSlice";
 import ProductCard from "@/components/product/ProductCard";
 import ProductCardSkeleton from "@/components/product/ProductCardSkeleton";
 import Pagination from "@/components/ui/Pagination";
-import { Loader2, SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal, X } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -14,42 +14,52 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import FilterSidebar from "@/components/filters/FilterSidebar";
-import { MenuIcon } from "@/components/icons";
 
 const ITEMS_PER_PAGE = 9;
 
-const CATEGORY_META: Record<string, { title: string; subtitle: string; description: string; heroBg: string }> = {
+const CATEGORY_META: Record<
+  string,
+  { title: string; subtitle: string; description: string; heroBg: string }
+> = {
   skincare: {
     title: "Skincare",
     subtitle: "Your Daily Ritual",
     description:
       "Science-backed formulas crafted to cleanse, treat, hydrate and protect. Build a routine that works for your unique skin.",
-    heroBg: "from-rose-50 via-pink-50 to-background dark:from-rose-950/30 dark:via-pink-950/20 dark:to-background",
+    heroBg:
+      "from-rose-50 via-pink-50 to-background dark:from-rose-950/30 dark:via-pink-950/20 dark:to-background",
   },
   makeup: {
     title: "Makeup",
     subtitle: "Express Yourself",
     description:
       "Pigment-rich, long-wearing makeup crafted to enhance your natural beauty — from barely-there to full glam.",
-    heroBg: "from-purple-50 via-fuchsia-50 to-background dark:from-purple-950/30 dark:via-fuchsia-950/20 dark:to-background",
+    heroBg:
+      "from-purple-50 via-fuchsia-50 to-background dark:from-purple-950/30 dark:via-fuchsia-950/20 dark:to-background",
   },
   haircare: {
     title: "Haircare",
     subtitle: "Healthy From Root to Tip",
-    description: "Nourishing, science-backed formulas designed for every hair type and texture.",
-    heroBg: "from-amber-50 via-yellow-50 to-background dark:from-amber-950/30 dark:via-yellow-950/20 dark:to-background",
+    description:
+      "Nourishing, science-backed formulas designed for every hair type and texture.",
+    heroBg:
+      "from-amber-50 via-yellow-50 to-background dark:from-amber-950/30 dark:via-yellow-950/20 dark:to-background",
   },
   bodycare: {
     title: "Bodycare",
     subtitle: "Head-to-Toe Glow",
-    description: "Indulgent body care rituals that cleanse, exfoliate, and deeply hydrate your skin.",
-    heroBg: "from-teal-50 via-cyan-50 to-background dark:from-teal-950/30 dark:via-cyan-950/20 dark:to-background",
+    description:
+      "Indulgent body care rituals that cleanse, exfoliate, and deeply hydrate your skin.",
+    heroBg:
+      "from-teal-50 via-cyan-50 to-background dark:from-teal-950/30 dark:via-cyan-950/20 dark:to-background",
   },
   fragrance: {
     title: "Fragrance",
     subtitle: "Find Your Signature",
-    description: "Captivating scents for every mood, occasion, and season. Discover your next obsession.",
-    heroBg: "from-violet-50 via-indigo-50 to-background dark:from-violet-950/30 dark:via-indigo-950/20 dark:to-background",
+    description:
+      "Captivating scents for every mood, occasion, and season. Discover your next obsession.",
+    heroBg:
+      "from-violet-50 via-indigo-50 to-background dark:from-violet-950/30 dark:via-indigo-950/20 dark:to-background",
   },
 };
 
@@ -65,7 +75,9 @@ const CategoryPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  const { items, status } = useAppSelector((state) => state.products || { items: [], status: "idle" });
+  const { items, status } = useAppSelector(
+    (state) => state.products || { items: [], status: "idle" },
+  );
 
   const [currentPage, setCurrentPage] = useState(1);
   const [sort, setSort] = useState("default");
@@ -98,13 +110,13 @@ const CategoryPage = () => {
   if (skinTypes) {
     const types = skinTypes.split(",").map((t) => t.trim().toLowerCase());
     products = products.filter((p) =>
-      p.skinTypes?.some((st) => types.includes(st.toLowerCase()))
+      p.skinTypes?.some((st) => types.includes(st.toLowerCase())),
     );
   }
   if (concerns) {
     const list = concerns.split(",").map((c) => c.trim().toLowerCase());
     products = products.filter((p) =>
-      p.concerns?.some((c) => list.includes(c.toLowerCase()))
+      p.concerns?.some((c) => list.includes(c.toLowerCase())),
     );
   }
   if (minPrice) products = products.filter((p) => p.price >= Number(minPrice));
@@ -114,23 +126,31 @@ const CategoryPage = () => {
   if (sort === "price-asc") products.sort((a, b) => a.price - b.price);
   else if (sort === "price-desc") products.sort((a, b) => b.price - a.price);
   else if (sort === "rating") products.sort((a, b) => b.rating - a.rating);
-  else if (sort === "newest") products.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
+  else if (sort === "newest")
+    products.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
 
   // Pagination
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentProducts = products.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const currentProducts = products.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE,
+  );
 
   const isLoading = status === "loading";
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* ── Hero Banner ── */}
-      <div className={`bg-gradient-to-b ${meta.heroBg} pt-14 pb-12 md:pt-20 md:pb-16`}>
+      <div
+        className={`bg-gradient-to-b ${meta.heroBg} pt-14 pb-12 md:pt-20 md:pb-16`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-[10px] text-muted-foreground mb-6 uppercase tracking-wider">
-            <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+            <Link to="/" className="hover:text-foreground transition-colors">
+              Home
+            </Link>
             <span>/</span>
             <span className="text-foreground font-semibold">{meta.title}</span>
           </nav>
@@ -152,7 +172,9 @@ const CategoryPage = () => {
           {/* Quick stats */}
           {!isLoading && (
             <div className="mt-8 flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">{products.length}</span>
+              <span className="font-semibold text-foreground">
+                {products.length}
+              </span>
               <span>{products.length === 1 ? "product" : "products"}</span>
             </div>
           )}
@@ -172,7 +194,10 @@ const CategoryPage = () => {
                   Filters
                 </button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-[300px] sm:w-[380px] overflow-y-auto pl-4">
+              <SheetContent
+                side="left"
+                className="w-[300px] sm:w-[380px] overflow-y-auto pl-4"
+              >
                 <SheetHeader className="border-b pb-4 mb-6">
                   <SheetTitle className="text-left font-serif text-2xl uppercase tracking-tighter">
                     Filters
@@ -185,7 +210,10 @@ const CategoryPage = () => {
 
           {/* Sort */}
           <div className="flex items-center gap-2 ml-auto">
-            <label htmlFor="sort" className="text-xs text-muted-foreground uppercase tracking-wider hidden sm:block">
+            <label
+              htmlFor="sort"
+              className="text-xs text-muted-foreground uppercase tracking-wider hidden sm:block"
+            >
               Sort:
             </label>
             <select
@@ -249,7 +277,10 @@ const CategoryPage = () => {
                 <h3 className="font-serif text-2xl mb-2">No products found</h3>
                 <p className="text-muted-foreground text-sm max-w-xs">
                   Try adjusting your filters or{" "}
-                  <Link to={`/category/${slug}`} className="text-primary underline underline-offset-2">
+                  <Link
+                    to={`/category/${slug}`}
+                    className="text-primary underline underline-offset-2"
+                  >
                     clear all filters
                   </Link>{" "}
                   to see more.

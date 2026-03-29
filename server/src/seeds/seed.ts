@@ -3,8 +3,9 @@ import mongoose from "mongoose";
 import connectDB from "../config/db";
 import Category from "../models/Category";
 import Product from "../models/Product";
+import Blog from "../models/Blog";
 import slugify from "../utils/slugify";
-import { categories, products } from "./sampleData";
+import { categories, products, blogs } from "./sampleData";
 
 dotenv.config();
 
@@ -12,7 +13,11 @@ const seed = async () => {
   try {
     await connectDB();
 
-    await Promise.all([Category.deleteMany({}), Product.deleteMany({})]);
+    await Promise.all([
+      Category.deleteMany({}),
+      Product.deleteMany({}),
+      Blog.deleteMany({}),
+    ]);
 
     const createdCategories = await Category.insertMany(categories);
     const categoryMap = new Map(
@@ -47,8 +52,9 @@ const seed = async () => {
     });
 
     await Product.insertMany(productDocs);
+    await Blog.insertMany(blogs);
 
-    console.log("Seed completed: categories and products inserted.");
+    console.log("Seed completed: categories, products and blogs inserted.");
     await mongoose.disconnect();
     process.exit(0);
   } catch (error) {

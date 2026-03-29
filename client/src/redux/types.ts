@@ -97,3 +97,17 @@ export interface IReview {
   name?: string;
   createdAt: string;
 }
+
+export interface IBlog {
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  authorName: string;
+  authorId?: string;
+  image: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+}

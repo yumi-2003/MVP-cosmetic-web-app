@@ -972,3 +972,33 @@ export const products = [
     countInStock: 30,
   },
 ];
+
+export const blogs = [
+  {
+    title: "The Ultimate Skincare Routine for Glowing Skin",
+    slug: "ultimate-skincare-routine-glowing-skin",
+    excerpt: "Discover the step-by-step guide to achieving a radiant complexion with our top product picks.",
+    content: "Achieving glowing skin isn't just about one product; it's about a consistent routine. Start with a gentle cleanser to remove impurities, followed by a balancing toner. Next, apply a vitamin C serum to brighten and even out your skin tone. Don't forget to moisturize and, most importantly, apply SPF every single day. In this post, we dive deep into each step and why it matters for your skin health.",
+    authorName: "Sarah Johnson",
+    image: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?q=80&w=800&auto=format&fit=crop",
+    tags: ["Skincare", "Glowing Skin", "Beauty Tips"],
+  },
+  {
+    title: "5 Makeup Trends to Watch in 2026",
+    slug: "5-makeup-trends-2026",
+    excerpt: "From 'Glass Skin' to bold graphic liners, here are the trends that will dominate the beauty world this year.",
+    content: "The beauty world is constantly evolving, and 2026 is no exception. This year, we're seeing a move towards 'maximalist minimalism'—combining natural, dewy skin with one bold statement feature. Think neon eyeliners paired with barely-there foundation. We also explore the rise of sustainable packaging and how it's influencing the products we choose.",
+    authorName: "Michael Chen",
+    image: "https://images.unsplash.com/photo-1512496115851-a1c8e04d2448?q=80&w=800&auto=format&fit=crop",
+    tags: ["Makeup", "Trends", "2026"],
+  },
+  {
+    title: "Why Scalp Care is the New Haircare",
+    slug: "scalp-care-new-haircare",
+    excerpt: "Healthy hair starts at the root. Learn why you should be treating your scalp with the same care as your face.",
+    content: "For too long, we've focused only on the strands of our hair, neglecting the foundation they grow from: the scalp. A healthy scalp environment is crucial for strong, shiny hair. From exfoliating scrubs to stimulating oils, we discuss the best ways to detoxify and nourish your scalp for optimal hair growth.",
+    authorName: "Elena Rodriguez",
+    image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?q=80&w=800&auto=format&fit=crop",
+    tags: ["Haircare", "Scalp Care", "Wellness"],
+  },
+];

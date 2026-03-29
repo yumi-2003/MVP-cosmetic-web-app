@@ -14,6 +14,7 @@ import newsletterRoutes from "./routes/newsletter";
 import authRoutes from "./routes/authRoute";
 import shippingRoutes from "./routes/shipping";
 import userRoutes from "./routes/userRoute";
+import blogRoutes from "./routes/blogRoutes";
 import { errorHandler, notFound } from "./middleware/errorHandler";
 
 dotenv.config();
@@ -39,6 +40,7 @@ app.use("/api/newsletter", newsletterRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/shipping", shippingRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/blogs", blogRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

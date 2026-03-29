@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProducts } from "@/redux/slices/productSlice";
 import BrandcommimentSection from "@/components/BrandcommimentSection";
+import BlogSection from "@/components/blog/BlogSection";
 import Hero from "@/components/layout/hero/Hero";
 import ProductGrid from "@/components/product/ProductGrid";
 
@@ -27,6 +28,7 @@ const Home = () => {
       <ProductGrid title="Best Sellers" subtitle="Our Top Picks" products={bestSellers} isLoading={status === "loading"} />
       <BrandcommimentSection />
       <ProductGrid title="Featured Products" subtitle="Curated For You" products={featured} isLoading={status === "loading"} />
+      <BlogSection />
     </>
   );
 };

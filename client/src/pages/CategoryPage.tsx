@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from "react";
 import { useParams, Link, useSearchParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -96,6 +97,7 @@ const CategoryPage = () => {
 
   useEffect(() => {
     setCurrentPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.toString(), sort]);
 
   // Filter & sort

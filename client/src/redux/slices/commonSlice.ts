@@ -1,9 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api";
+import type { IRecommendationResponse } from "../types";
+
+export interface RecommendationRequest {
+  skinType?: string;
+  concerns?: string[];
+  toneHex?: string;
+  undertone?: "warm" | "cool" | "neutral" | "olive";
+  favoriteProductIds?: string[];
+  viewedProductIds?: string[];
+  cartProductIds?: string[];
+  limit?: number;
+}
 
 interface CommonState {
   newsletterStatus: "idle" | "loading" | "succeeded" | "failed";
-  advisorRecommendation: any | null;
+  advisorRecommendation: IRecommendationResponse | null;
   advisorStatus: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -29,10 +41,10 @@ export const subscribeNewsletter = createAsyncThunk(
 
 export const getSkinAdvisorRecommendation = createAsyncThunk(
   "common/getSkinRecommendation",
-  async (data: any, { rejectWithValue }) => {
+  async (data: RecommendationRequest, { rejectWithValue }) => {
     try {
-      const response = await api.post("/skinAdvisor/recommendation", data);
-      return response.data;
+      const response = await api.post("/skin-advisor", data);
+      return response.data as IRecommendationResponse;
     } catch (err: any) {
       return rejectWithValue(err.response?.data?.message || "Failed to get recommendation");
     }
@@ -65,6 +77,7 @@ const commonSlice = createSlice({
       })
       .addCase(getSkinAdvisorRecommendation.pending, (state) => {
         state.advisorStatus = "loading";
+        state.error = null;
       })
       .addCase(getSkinAdvisorRecommendation.fulfilled, (state, action) => {
         state.advisorStatus = "succeeded";

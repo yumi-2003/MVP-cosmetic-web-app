@@ -26,6 +26,7 @@ import { addReview, fetchReviewsByProductId } from "@/redux/slices/reviewSlice";
 import { addToCart } from "@/redux/slices/cartSlice";
 import { toggleFavorite } from "@/redux/slices/favoriteSlice";
 import type { IReview, IUser } from "@/redux/types";
+import { trackRecentlyViewedProductId } from "@/lib/recommendationHistory";
 
 const ProductDetailSkeleton = () => (
   <div className="min-h-screen bg-background">
@@ -140,6 +141,7 @@ const ProductDetail = () => {
       dispatch(fetchReviewsByProductId(productId));
       setActiveImage(0);
       setQuantity(1);
+      trackRecentlyViewedProductId(productId);
     }
   }, [dispatch, productId]);
 

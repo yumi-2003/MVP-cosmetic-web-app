@@ -30,6 +30,33 @@ export interface IProduct {
   countInStock: number;
 }
 
+export interface IRecommendationStep {
+  title: string;
+  description: string;
+}
+
+export interface IProductRecommendation {
+  product: IProduct;
+  score: number;
+  confidence: number;
+  reasons: string[];
+}
+
+export interface IRecommendationSummary {
+  skinType: string | null;
+  concerns: string[];
+  toneHex: string | null;
+  undertone: "warm" | "cool" | "neutral" | "olive" | null;
+  behaviorSignals: number;
+  preferredCategory: string | null;
+}
+
+export interface IRecommendationResponse {
+  summary: IRecommendationSummary;
+  steps: IRecommendationStep[];
+  recommendations: IProductRecommendation[];
+}
+
 export interface ICategory {
   _id: string;
   name: string;

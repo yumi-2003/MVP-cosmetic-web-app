@@ -2,11 +2,11 @@ export const footerLinks = [
   {
     title: "SHOP",
     links: [
-      { label: "All Products", href: "/products" },
-      { label: "Skincare", href: "/shop/skincare" },
-      { label: "Makeup", href: "/shop/makeup" },
-      { label: "New Arrivals", href: "/new-arrivals" },
-      { label: "Best Sellers", href: "/best-sellers" },
+      { label: "All Products", href: "/shop" },
+      { label: "Skincare", href: "/category/skincare" },
+      { label: "Makeup", href: "/category/makeup" },
+      { label: "New Arrivals", href: "/shop?sort=newest" },
+      { label: "Best Sellers", href: "/shop?sort=popular" },
     ],
   },
   {

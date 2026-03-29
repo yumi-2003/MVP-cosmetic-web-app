@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProducts } from "@/redux/slices/productSlice";
 import BrandcommimentSection from "@/components/BrandcommimentSection";
 import BlogSection from "@/components/blog/BlogSection";
-import PersonalizedRecommendationSection from "@/components/home/PersonalizedRecommendationSection";
 import Hero from "@/components/layout/hero/Hero";
 import ProductGrid from "@/components/product/ProductGrid";
 
@@ -17,8 +16,6 @@ const Home = () => {
     }
   }, [status, dispatch]);
 
-
-
   // First 8 items as best sellers, next 8 as featured
   const bestSellers = items.slice(0, 8);
   const featured = items.slice(4, 12);
@@ -26,7 +23,6 @@ const Home = () => {
   return (
     <>
       <Hero />
-      <PersonalizedRecommendationSection />
       <ProductGrid title="Best Sellers" subtitle="Our Top Picks" products={bestSellers} isLoading={status === "loading"} />
       <BrandcommimentSection />
       <ProductGrid title="Featured Products" subtitle="Curated For You" products={featured} isLoading={status === "loading"} />

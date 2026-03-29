@@ -25,6 +25,7 @@ import { toast } from "sonner";
 const navLinks = {
   shop: [
     { label: "Shop All", to: "/shop" },
+    { label: "For You", to: "/for-you" },
     { label: "Blog", to: "/blog" },
     { label: "Best Sellers", to: "/best-sellers" },
     { label: "New Arrivals", to: "/new-arrivals" },

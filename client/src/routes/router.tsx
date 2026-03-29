@@ -14,6 +14,7 @@ import ProfilePage from "@/pages/Profile";
 import BlogList from "@/pages/BlogList";
 import BlogDetail from "@/pages/BlogDetail";
 import CreateBlog from "@/pages/CreateBlog";
+import PersonalizedRecommendation from "@/pages/PersonalizedRecommendation";
 import { createBrowserRouter } from "react-router";
 import RootLayout from "@/layouts/RootLayout";
 import shopLoader from "./loaders/shopLoader";
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
       {
         path: "/blog/:slug",
         Component: BlogDetail,
+      },
+      {
+        path: "/for-you",
+        Component: PersonalizedRecommendation,
       },
       {
         path: "/blog/create",

@@ -157,11 +157,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
       {/* Product Details */}
       <div className="flex flex-col gap-1.5 px-1">
         <div className="flex flex-col">
-          <span className="text-[10px] font-bold tracking-[0.15em] text-primary/70 uppercase">
+          <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-[#7a4e5a] dark:text-primary/80">
             {categoryName}
           </span>
           <Link to={`/product/${product.slug}`}>
-            <h3 className="font-serif text-base text-foreground mt-1 group-hover:text-primary transition-colors line-clamp-1">
+            <h3 className="mt-1 line-clamp-1 font-serif text-base text-[#24181d] transition-colors group-hover:text-primary dark:text-foreground">
               {product.name}
             </h3>
           </Link>
@@ -189,12 +189,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 className={`h-3 w-3 ${
                   i < Math.floor(product.rating)
                     ? "fill-amber-400 text-amber-400"
-                    : "text-muted-foreground/30"
+                    : "text-[#cdbfc4] dark:text-muted-foreground/30"
                 }`}
               />
             ))}
           </div>
-          <span className="text-[11px] text-muted-foreground font-medium">({product.reviewCount})</span>
+          <span className="text-[11px] font-medium text-[#7c6b72] dark:text-muted-foreground">({product.reviewCount})</span>
         </div>
 
         {/* Price */}
@@ -204,7 +204,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
               ${product.price.toFixed(2)}
             </span>
             {hasDiscount && (
-              <span className="text-xs text-muted-foreground line-through opacity-70">
+              <span className="text-xs text-[#8b7980] line-through opacity-85 dark:text-muted-foreground dark:opacity-70">
                 ${product.comparePrice?.toFixed(2)}
               </span>
             )}

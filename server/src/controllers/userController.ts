@@ -122,3 +122,66 @@ export const updateUserProfile = async (req: AuthRequest, res: Response) => {
     }
   }
 };
+
+// @desc    Get all users
+// @route   GET /api/admin/users
+// @access  Private/Admin
+export const getUsers = async (req: AuthRequest, res: Response) => {
+  try {
+    const users = await User.find({}).select("-password");
+    res.status(200).json(users);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Update user
+// @route   PUT /api/admin/users/:id
+// @access  Private/Admin
+export const updateUser = async (req: AuthRequest, res: Response) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+      user.firstname = req.body.firstname || user.firstname;
+      user.lastname = req.body.lastname || user.lastname;
+      user.email = req.body.email || user.email;
+      user.isAdmin = req.body.isAdmin !== undefined ? req.body.isAdmin : user.isAdmin;
+
+      const updatedUser = await user.save();
+
+      res.status(200).json({
+        _id: updatedUser._id,
+        firstname: updatedUser.firstname,
+        lastname: updatedUser.lastname,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+      });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Delete user
+// @route   DELETE /api/admin/users/:id
+// @access  Private/Admin
+export const deleteUser = async (req: AuthRequest, res: Response) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+      if (user.isAdmin) {
+        return res.status(400).json({ message: "Cannot delete admin user" });
+      }
+      await User.findByIdAndDelete(req.params.id);
+      res.status(200).json({ message: "User removed" });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};

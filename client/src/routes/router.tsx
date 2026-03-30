@@ -23,9 +23,17 @@ import FAQ from "@/pages/FAQ";
 import ShippingReturns from "@/pages/ShippingReturns";
 import TrackOrder from "@/pages/TrackOrder";
 import ContactUs from "@/pages/ContactUs";
+import AdminDashboard from "@/pages/admin/Dashboard";
+import AdminProducts from "@/pages/admin/Products";
+import AdminCategories from "@/pages/admin/Categories";
+import AdminOrders from "@/pages/admin/Orders";
+import AdminUsers from "@/pages/admin/Users";
+import AdminBlogs from "@/pages/admin/Blogs";
 
 import { createBrowserRouter } from "react-router";
 import RootLayout from "@/layouts/RootLayout";
+import AdminLayout from "@/components/layout/AdminLayout";
+import AdminRoute from "@/components/auth/AdminRoute";
 import shopLoader from "./loaders/shopLoader";
 import productLaoder from "./loaders/productLaoder";
 import ProtectedRoute from "./ProtectedRoute";
@@ -161,6 +169,43 @@ export const router = createBrowserRouter([
       {
         path: "/contact",
         Component: ContactUs,
+      },
+      {
+        path: "/admin",
+        element: (
+          <AdminRoute />
+        ),
+        children: [
+          {
+            element: <AdminLayout />,
+            children: [
+              {
+                index: true,
+                Component: AdminDashboard,
+              },
+              {
+                path: "products",
+                Component: AdminProducts,
+              },
+              {
+                path: "categories",
+                Component: AdminCategories,
+              },
+              {
+                path: "orders",
+                Component: AdminOrders,
+              },
+              {
+                path: "users",
+                Component: AdminUsers,
+              },
+              {
+                path: "blogs",
+                Component: AdminBlogs,
+              },
+            ],
+          },
+        ],
       },
     ],
   },

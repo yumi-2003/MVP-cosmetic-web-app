@@ -7,6 +7,7 @@ import {
   getOrderById,
   getOrdersByUser,
   updateOrderStatus,
+  listAllOrders,
 } from "../services/orderService";
 
 const getOwnerFromRequest = (req: any) => {
@@ -54,4 +55,9 @@ export const updateStatus = asyncHandler(async (req: Request, res: Response) => 
 
   const order = await updateOrderStatus(req.params.id, status);
   res.status(200).json(order);
+});
+
+export const getAllOrders = asyncHandler(async (req: Request, res: Response) => {
+  const orders = await listAllOrders();
+  res.status(200).json(orders);
 });

@@ -60,3 +60,11 @@ export const optionalProtect = async (
   }
   next();
 };
+
+export const admin = (req: AuthRequest, res: Response, next: NextFunction) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(403).json({ message: "Not authorized as an admin" });
+  }
+};

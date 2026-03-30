@@ -4,6 +4,7 @@ export interface IUser {
   firstname: string;
   lastname: string;
   email: string;
+  isAdmin: boolean;
   profileImage?: string;
   createdAt: string;
   updatedAt: string;

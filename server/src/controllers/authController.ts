@@ -39,6 +39,7 @@ const signUp = async (req: Request, res: Response) => {
         firstname: newUser.firstname,
         lastname: newUser.lastname,
         email: newUser.email,
+        isAdmin: newUser.isAdmin,
       },
     });
   } catch (err) {
@@ -75,6 +76,7 @@ const login = async (req: Request, res: Response) => {
         firstname: user.firstname,
         lastname: user.lastname,
         email: user.email,
+        isAdmin: user.isAdmin,
       }
     });
   } catch (err) {

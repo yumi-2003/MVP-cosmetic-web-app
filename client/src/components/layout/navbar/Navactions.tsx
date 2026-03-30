@@ -7,7 +7,7 @@ import {
   SettingsIcon,
   FavIcon,
 } from "@/components/icons";
-import { Package } from "lucide-react";
+import { Package, ShieldCheck } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
 import {
   DropdownMenu,
@@ -90,6 +90,14 @@ const Navactions = () => {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            {user?.isAdmin && (
+              <DropdownMenuItem asChild className="cursor-pointer py-2.5 text-primary focus:text-primary focus:bg-primary/5">
+                <Link to="/admin" className="flex items-center w-full font-semibold">
+                  <ShieldCheck className="mr-2 h-4 w-4" />
+                  <span>Admin Dashboard</span>
+                </Link>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem asChild className="cursor-pointer py-2.5">
               <Link to="/profile" className="flex items-center w-full">
                 <UserIcon className="mr-2 h-4 w-4" />

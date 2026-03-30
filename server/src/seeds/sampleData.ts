@@ -402,7 +402,7 @@ export const products = [
     comparePrice: 40,
     categorySlug: "makeup",
     images: [
-      "https://images.unsplash.com/photo-1590439474864-39930df601b1?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?q=80&w=800&auto=format&fit=crop",
     ],
     tags: ["CLEAN"],
     skinTypes: ["oily", "combination"],
@@ -464,7 +464,7 @@ export const products = [
     comparePrice: 54,
     categorySlug: "haircare",
     images: [
-      "https://images.unsplash.com/photo-1519735891097-3b8a330aeecb?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a3ef?q=80&w=800&auto=format&fit=crop",
     ],
     tags: ["NEW"],
     skinTypes: ["all"],
@@ -885,7 +885,7 @@ export const products = [
     price: 105,
     comparePrice: 125,
     categorySlug: "fragrance",
-    images: ["https://images.unsplash.com/photo-1547881338-64913593f1c2?q=80&w=800&auto=format&fit=crop"],
+    images: ["https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=800&auto=format&fit=crop"],
     tags: ["SOPHISTICATED"],
     skinTypes: ["all"],
     concerns: ["sensitivity"],

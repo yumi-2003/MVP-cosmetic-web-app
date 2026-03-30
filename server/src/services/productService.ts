@@ -110,3 +110,15 @@ export const getProductBySlug = async (slug: string) => {
     .populate("category", "name slug")
     .lean();
 };
+
+export const createProduct = async (productData: Partial<ProductProps>) => {
+  return await Product.create(productData);
+};
+
+export const updateProduct = async (id: string, productData: Partial<ProductProps>) => {
+  return await Product.findByIdAndUpdate(id, productData, { new: true, runValidators: true });
+};
+
+export const deleteProduct = async (id: string) => {
+  return await Product.findByIdAndDelete(id);
+};

@@ -9,7 +9,7 @@ import {
 } from "@/components/icons";
 import SearchBar from "./SearchBar";
 import { useTheme } from "@/components/theme-provider";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, ShieldCheck } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -196,6 +196,15 @@ const MobileNav = () => {
                       >
                         <UserIcon className="w-3 h-3 mr-1" /> View Profile
                       </Link>
+                      {user?.isAdmin && (
+                        <Link
+                          to="/admin"
+                          className="text-[11px] text-primary hover:opacity-80 transition-opacity flex items-center mt-1 font-semibold"
+                          onClick={() => setOpen(false)}
+                        >
+                          <ShieldCheck className="w-3 h-3 mr-1" /> Admin Dashboard
+                        </Link>
+                      )}
                       <Link
                         to="/favorites"
                         className="text-[11px] text-muted-foreground hover:text-primary transition-colors flex items-center mt-1"

@@ -4,6 +4,9 @@ import ApiError from "../utils/ApiError";
 import {
   getCategoryBySlug as getCategoryBySlugService,
   listCategories,
+  createCategory as serviceCreateCategory,
+  updateCategory as serviceUpdateCategory,
+  deleteCategory as serviceDeleteCategory,
 } from "../services/categoryService";
 
 export const getAllCategories = asyncHandler(
@@ -20,3 +23,20 @@ export const getCategoryBySlug = asyncHandler(
     res.status(200).json(category);
   }
 );
+
+export const createCategory = asyncHandler(async (req: Request, res: Response) => {
+  const category = await serviceCreateCategory(req.body);
+  res.status(201).json(category);
+});
+
+export const updateCategory = asyncHandler(async (req: Request, res: Response) => {
+  const category = await serviceUpdateCategory(req.params.id, req.body);
+  if (!category) throw new ApiError(404, "Category not found");
+  res.status(200).json(category);
+});
+
+export const deleteCategory = asyncHandler(async (req: Request, res: Response) => {
+  const category = await serviceDeleteCategory(req.params.id);
+  if (!category) throw new ApiError(404, "Category not found");
+  res.status(204).send();
+});

@@ -251,6 +251,13 @@ export const updateOrderStatus = async (orderId: string, status: string) => {
   return order;
 };
 
+export const listAllOrders = async () => {
+  return await Order.find({ status: { $ne: "cart" } })
+    .populate("user", "firstname lastname email")
+    .sort({ createdAt: -1 })
+    .lean();
+};
+
 const reserveStockForItems = async (
   items: OrderItem[],
   session: ClientSession,

@@ -15,6 +15,7 @@ import authRoutes from "./routes/authRoute";
 import shippingRoutes from "./routes/shipping";
 import userRoutes from "./routes/userRoute";
 import blogRoutes from "./routes/blogRoutes";
+import adminRoutes from "./routes/adminRoutes";
 import { errorHandler, notFound } from "./middleware/errorHandler";
 
 dotenv.config();
@@ -41,6 +42,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/shipping", shippingRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/blogs", blogRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

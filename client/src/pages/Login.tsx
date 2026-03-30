@@ -43,7 +43,11 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      navigate(redirectTo);
+      if (redirectTo === "/" && user.isAdmin) {
+        navigate("/admin");
+      } else {
+        navigate(redirectTo);
+      }
     }
   }, [user, navigate, redirectTo]);
 

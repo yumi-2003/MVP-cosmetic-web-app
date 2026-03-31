@@ -12,7 +12,7 @@ const InformationLayout = ({
   title,
   subtitle,
   children,
-  heroBg = "from-rose-50/50 via-background to-background dark:from-rose-950/10 dark:via-background dark:to-background",
+  heroBg = "from-primary/10 via-background to-background",
 }: InformationLayoutProps) => {
   return (
     <div className="min-h-screen bg-background text-foreground">

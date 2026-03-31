@@ -197,7 +197,7 @@ const FilterSidebar = () => {
                   type="checkbox" 
                   checked={isChecked}
                   onChange={() => handleArrayFilterChange("skinTypes", item.value, currentSkinTypes)}
-                  className="w-4 h-4 border-gray-300 rounded focus:ring-black" 
+                  className="w-4 h-4 border-input rounded focus:ring-primary bg-background" 
                 />
                 <span className="text-sm text-muted-foreground group-hover:text-black transition-colors">
                   {item.label}
@@ -220,9 +220,9 @@ const FilterSidebar = () => {
                   type="checkbox" 
                   checked={isChecked}
                   onChange={() => handleArrayFilterChange("concerns", item.value, currentConcerns)}
-                  className="w-4 h-4 border-gray-300 rounded focus:ring-black" 
+                  className="w-4 h-4 border-input rounded focus:ring-primary bg-background" 
                 />
-                <span className="text-sm text-muted-foreground group-hover:text-black transition-colors">
+                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
                   {item.label}
                 </span>
               </label>

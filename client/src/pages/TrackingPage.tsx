@@ -32,20 +32,20 @@ const STATUS_CONFIG: Record<
 > = {
   pending: {
     label: "Order Received",
-    color: "text-amber-500",
-    bg: "bg-amber-500/10 border-amber-500/30",
+    color: "text-muted-foreground",
+    bg: "bg-muted border-border",
     icon: <Clock className="w-4 h-4" />,
   },
   processing: {
     label: "Processing",
-    color: "text-blue-500",
-    bg: "bg-blue-500/10 border-blue-500/30",
+    color: "text-secondary-foreground",
+    bg: "bg-secondary/30 border-secondary/50",
     icon: <Package className="w-4 h-4" />,
   },
   shipped: {
     label: "Shipped",
-    color: "text-violet-500",
-    bg: "bg-violet-500/10 border-violet-500/30",
+    color: "text-secondary-foreground",
+    bg: "bg-secondary/50 border-secondary",
     icon: <Truck className="w-4 h-4" />,
   },
   out_for_delivery: {
@@ -56,8 +56,8 @@ const STATUS_CONFIG: Record<
   },
   delivered: {
     label: "Delivered",
-    color: "text-emerald-500",
-    bg: "bg-emerald-500/10 border-emerald-500/30",
+    color: "text-primary",
+    bg: "bg-primary/20 border-primary/40",
     icon: <CheckCircle2 className="w-4 h-4" />,
   },
   failed: {
@@ -68,8 +68,8 @@ const STATUS_CONFIG: Record<
   },
   returned: {
     label: "Returned",
-    color: "text-orange-500",
-    bg: "bg-orange-500/10 border-orange-500/30",
+    color: "text-muted-foreground",
+    bg: "bg-muted border-border",
     icon: <RotateCcw className="w-4 h-4" />,
   },
 };
@@ -288,7 +288,7 @@ const TrackingPage = () => {
             </div>
             {tracking.actualDelivery && (
               <div className="flex gap-3">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
                 <div>
                   <p className="font-medium">Delivered On</p>
                   <p className="text-muted-foreground text-xs mt-0.5">

@@ -141,9 +141,9 @@ const AdminOrders: React.FC = () => {
                   <td className="px-6 py-4">
                     <div className="flex justify-center">
                       <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                        order.status === 'delivered' ? 'bg-emerald-500/10 text-emerald-500' :
-                        order.status === 'cancelled' ? 'bg-rose-500/10 text-rose-500' :
-                        'bg-amber-500/10 text-amber-500'
+                        order.status === 'delivered' ? 'bg-primary/20 text-primary' :
+                        order.status === 'cancelled' ? 'bg-destructive/10 text-destructive' :
+                        'bg-secondary/30 text-secondary-foreground'
                       }`}>
                         {order.status}
                       </span>

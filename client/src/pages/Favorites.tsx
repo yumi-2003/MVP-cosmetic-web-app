@@ -55,8 +55,8 @@ export default function Favorites() {
           </div>
         ) : items.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-6 py-12 md:py-24 max-w-md mx-auto text-center">
-            <div className="rounded-full bg-pink-200 p-8 border border-border/50 w-10 h-10 flex items-center justify-center">
-              <span className="text-5xl text-pink-500 block leading-none">♡</span>
+            <div className="rounded-full bg-primary/10 p-8 border border-primary/20 w-10 h-10 flex items-center justify-center">
+              <span className="text-5xl text-primary block leading-none">♡</span>
             </div>
             <h3 className="text-2xl font-serif text-foreground">Your Wishlist is Empty</h3>
             <p className="text-muted-foreground/80 leading-relaxed mb-4">

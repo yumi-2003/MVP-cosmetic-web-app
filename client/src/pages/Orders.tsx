@@ -15,17 +15,17 @@ import {
 const STATUS_CONFIG = {
   pending: {
     label: "Order Received",
-    className: "bg-amber-500/10 text-amber-600 border-amber-500/30",
+    className: "bg-muted text-muted-foreground border-border",
     icon: <Clock className="w-3.5 h-3.5" />,
   },
   processing: {
     label: "Processing",
-    className: "bg-blue-500/10 text-blue-600 border-blue-500/30",
+    className: "bg-secondary/30 text-secondary-foreground border-secondary/50",
     icon: <Package className="w-3.5 h-3.5" />,
   },
   shipped: {
     label: "Shipped",
-    className: "bg-violet-500/10 text-violet-600 border-violet-500/30",
+    className: "bg-secondary/50 text-secondary-foreground border-secondary",
     icon: <Truck className="w-3.5 h-3.5" />,
   },
   out_for_delivery: {
@@ -35,7 +35,7 @@ const STATUS_CONFIG = {
   },
   delivered: {
     label: "Delivered",
-    className: "bg-emerald-500/10 text-emerald-600 border-emerald-500/30",
+    className: "bg-primary/20 text-primary border-primary/40 font-bold",
     icon: <CheckCircle2 className="w-3.5 h-3.5" />,
   },
   failed: {
@@ -45,7 +45,7 @@ const STATUS_CONFIG = {
   },
   returned: {
     label: "Returned",
-    className: "bg-orange-500/10 text-orange-600 border-orange-500/30",
+    className: "bg-muted text-muted-foreground border-border",
     icon: <RotateCcw className="w-3.5 h-3.5" />,
   },
 } as const;

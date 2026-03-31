@@ -28,7 +28,7 @@ const CATEGORY_META: Record<
     description:
       "Science-backed formulas crafted to cleanse, treat, hydrate and protect. Build a routine that works for your unique skin.",
     heroBg:
-      "from-rose-50 via-pink-50 to-background dark:from-rose-950/30 dark:via-pink-950/20 dark:to-background",
+      "from-primary/10 via-background to-background",
   },
   makeup: {
     title: "Makeup",
@@ -36,7 +36,7 @@ const CATEGORY_META: Record<
     description:
       "Pigment-rich, long-wearing makeup crafted to enhance your natural beauty — from barely-there to full glam.",
     heroBg:
-      "from-purple-50 via-fuchsia-50 to-background dark:from-purple-950/30 dark:via-fuchsia-950/20 dark:to-background",
+      "from-secondary/20 via-background to-background",
   },
   haircare: {
     title: "Haircare",
@@ -44,7 +44,7 @@ const CATEGORY_META: Record<
     description:
       "Nourishing, science-backed formulas designed for every hair type and texture.",
     heroBg:
-      "from-amber-50 via-yellow-50 to-background dark:from-amber-950/30 dark:via-yellow-950/20 dark:to-background",
+      "from-muted via-background to-background",
   },
   bodycare: {
     title: "Bodycare",
@@ -52,7 +52,7 @@ const CATEGORY_META: Record<
     description:
       "Indulgent body care rituals that cleanse, exfoliate, and deeply hydrate your skin.",
     heroBg:
-      "from-teal-50 via-cyan-50 to-background dark:from-teal-950/30 dark:via-cyan-950/20 dark:to-background",
+      "from-primary/10 via-secondary/10 to-background",
   },
   fragrance: {
     title: "Fragrance",
@@ -60,7 +60,7 @@ const CATEGORY_META: Record<
     description:
       "Captivating scents for every mood, occasion, and season. Discover your next obsession.",
     heroBg:
-      "from-violet-50 via-indigo-50 to-background dark:from-violet-950/30 dark:via-indigo-950/20 dark:to-background",
+      "from-muted via-secondary/10 to-background",
   },
 };
 

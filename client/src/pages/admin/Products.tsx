@@ -154,7 +154,7 @@ const AdminProducts: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 text-center">
                     <span className={`font-mono font-bold px-2 py-1 rounded-lg ${
-                      product.countInStock <= 5 ? 'bg-rose-500/10 text-rose-500' : 'text-foreground'
+                      product.countInStock <= 5 ? 'bg-destructive/10 text-destructive' : 'text-foreground'
                     }`}>
                       {product.countInStock}
                     </span>
@@ -162,7 +162,7 @@ const AdminProducts: React.FC = () => {
                   <td className="px-6 py-4">
                     <div className="flex justify-center">
                       <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                        product.countInStock > 0 ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'
+                        product.countInStock > 0 ? 'bg-primary/20 text-primary' : 'bg-destructive/10 text-destructive'
                       }`}>
                         {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
                       </span>

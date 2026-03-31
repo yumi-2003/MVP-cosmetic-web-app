@@ -319,12 +319,12 @@ const ProductDetail = () => {
                 className="h-full w-full object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-105"
               />
               {hasDiscount && (
-                <span className="absolute left-4 top-4 rounded-full bg-rose-600 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow">
+                <span className="absolute left-4 top-4 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground shadow">
                   -{discountPct}%
                 </span>
               )}
               {product.isBestSeller && (
-                <span className="absolute right-4 top-4 rounded-full bg-amber-500 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow">
+                <span className="absolute right-4 top-4 rounded-full bg-secondary px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-secondary-foreground shadow">
                   Best Seller
                 </span>
               )}
@@ -376,7 +376,7 @@ const ProductDetail = () => {
                     key={index}
                     className={`h-4 w-4 ${
                       index < Math.floor(product.rating)
-                        ? "fill-amber-400 text-amber-400"
+                        ? "fill-primary text-primary"
                         : "text-muted-foreground/30"
                     }`}
                   />
@@ -396,7 +396,7 @@ const ProductDetail = () => {
                   <span className="text-lg text-muted-foreground opacity-60 line-through">
                     ${product.comparePrice?.toFixed(2)}
                   </span>
-                  <span className="text-sm font-bold text-rose-600">
+                  <span className="text-sm font-bold text-primary">
                     Save {discountPct}%
                   </span>
                 </>
@@ -406,12 +406,12 @@ const ProductDetail = () => {
             <div className="flex items-center gap-2">
               {inStock ? (
                 <>
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                  <CheckCircle2 className="h-4 w-4 text-primary" />
                   <span
                     className={`text-sm font-medium ${
                       (product.countInStock ?? 0) < 10
-                        ? "text-amber-600"
-                        : "text-emerald-600"
+                        ? "text-secondary font-bold"
+                        : "text-primary"
                     }`}
                   >
                     {(product.countInStock ?? 0) < 10
@@ -508,13 +508,13 @@ const ProductDetail = () => {
                 }
                 className={`flex h-14 sm:h-12 w-14 sm:w-12 shrink-0 items-center justify-center rounded-xl border transition-all duration-200 hover:scale-105 disabled:opacity-50 ${
                   isFavorited
-                    ? "border-rose-400 bg-rose-50 text-rose-500 dark:bg-rose-950"
-                    : "border-border hover:border-rose-400 hover:text-rose-500"
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border hover:border-primary hover:text-primary"
                 }`}
               >
                 <FavIcon
                   className={`h-5 w-5 transition-colors ${
-                    isFavorited ? "fill-rose-500 text-rose-500" : ""
+                    isFavorited ? "fill-primary text-primary" : ""
                   }`}
                 />
               </button>
@@ -570,7 +570,7 @@ const ProductDetail = () => {
                       key={index}
                       className={`h-5 w-5 ${
                         index < Math.round(product.rating)
-                          ? "fill-amber-400 text-amber-400"
+                          ? "fill-primary text-primary"
                           : "text-muted-foreground/30"
                       }`}
                     />
@@ -589,7 +589,7 @@ const ProductDetail = () => {
                 </Button>
               </div>
             ) : hasReviewed ? (
-              <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-5 text-sm text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200">
+              <div className="mt-6 rounded-2xl border border-primary/20 bg-primary/5 p-5 text-sm text-primary dark:border-primary/30 dark:bg-primary/10 dark:text-primary-foreground">
                 You have already reviewed this product. Your review stays visible
                 to other shoppers, but there is no edit or delete action here.
               </div>
@@ -607,14 +607,14 @@ const ProductDetail = () => {
                         onClick={() => setReviewRating(value)}
                         className={`flex items-center gap-2 rounded-full border px-3 py-2 text-sm transition-colors ${
                           reviewRating === value
-                            ? "border-amber-400 bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-200"
-                            : "border-border bg-background hover:border-amber-300 hover:text-foreground"
+                            ? "border-primary bg-primary/10 text-primary dark:bg-primary/20"
+                            : "border-border bg-background hover:border-primary hover:text-foreground"
                         }`}
                       >
                         <StarIcon
                           className={`h-4 w-4 ${
                             value <= reviewRating
-                              ? "fill-amber-400 text-amber-400"
+                              ? "fill-primary text-primary"
                               : "text-muted-foreground/40"
                           }`}
                         />
@@ -728,7 +728,7 @@ const ProductDetail = () => {
                             key={index}
                             className={`h-4 w-4 ${
                               index < review.rating
-                                ? "fill-amber-400 text-amber-400"
+                                ? "fill-primary text-primary"
                                 : "text-muted-foreground/30"
                             }`}
                           />

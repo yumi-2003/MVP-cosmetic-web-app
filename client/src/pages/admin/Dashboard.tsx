@@ -38,7 +38,7 @@ const StatCard = ({ title, value, icon: Icon, color, trend }: any) => (
         <Icon size={24} />
       </div>
       {trend && (
-        <div className="flex items-center gap-1 text-xs font-medium text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full">
+        <div className="flex items-center gap-1 text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
           <TrendingUp size={12} />
           {trend}%
         </div>
@@ -253,9 +253,9 @@ const AdminDashboard: React.FC = () => {
                       <td className="px-6 py-4">
                         <div className="flex justify-center">
                           <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                            order.status === 'delivered' ? 'bg-emerald-500/10 text-emerald-500' :
-                            order.status === 'cancelled' ? 'bg-rose-500/10 text-rose-500' :
-                            'bg-amber-500/10 text-amber-500'
+                            order.status === 'delivered' ? 'bg-primary/20 text-primary' :
+                            order.status === 'cancelled' ? 'bg-destructive/10 text-destructive' :
+                            'bg-secondary/30 text-secondary-foreground'
                           }`}>
                             {order.status}
                           </span>
@@ -291,11 +291,11 @@ const AdminDashboard: React.FC = () => {
             </button>
             <div className="pt-6 mt-6 border-t border-border">
               <h3 className="text-sm font-medium text-muted-foreground mb-4">Inventory Alerts</h3>
-              <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl">
-                <p className="text-xs text-amber-600 font-medium">Some products are low in stock</p>
+              <div className="p-4 bg-primary/10 border border-primary/20 rounded-2xl">
+                <p className="text-xs text-primary font-medium">Some products are low in stock</p>
                 <button 
                   onClick={() => window.location.href = '/admin/products'}
-                  className="mt-2 text-[10px] font-bold text-amber-700 uppercase tracking-wider hover:underline"
+                  className="mt-2 text-[10px] font-bold text-primary uppercase tracking-wider hover:underline"
                 >
                   Restock Now →
                 </button>

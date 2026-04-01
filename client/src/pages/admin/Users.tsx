@@ -6,158 +6,187 @@ import {
   Shield, 
   ShieldCheck, 
   UserMinus, 
-  Edit3,
-  MoreVertical,
-  UserPlus
+  UserPlus,
+  ShieldAlert,
+  Clock,
+  ChevronRight
 } from "lucide-react";
 import api from "../../redux/api";
 import type { IUser } from "../../redux/types";
+import Pagination from "../../components/ui/Pagination";
+import { toast } from "sonner";
 
 const AdminUsers: React.FC = () => {
+  // Data State
   const [users, setUsers] = useState<IUser[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [limit] = useState(10);
+  
+  // Filters & Search
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await api.get("/admin/users");
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get(`/admin/users?page=${currentPage}&limit=${limit}&search=${searchTerm}`);
+      // Assuming backend supports pagination for users similarly
+      if (response.data.data) {
+        setUsers(response.data.data);
+        setTotalPages(response.data.totalPages);
+      } else {
         setUsers(response.data);
-      } catch (error) {
-        console.error("Failed to fetch users", error);
-      } finally {
-        setLoading(false);
+        setTotalPages(1);
       }
-    };
-    fetchUsers();
-  }, []);
+    } catch (error) {
+      console.error("Failed to fetch users", error);
+      toast.error("Failed to load user registry");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage, searchTerm]);
 
   const handleToggleAdmin = async (id: string, isAdmin: boolean) => {
     try {
       await api.put(`/admin/users/${id}`, { isAdmin: !isAdmin });
-      setUsers(users.map(u => u._id === id ? { ...u, isAdmin: !isAdmin } : u));
+      toast.success(isAdmin ? "Privileges revoked" : "Privileges granted");
+      fetchData();
     } catch (error) {
-      alert("Failed to update user role");
+      toast.error("Security protocol failed: Could not update role");
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
+    if (window.confirm("Are you sure you want to permanently remove this individual from the registry?")) {
       try {
         await api.delete(`/admin/users/${id}`);
-        setUsers(users.filter(u => u._id !== id));
+        toast.success("Identity removed from registry");
+        fetchData();
       } catch (error) {
-        alert("Failed to delete user");
+        toast.error("Failed to remove user");
       }
     }
   };
 
-  const filteredUsers = users.filter(u => 
-    `${u.firstname} ${u.lastname}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    u.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  if (loading) {
+  if (loading && users.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <p className="text-muted-foreground animate-pulse font-medium">Accessing user registry...</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8 pb-10">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="space-y-10 pb-16">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-            User <span className="text-primary text-xl align-top">Management</span>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">
+            User <span className="text-primary italic">Registry</span>
           </h1>
-          <p className="mt-2 text-lg text-muted-foreground">
-            Manage permissions and monitor user activity.
+          <p className="mt-2 text-lg text-muted-foreground max-w-2xl leading-relaxed">
+            Oversee personnel permissions and curate the community of connoisseurs.
           </p>
         </div>
       </div>
 
-      <div className="relative group max-w-md">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" size={20} />
+      <div className="relative group max-w-2xl">
+        <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" size={24} />
         <input 
           type="text" 
-          placeholder="Search by name or email..." 
-          className="w-full pl-12 pr-4 py-3 bg-card border border-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-sm"
+          placeholder="Search by identity or contact..." 
+          className="w-full pl-16 pr-8 py-5 bg-card border border-border rounded-3xl focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm text-xl"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
-      <div className="bg-card/30 backdrop-blur-md border border-border/50 rounded-3xl overflow-hidden">
+      <div className="luxury-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
+          <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-muted/30 text-muted-foreground text-xs uppercase tracking-wider font-semibold">
-                <th className="px-6 py-4 text-center">Avatar</th>
-                <th className="px-6 py-4">Full Name</th>
-                <th className="px-6 py-4">Email Address</th>
-                <th className="px-6 py-4 text-center">Role</th>
-                <th className="px-6 py-4 text-center">Joined Date</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+              <tr className="bg-muted/10 text-muted-foreground text-xs uppercase tracking-widest font-bold">
+                <th className="px-8 py-6">Individual</th>
+                <th className="px-8 py-6">Identity Verification</th>
+                <th className="px-8 py-6">Commission Status</th>
+                <th className="px-8 py-6">Registry Origin</th>
+                <th className="px-8 py-6 text-right">Sanctions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/50">
-              {filteredUsers.map((user) => (
-                <tr key={user._id} className="hover:bg-accent/10 transition-colors group">
-                  <td className="px-6 py-4">
-                    <div className="flex justify-center">
-                      <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold overflow-hidden border-2 border-primary/20 group-hover:scale-110 transition-transform">
-                        {user.profileImage ? (
-                          <img src={user.profileImage} alt={user.firstname || 'User'} className="w-full h-full object-cover" />
-                        ) : (
-                          (user.firstname?.[0] || user.email?.[0] || '?').toUpperCase()
+            <tbody className="divide-y divide-border/20">
+              {users.map((user) => (
+                <tr key={user._id} className="hover:bg-primary/[0.01] transition-colors group">
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-6">
+                      <div className="relative">
+                        <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xl border-2 border-primary/20 group-hover:scale-105 transition-transform duration-500 shadow-xl shadow-black/5 overflow-hidden">
+                          {user.profileImage ? (
+                            <img src={user.profileImage} alt={user.firstname} className="w-full h-full object-cover" />
+                          ) : (
+                            (user.firstname?.[0] || user.email?.[0] || '?').toUpperCase()
+                          )}
+                        </div>
+                        {user.isAdmin && (
+                          <div className="absolute -bottom-1 -right-1 bg-primary text-white p-1 rounded-full shadow-lg border-2 border-card">
+                            <ShieldCheck size={12} />
+                          </div>
                         )}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-bold text-lg text-foreground group-hover:text-primary transition-colors">{user.firstname} {user.lastname}</span>
+                        <span className="text-xs text-muted-foreground/60 font-mono tracking-tighter uppercase">ID: {user._id.slice(-8)}</span>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 font-semibold text-foreground">
-                    {user.firstname} {user.lastname}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground bg-secondary px-4 py-2 rounded-full w-fit">
                       <Mail size={14} className="text-primary" />
                       {user.email}
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex justify-center">
+                  <td className="px-8 py-6">
+                    <div className="flex justify-start">
                       {user.isAdmin ? (
-                        <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary">
-                          <ShieldCheck size={12} />
-                          Admin
+                        <span className="flex items-center gap-2 px-4 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest bg-primary/15 text-primary border border-primary/20 shadow-sm shadow-primary/5">
+                          <ShieldAlert size={14} />
+                          High Authority
                         </span>
                       ) : (
-                        <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent text-muted-foreground border border-border/50">
-                          <Shield size={12} />
-                          User
+                        <span className="flex items-center gap-2 px-4 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest bg-muted/40 text-muted-foreground border border-border/50">
+                          <Shield size={14} />
+                          Standard Member
                         </span>
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-center text-sm text-muted-foreground">
-                    {new Date(user.createdAt).toLocaleDateString()}
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Clock size={16} className="text-primary" />
+                      {new Date(user.createdAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}
+                    </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <td className="px-8 py-6">
+                    <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
                       <button 
                         onClick={() => handleToggleAdmin(user._id, user.isAdmin)}
-                        title={user.isAdmin ? "Remove Admin" : "Make Admin"}
-                        className="p-2 border border-border bg-background rounded-xl hover:bg-primary hover:text-primary-foreground transition-all"
+                        title={user.isAdmin ? "Revoke Authority" : "Grant Authority"}
+                        className="p-3 border border-border bg-card rounded-2xl hover:bg-primary hover:text-primary-foreground hover:shadow-xl hover:shadow-primary/20 transition-all duration-300"
                       >
-                        {user.isAdmin ? <UserMinus size={16} /> : <UserPlus size={16} />}
+                        {user.isAdmin ? <UserMinus size={18} /> : <UserPlus size={18} />}
                       </button>
                       <button 
                         onClick={() => handleDelete(user._id)}
                         title="Delete User"
-                        className="p-2 border border-border bg-background rounded-xl hover:bg-destructive hover:text-destructive-foreground transition-all"
+                        className="p-3 border border-border bg-card rounded-2xl hover:bg-destructive hover:text-destructive-foreground hover:shadow-xl hover:shadow-destructive/20 transition-all duration-300"
                       >
-                        <UserMinus size={16} />
+                        <UserMinus size={18} />
                       </button>
                     </div>
                   </td>
@@ -166,6 +195,16 @@ const AdminUsers: React.FC = () => {
             </tbody>
           </table>
         </div>
+        
+        {totalPages > 1 && (
+          <div className="border-t border-border/10 bg-muted/5">
+            <Pagination 
+              currentPage={currentPage} 
+              totalPages={totalPages} 
+              onPageChange={setCurrentPage} 
+            />
+          </div>
+        )}
       </div>
     </div>
   );

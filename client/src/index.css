@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 @import "shadcn/tailwind.css";
 @import "tw-animate-css";
@@ -6,78 +6,68 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #FFF1E6;
-  --foreground: #3A3A3A;
-  --card: #ffffff;
-  --card-foreground: #3A3A3A;
-  --popover: #FFF1E6;
-  --popover-foreground: #3A3A3A;
-  --primary: #FFB3C6;
-  --primary-foreground: #3A3A3A;
-  --secondary: #CDB4DB;
-  --secondary-foreground: #3A3A3A;
-  --muted: #FFC8DD;
-  --muted-foreground: #705b63;
-  --accent: #FFC8DD;
-  --accent-foreground: #3A3A3A;
+  --background: #FCFBF9;
+  --foreground: #1A1A1A;
+  --card: #FFFFFF;
+  --card-foreground: #1A1A1A;
+  --popover: #FFFFFF;
+  --popover-foreground: #1A1A1A;
+  --primary: #C5A059; /* Sophisticated Gold */
+  --primary-foreground: #FFFFFF;
+  --secondary: #F4EFE6; /* Champagne Cream */
+  --secondary-foreground: #1A1A1A;
+  --muted: #F4EFE6;
+  --muted-foreground: #666666;
+  --accent: #F4EFE6;
+  --accent-foreground: #1A1A1A;
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(1 0 0);
-  --border: #f3d8e0;
-  --input: #f3d8e0;
-  --ring: #FFB3C6;
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #3A3A3A;
-  --sidebar-primary: #FFB3C6;
-  --sidebar-primary-foreground: #3A3A3A;
-  --sidebar-accent: #FFC8DD;
-  --sidebar-accent-foreground: #3A3A3A;
-  --sidebar-border: #f3d8e0;
-  --sidebar-ring: #FFB3C6;
+  --border: #E8E2D6;
+  --input: #E8E2D6;
+  --ring: #C5A059;
+  --radius: 1rem;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1A1A1A;
+  --sidebar-primary: #C5A059;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F4EFE6;
+  --sidebar-accent-foreground: #1A1A1A;
+  --sidebar-border: #E8E2D6;
+  --sidebar-ring: #C5A059;
 }
 
 .dark {
-  --background: #1c191a;
-  --foreground: #FFF1E6;
-  --card: #2a2526;
-  --card-foreground: #FFF1E6;
-  --popover: #2a2526;
-  --popover-foreground: #FFF1E6;
-  --primary: #FFB3C6;
-  --primary-foreground: #3A3A3A;
-  --secondary: #CDB4DB;
-  --secondary-foreground: #3A3A3A;
-  --muted: #3f3538;
-  --muted-foreground: #f3d8e0;
-  --accent: #3f3538;
-  --accent-foreground: #FFF1E6;
+  --background: #0F0F0F;
+  --foreground: #F4EFE6;
+  --card: #161616;
+  --card-foreground: #F4EFE6;
+  --popover: #161616;
+  --popover-foreground: #F4EFE6;
+  --primary: #C5A059;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1F1F1F;
+  --secondary-foreground: #F4EFE6;
+  --muted: #1F1F1F;
+  --muted-foreground: #A1A1AA;
+  --accent: #1F1F1F;
+  --accent-foreground: #F4EFE6;
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: #3f3538;
-  --input: #3f3538;
-  --ring: #FFB3C6;
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: #1c191a;
-  --sidebar-foreground: #FFF1E6;
-  --sidebar-primary: #FFB3C6;
-  --sidebar-primary-foreground: #3A3A3A;
-  --sidebar-accent: #3f3538;
-  --sidebar-accent-foreground: #FFF1E6;
-  --sidebar-border: #3f3538;
-  --sidebar-ring: #FFB3C6;
+  --border: #27272A;
+  --input: #27272A;
+  --ring: #C5A059;
+  --sidebar: #0F0F0F;
+  --sidebar-foreground: #F4EFE6;
+  --sidebar-primary: #C5A059;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #1F1F1F;
+  --sidebar-accent-foreground: #F4EFE6;
+  --sidebar-border: #27272A;
+  --sidebar-ring: #C5A059;
 }
 
 @theme inline {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -98,11 +88,6 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -119,9 +104,30 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 transition-colors duration-300;
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased;
   }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  @apply bg-card/70 backdrop-blur-xl border border-border/50 shadow-xl;
+}
+
+.glass-dark {
+  @apply bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl;
+}
+
+/* Luxury Transitions */
+.hover-gold {
+  @apply hover:text-primary hover:border-primary transition-all duration-500 ease-out;
+}
+
+.luxury-card {
+  @apply bg-card border border-border/50 rounded-3xl p-8 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500;
 }

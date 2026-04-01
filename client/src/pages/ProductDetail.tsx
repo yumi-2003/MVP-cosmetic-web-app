@@ -100,6 +100,7 @@ const ProductDetail = () => {
   const { itemIds, status: favoriteStatus } = useAppSelector(
     (state) => state.favorites
   );
+  const isAdmin = user?.isAdmin ?? false;
   const {
     productReviews,
     status: reviewStatus,
@@ -464,61 +465,71 @@ const ProductDetail = () => {
               </div>
             )}
 
-            <div className="mt-2 flex flex-col gap-3 border-t border-border/50 pt-5 sm:flex-row">
-              <div className="flex items-center overflow-hidden rounded-xl border border-border/60">
-                <button
-                  onClick={() => setQuantity((value) => Math.max(1, value - 1))}
-                  className="flex h-14 sm:h-12 w-12 sm:w-10 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            {isAdmin ? (
+              <div className="mt-2 flex items-center gap-3 rounded-xl border border-border/50 bg-muted/60 px-5 py-4 text-sm text-muted-foreground">
+                <span className="text-xl">🚫</span>
+                <div>
+                  <p className="font-semibold text-foreground">Admin accounts cannot purchase</p>
+                  <p className="text-xs mt-0.5">Switch to a regular customer account to shop.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-2 flex flex-col gap-3 border-t border-border/50 pt-5 sm:flex-row">
+                <div className="flex items-center overflow-hidden rounded-xl border border-border/60">
+                  <button
+                    onClick={() => setQuantity((value) => Math.max(1, value - 1))}
+                    className="flex h-14 sm:h-12 w-12 sm:w-10 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  >
+                    -
+                  </button>
+                  <span className="w-12 sm:w-10 text-center font-medium">{quantity}</span>
+                  <button
+                    onClick={() =>
+                      setQuantity((value) =>
+                        Math.min(product.countInStock ?? 99, value + 1)
+                      )
+                    }
+                    className="flex h-14 sm:h-12 w-12 sm:w-10 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  >
+                    +
+                  </button>
+                </div>
+
+                <Button
+                  onClick={handleAddToCart}
+                  disabled={isAdding || !inStock}
+                  className="h-14 sm:h-12 flex-1 rounded-xl px-12 sm:px-8 text-sm font-bold uppercase tracking-widest shadow-md"
                 >
-                  -
-                </button>
-                <span className="w-12 sm:w-10 text-center font-medium">{quantity}</span>
+                  {isAdding ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <CartIcon className="mr-2 h-4 w-4" />
+                  )}
+                  {isAdding ? "Adding..." : !inStock ? "Out of Stock" : "Add to Cart"}
+                </Button>
+
                 <button
-                  onClick={() =>
-                    setQuantity((value) =>
-                      Math.min(product.countInStock ?? 99, value + 1)
-                    )
+                  onClick={handleToggleFavorite}
+                  disabled={isFavoriting || favoriteStatus === "loading"}
+                  title={
+                    isFavorited
+                      ? "Remove from favorites"
+                      : "Add to favorites"
                   }
-                  className="flex h-14 sm:h-12 w-12 sm:w-10 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  className={`flex h-14 sm:h-12 w-14 sm:w-12 shrink-0 items-center justify-center rounded-xl border transition-all duration-200 hover:scale-105 disabled:opacity-50 ${
+                    isFavorited
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border hover:border-primary hover:text-primary"
+                  }`}
                 >
-                  +
+                  <FavIcon
+                    className={`h-5 w-5 transition-colors ${
+                      isFavorited ? "fill-primary text-primary" : ""
+                    }`}
+                  />
                 </button>
               </div>
-
-              <Button
-                onClick={handleAddToCart}
-                disabled={isAdding || !inStock}
-                className="h-14 sm:h-12 flex-1 rounded-xl px-12 sm:px-8 text-sm font-bold uppercase tracking-widest shadow-md"
-              >
-                {isAdding ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <CartIcon className="mr-2 h-4 w-4" />
-                )}
-                {isAdding ? "Adding..." : !inStock ? "Out of Stock" : "Add to Cart"}
-              </Button>
-
-              <button
-                onClick={handleToggleFavorite}
-                disabled={isFavoriting || favoriteStatus === "loading"}
-                title={
-                  isFavorited
-                    ? "Remove from favorites"
-                    : "Add to favorites"
-                }
-                className={`flex h-14 sm:h-12 w-14 sm:w-12 shrink-0 items-center justify-center rounded-xl border transition-all duration-200 hover:scale-105 disabled:opacity-50 ${
-                  isFavorited
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border hover:border-primary hover:text-primary"
-                }`}
-              >
-                <FavIcon
-                  className={`h-5 w-5 transition-colors ${
-                    isFavorited ? "fill-primary text-primary" : ""
-                  }`}
-                />
-              </button>
-            </div>
+            )}
 
             {product.ingredients?.length > 0 && (
               <details className="group cursor-pointer rounded-xl border border-border/50 px-4 py-3">

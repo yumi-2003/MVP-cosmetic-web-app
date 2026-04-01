@@ -21,7 +21,8 @@ export const fetchBlogs = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("/blogs");
-      return response.data;
+      // The backend returns an object { data, page, limit, total, totalPages }
+      return response.data.data || (Array.isArray(response.data) ? response.data : []);
     } catch (err: any) {
       return rejectWithValue(err.response?.data?.message || "Failed to fetch blogs");
     }

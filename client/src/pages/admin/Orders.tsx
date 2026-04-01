@@ -8,163 +8,208 @@ import {
   XCircle, 
   Clock,
   Filter,
-  MoreVertical,
-  Calendar
+  Calendar,
+  CreditCard,
+  User as UserIcon,
+  ChevronRight,
+  PackageCheck
 } from "lucide-react";
 import api from "../../redux/api";
 import type { IOrder } from "../../redux/types";
+import Pagination from "../../components/ui/Pagination";
+import { toast } from "sonner";
 
 const AdminOrders: React.FC = () => {
+  // Data State
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [limit] = useState(10);
+  
+  // Filters & Search
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await api.get("/admin/orders");
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get(`/admin/orders?page=${currentPage}&limit=${limit}&search=${searchTerm}&status=${statusFilter === 'all' ? '' : statusFilter}`);
+      if (response.data.data) {
+        setOrders(response.data.data);
+        setTotalPages(response.data.totalPages);
+      } else {
         setOrders(response.data);
-      } catch (error) {
-        console.error("Failed to fetch orders", error);
-      } finally {
-        setLoading(false);
+        setTotalPages(1);
       }
-    };
-    fetchOrders();
-  }, []);
+    } catch (error) {
+      console.error("Failed to fetch orders", error);
+      toast.error("Failed to load order registry");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage, searchTerm, statusFilter]);
 
   const handleStatusUpdate = async (id: string, newStatus: string) => {
     try {
       await api.put(`/admin/orders/${id}`, { status: newStatus });
-      setOrders(orders.map(o => o._id === id ? { ...o, status: newStatus as any } : o));
+      toast.success(`Order #${id.slice(-6).toUpperCase()} is now ${newStatus}`);
+      fetchData();
     } catch (error) {
-      alert("Failed to update order status");
+      toast.error("Failed to update order status");
     }
   };
 
-  const filteredOrders = orders.filter(o => {
-    const customerName = typeof o.user === 'object' ? `${o.user?.firstname} ${o.user?.lastname}`.toLowerCase() : '';
-    const matchesSearch = customerName.includes(searchTerm.toLowerCase()) || o._id.includes(searchTerm);
-    const matchesStatus = statusFilter === "all" || o.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
-
-  if (loading) {
+  if (loading && orders.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <p className="text-muted-foreground animate-pulse font-medium">Processing acquisitions...</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8 pb-10">
-      <div>
-        <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-          Order <span className="text-primary text-xl align-top">Management</span>
-        </h1>
-        <p className="mt-2 text-lg text-muted-foreground">
-          Track and manage your customer orders.
-        </p>
+    <div className="space-y-10 pb-16">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">
+            Acquisition <span className="text-primary italic">Ledger</span>
+          </h1>
+          <p className="mt-2 text-lg text-muted-foreground max-w-2xl leading-relaxed">
+            Monitor and fulfill the desires of your global clientele.
+          </p>
+        </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="flex flex-col lg:flex-row gap-6">
         <div className="relative flex-1 group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" size={20} />
+          <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" size={24} />
           <input 
             type="text" 
-            placeholder="Search by order ID or customer..." 
-            className="w-full pl-12 pr-4 py-3 bg-card border border-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-sm"
+            placeholder="Search by order signature or client name..." 
+            className="w-full pl-16 pr-8 py-5 bg-card border border-border rounded-3xl focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm text-xl"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <div className="flex gap-4">
-          <select 
-            className="px-4 py-3 bg-card border border-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-sm min-w-[150px]"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option value="all">All Statuses</option>
-            <option value="placed">Placed</option>
-            <option value="paid">Paid</option>
-            <option value="shipped">Shipped</option>
-            <option value="delivered">Delivered</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-          <button className="max-md:flex-1 p-3 border border-border bg-card rounded-2xl hover:bg-accent transition-all shadow-sm flex items-center gap-2">
-            <Calendar size={20} />
-            <span className="md:hidden">Select Date</span>
-          </button>
+          <div className="relative">
+            <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={18} />
+            <select 
+              className="pl-12 pr-10 py-5 bg-card border border-border rounded-3xl focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-medium text-muted-foreground appearance-none min-w-[200px]"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="all">All Acquisitions</option>
+              <option value="placed">Initiated</option>
+              <option value="paid">Authenticated</option>
+              <option value="shipped">In Transit</option>
+              <option value="delivered">Fulfilled</option>
+              <option value="cancelled">Voided</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      <div className="bg-card/30 backdrop-blur-md border border-border/50 rounded-3xl overflow-hidden">
+      <div className="luxury-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
+          <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-muted/30 text-muted-foreground text-xs uppercase tracking-wider font-semibold">
-                <th className="px-6 py-4">Order Details</th>
-                <th className="px-6 py-4">Customer</th>
-                <th className="px-6 py-4">Date</th>
-                <th className="px-6 py-4">Total</th>
-                <th className="px-6 py-4 text-center">Status</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+              <tr className="bg-muted/10 text-muted-foreground text-xs uppercase tracking-widest font-bold">
+                <th className="px-8 py-6">Order Signature</th>
+                <th className="px-8 py-6">Client</th>
+                <th className="px-8 py-6">Timeline</th>
+                <th className="px-8 py-6 text-center">Value</th>
+                <th className="px-8 py-6 text-center">Status</th>
+                <th className="px-8 py-6 text-right">Fulfillment</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/50">
-              {filteredOrders.map((order) => (
-                <tr key={order._id} className="hover:bg-accent/10 transition-colors group">
-                  <td className="px-6 py-4">
+            <tbody className="divide-y divide-border/20">
+              {orders.map((order) => (
+                <tr key={order._id} className="hover:bg-primary/[0.01] transition-colors group">
+                  <td className="px-8 py-6">
                     <div className="flex flex-col">
-                      <span className="font-bold text-foreground">#{order._id.slice(-8).toUpperCase()}</span>
-                      <span className="text-xs text-muted-foreground">{order.items.length} items</span>
+                      <span className="font-bold text-lg text-foreground group-hover:text-primary transition-colors italic">#{order._id.slice(-8).toUpperCase()}</span>
+                      <span className="text-[10px] text-muted-foreground/60 font-bold uppercase tracking-tighter">{order.items.length} Masterpieces</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-8 py-6">
                     {typeof order.user === 'object' ? (
-                      <div className="flex flex-col">
-                        <span className="font-medium">{order.user?.firstname} {order.user?.lastname}</span>
-                        <span className="text-xs text-muted-foreground truncate max-w-[150px]">{order.user?.email}</span>
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary border border-primary/20 font-bold text-xs">
+                          {order.user?.firstname[0]}{order.user?.lastname[0]}
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="font-bold text-foreground">{order.user?.firstname} {order.user?.lastname}</span>
+                          <span className="text-xs text-muted-foreground truncate max-w-[150px] font-mono">{order.user?.email}</span>
+                        </div>
                       </div>
                     ) : (
-                      <span className="text-muted-foreground italic">Registered User</span>
+                      <div className="flex items-center gap-3 text-muted-foreground italic text-sm">
+                        <UserIcon size={16} />
+                        Anonymous Connoisseur
+                      </div>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-sm font-medium">
-                    {new Date(order.createdAt).toLocaleDateString()}
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-2 text-sm font-bold text-muted-foreground">
+                      <Calendar size={14} className="text-primary" />
+                      {new Date(order.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 font-bold text-foreground">
-                    ${order.total.toFixed(2)}
+                  <td className="px-8 py-6 text-center">
+                    <div className="flex flex-col items-center">
+                      <span className="font-bold text-xl text-foreground">${order.total.toFixed(2)}</span>
+                      <div className="flex items-center gap-1 text-[8px] font-bold uppercase text-primary tracking-widest mt-1">
+                        <CreditCard size={8} /> Secure
+                      </div>
+                    </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-8 py-6">
                     <div className="flex justify-center">
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                        order.status === 'delivered' ? 'bg-primary/20 text-primary' :
-                        order.status === 'cancelled' ? 'bg-destructive/10 text-destructive' :
-                        'bg-secondary/30 text-secondary-foreground'
+                      <span className={`px-4 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all ${
+                        order.status === 'delivered' ? 'bg-primary/10 text-primary border-primary/20' :
+                        order.status === 'cancelled' ? 'bg-destructive/10 text-destructive border-destructive/20' :
+                        order.status === 'shipped' ? 'bg-secondary text-foreground border-border' :
+                        'bg-muted/40 text-muted-foreground border-border/50'
                       }`}>
-                        {order.status}
+                        {order.status === 'placed' ? 'Initiated' :
+                         order.status === 'paid' ? 'Authenticated' :
+                         order.status === 'shipped' ? 'In Transit' :
+                         order.status === 'delivered' ? 'Fulfilled' :
+                         order.status === 'cancelled' ? 'Voided' : order.status}
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <select 
-                        title="Update Status"
-                        className="p-2 border border-border bg-background rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary"
-                        value={order.status}
-                        onChange={(e) => handleStatusUpdate(order._id, e.target.value)}
+                  <td className="px-8 py-6">
+                    <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                      <div className="relative group/select">
+                        <select 
+                          title="Update Status"
+                          className="pl-3 pr-8 py-3 border border-border bg-card rounded-2xl text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary appearance-none cursor-pointer hover:border-primary transition-all"
+                          value={order.status}
+                          onChange={(e) => handleStatusUpdate(order._id, e.target.value)}
+                        >
+                          <option value="placed">Initiated</option>
+                          <option value="paid">Authenticated</option>
+                          <option value="shipped">In Transit</option>
+                          <option value="delivered">Fulfilled</option>
+                          <option value="cancelled">Voided</option>
+                        </select>
+                        <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 rotate-90 text-primary pointer-events-none" size={12} />
+                      </div>
+                      <button 
+                        className="p-3 border border-border bg-card rounded-2xl hover:bg-primary hover:text-primary-foreground hover:shadow-xl hover:shadow-primary/20 transition-all duration-300"
+                        title="View Manuscript"
                       >
-                        <option value="placed">Placed</option>
-                        <option value="paid">Paid</option>
-                        <option value="shipped">Shipped</option>
-                        <option value="delivered">Delivered</option>
-                        <option value="cancelled">Cancelled</option>
-                      </select>
-                      <button className="p-2 border border-border bg-background rounded-xl hover:bg-primary hover:text-primary-foreground transition-all">
-                        <Eye size={16} />
+                        <Eye size={18} />
                       </button>
                     </div>
                   </td>
@@ -173,6 +218,16 @@ const AdminOrders: React.FC = () => {
             </tbody>
           </table>
         </div>
+        
+        {totalPages > 1 && (
+          <div className="border-t border-border/10 bg-muted/5">
+            <Pagination 
+              currentPage={currentPage} 
+              totalPages={totalPages} 
+              onPageChange={setCurrentPage} 
+            />
+          </div>
+        )}
       </div>
     </div>
   );

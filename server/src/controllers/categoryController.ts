@@ -10,9 +10,9 @@ import {
 } from "../services/categoryService";
 
 export const getAllCategories = asyncHandler(
-  async (_req: Request, res: Response) => {
-    const categories = await listCategories();
-    res.status(200).json(categories);
+  async (req: Request, res: Response) => {
+    const result = await listCategories(req.query as any);
+    res.status(200).json(result);
   }
 );
 

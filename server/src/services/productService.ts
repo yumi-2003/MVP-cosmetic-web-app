@@ -1,5 +1,5 @@
 import Category from "../models/Category";
-import Product from "../models/Product";
+import Product, { ProductProps } from "../models/Product";
 
 export interface ProductQuery {
   page?: string;

@@ -14,6 +14,8 @@ export default function Checkout() {
   const dispatch = useAppDispatch();
   const { items } = useAppSelector((state) => state.cart || { items: [] });
   const { status: orderStatus } = useAppSelector((state) => state.orders || { status: "idle" });
+  const { user } = useAppSelector((state) => state.auth);
+  const isAdmin = user?.isAdmin ?? false;
 
   const [shippingAddress, setShippingAddress] = useState({
     street: "",
@@ -79,6 +81,26 @@ export default function Checkout() {
       [e.target.name]: e.target.value,
     }));
   };
+
+  // ─── Admin guard ─────────────────────────────────────────────────────────────
+  if (isAdmin) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-6 px-4 text-center">
+        <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center text-5xl">
+          🚫
+        </div>
+        <div className="space-y-2">
+          <h2 className="text-2xl font-serif font-light">Admin accounts cannot place orders</h2>
+          <p className="text-sm text-muted-foreground max-w-xs">
+            Checkout is restricted to regular customer accounts only.
+          </p>
+        </div>
+        <Button onClick={() => navigate("/admin")}>
+          Go to Admin Dashboard
+        </Button>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (

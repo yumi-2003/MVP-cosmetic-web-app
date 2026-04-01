@@ -22,6 +22,8 @@ const Cart = () => {
   const { items, status } = useAppSelector(
     (state) => state.cart || { items: [], status: "idle" }
   );
+  const { user } = useAppSelector((state) => state.auth);
+  const isAdmin = user?.isAdmin ?? false;
 
   const [loadingItem, setLoadingItem] = useState<string | null>(null);
 
@@ -51,6 +53,26 @@ const Cart = () => {
       setLoadingItem(null);
     }
   };
+
+  // ─── Admin guard ─────────────────────────────────────────────────────────────
+  if (isAdmin) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center gap-6 px-4 text-center">
+        <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center text-5xl">
+          🚫
+        </div>
+        <div className="space-y-2">
+          <h2 className="text-2xl font-serif font-light">Admin accounts cannot shop</h2>
+          <p className="text-sm text-muted-foreground max-w-xs">
+            Your admin account is not permitted to place orders. Please use a regular customer account.
+          </p>
+        </div>
+        <Button onClick={() => navigate("/admin")} className="mt-2 px-8 py-5 rounded-xl tracking-wide">
+          Go to Admin Dashboard
+        </Button>
+      </div>
+    );
+  }
 
   // ─── Empty state ────────────────────────────────────────────────────────────
   if (status !== "loading" && items.length === 0) {

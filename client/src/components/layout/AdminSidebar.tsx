@@ -9,6 +9,7 @@ import {
   BookOpen,
   LogOut,
   ChevronRight,
+  Home,
 } from "lucide-react";
 import { useAppDispatch } from "../../redux/hooks";
 import { logout } from "../../redux/slices/authSlice";
@@ -21,6 +22,7 @@ const menuItems = [
   { icon: Users, label: "Users", path: "/admin/users" },
   { icon: BookOpen, label: "Blogs", path: "/admin/blogs" },
 ];
+
 interface AdminSidebarProps {
   isMobile?: boolean;
   onClose?: () => void;
@@ -67,7 +69,15 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobile, onClose }) => {
         })}
       </nav>
 
-      <div className="p-4 border-t border-border mt-auto">
+      <div className="p-4 border-t border-border mt-auto space-y-2">
+        <Link
+          to="/"
+          onClick={onClose}
+          className="flex items-center gap-3 w-full p-3 rounded-xl text-primary hover:bg-primary/10 transition-all duration-300"
+        >
+          <Home size={20} />
+          <span className="font-medium">Storefront</span>
+        </Link>
         <button
           onClick={() => dispatch(logout())}
           className="flex items-center gap-3 w-full p-3 rounded-xl text-destructive hover:bg-destructive/10 transition-all duration-300"

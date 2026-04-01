@@ -20,6 +20,11 @@ import {
   getAllOrders,
   updateStatus,
 } from "../controllers/orderController";
+import {
+  createBlog,
+  updateBlog,
+  deleteBlog,
+} from "../controllers/blogController";
 
 const router = express.Router();
 
@@ -48,5 +53,10 @@ router.delete("/users/:id", deleteUser);
 // Orders
 router.get("/orders", getAllOrders);
 router.put("/orders/:id", updateStatus);
+
+// Blogs
+router.post("/blogs", createBlog);
+router.put("/blogs/:id", updateBlog);
+router.delete("/blogs/:id", deleteBlog);
 
 export default router;

@@ -26,7 +26,9 @@ const RootLayout = () => {
   }, [token, user, dispatch]);
 
   const hideChrome =
-    pathname.startsWith("/login") || pathname.startsWith("/signup");
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/signup") ||
+    pathname.startsWith("/admin");
 
   return (
     <div className="min-h-screen flex flex-col">

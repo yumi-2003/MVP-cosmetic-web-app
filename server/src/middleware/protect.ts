@@ -68,3 +68,10 @@ export const admin = (req: AuthRequest, res: Response, next: NextFunction) => {
     res.status(403).json({ message: "Not authorized as an admin" });
   }
 };
+
+export const notAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
+  if (req.user && req.user.isAdmin) {
+    return res.status(403).json({ message: "Admin accounts are not permitted to place orders or manage carts." });
+  }
+  next();
+};

@@ -37,7 +37,8 @@ const categorySlice = createSlice({
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.categories = action.payload;
+        // Handle both paginated object and direct array response
+        state.categories = action.payload.data || action.payload;
       })
       .addCase(fetchCategories.rejected, (state, action) => {
         state.status = "failed";

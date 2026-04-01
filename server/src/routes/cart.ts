@@ -7,19 +7,20 @@ import {
   updateCartItemQuantity,
 } from "../controllers/cartController";
 import validate from "../middleware/validate";
-import { protect } from "../middleware/protect";
+import { protect, notAdmin } from "../middleware/protect";
 
 const router = Router();
 
 // For cart routes, we now STRICTLY require authentication.
 // No extra headers like x-user-id or x-session-id are needed for security.
 
-router.get("/", protect, getCart);
+router.get("/", protect, notAdmin, getCart);
 
 router.post(
   "/items",
   [
     protect,
+    notAdmin,
     body("productId").isMongoId(),
     body("quantity").isInt({ min: 1 }).toInt(),
   ],
@@ -31,6 +32,7 @@ router.patch(
   "/items/:productId",
   [
     protect,
+    notAdmin,
     param("productId").isMongoId(),
     body("quantity").isInt({ min: 0 }).toInt(),
   ],
@@ -40,7 +42,7 @@ router.patch(
 
 router.delete(
   "/items/:productId",
-  [protect, param("productId").isMongoId()],
+  [protect, notAdmin, param("productId").isMongoId()],
   validate,
   removeCartItemByProduct
 );

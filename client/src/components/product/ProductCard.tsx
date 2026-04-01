@@ -26,6 +26,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   
   const isFavorited = itemIds.includes(product._id);
   const [isFavoriting, setIsFavoriting] = useState(false);
+  const isAdmin = user?.isAdmin ?? false;
 
   const handleAddToCart = async () => {
     if (!user) {
@@ -98,22 +99,28 @@ const ProductCard = ({ product }: ProductCardProps) => {
         
         {/* Add to Cart - Slide up on hover */}
         <div className="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-10 px-4 pb-4 flex flex-col gap-2">
-          <Button 
-            onClick={handleAddToCart}
-            disabled={isAdding || (product.countInStock ?? 0) === 0}
-            className="w-full bg-background/95 backdrop-blur-md text-foreground hover:bg-primary hover:text-primary-foreground border border-border/50 rounded-lg py-6 shadow-xl active:scale-[0.98] transition-all duration-300 group/btn disabled:opacity-80 disabled:bg-muted disabled:text-muted-foreground"
-          >
-            {isAdding ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin text-primary group-hover/btn:text-primary-foreground" />
-            ) : (product.countInStock ?? 0) === 0 ? (
-              null
-            ) : (
-              <CartIcon className="w-4 h-4 mr-2 text-primary group-hover/btn:text-primary-foreground transition-transform duration-300 group-hover/btn:scale-110 group-hover/btn:rotate-[-10deg]" />
-            )}
-            <span className="text-[10px] font-bold tracking-[0.2em] uppercase">
-              {isAdding ? "Adding..." : (product.countInStock ?? 0) === 0 ? "Out of Stock" : "Add to Cart"}
-            </span>
-          </Button>
+          {isAdmin ? (
+            <div className="w-full bg-background/95 backdrop-blur-md text-muted-foreground border border-border/50 rounded-lg py-3 px-4 text-center shadow-xl text-[10px] font-bold tracking-[0.15em] uppercase">
+              Admin — Cannot Purchase
+            </div>
+          ) : (
+            <Button 
+              onClick={handleAddToCart}
+              disabled={isAdding || (product.countInStock ?? 0) === 0}
+              className="w-full bg-background/95 backdrop-blur-md text-foreground hover:bg-primary hover:text-primary-foreground border border-border/50 rounded-lg py-6 shadow-xl active:scale-[0.98] transition-all duration-300 group/btn disabled:opacity-80 disabled:bg-muted disabled:text-muted-foreground"
+            >
+              {isAdding ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin text-primary group-hover/btn:text-primary-foreground" />
+              ) : (product.countInStock ?? 0) === 0 ? (
+                null
+              ) : (
+                <CartIcon className="w-4 h-4 mr-2 text-primary group-hover/btn:text-primary-foreground transition-transform duration-300 group-hover/btn:scale-110 group-hover/btn:rotate-[-10deg]" />
+              )}
+              <span className="text-[10px] font-bold tracking-[0.2em] uppercase">
+                {isAdding ? "Adding..." : (product.countInStock ?? 0) === 0 ? "Out of Stock" : "Add to Cart"}
+              </span>
+            </Button>
+          )}
         </div>
 
         {/* badges - Top Left */}
@@ -139,19 +146,21 @@ const ProductCard = ({ product }: ProductCardProps) => {
           )}
         </div>
 
-        <button
-          onClick={handleToggleFavorite}
-          disabled={isFavoriting || status === "loading"}
-          type="button"
-          aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
-          className={`absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-background/80 backdrop-blur-sm shadow-sm transition-all hover:scale-110 disabled:opacity-50 ${
-            isFavorited
-              ? "text-primary hover:bg-background/90"
-              : "text-foreground hover:bg-primary hover:text-primary-foreground"
-          }`}
-        >
-          <FavIcon className={`h-4 w-4 transition-colors ${isFavorited ? "fill-primary text-primary" : ""}`} />
-        </button>
+        {!isAdmin && (
+          <button
+            onClick={handleToggleFavorite}
+            disabled={isFavoriting || status === "loading"}
+            type="button"
+            aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
+            className={`absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-background/80 backdrop-blur-sm shadow-sm transition-all hover:scale-110 disabled:opacity-50 ${
+              isFavorited
+                ? "text-primary hover:bg-background/90"
+                : "text-foreground hover:bg-primary hover:text-primary-foreground"
+            }`}
+          >
+            <FavIcon className={`h-4 w-4 transition-colors ${isFavorited ? "fill-primary text-primary" : ""}`} />
+          </button>
+        )}
       </Link>
 
       {/* Product Details */}

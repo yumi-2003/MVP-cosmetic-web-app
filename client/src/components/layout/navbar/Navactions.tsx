@@ -29,19 +29,12 @@ const Navactions = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  // const { items } = useAppSelector((state) => state.cart || { items: [] });
-
-  // const totalItems = items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
   const isShopPage = location.pathname === "/shop";
 
   const handleLogout = () => {
     dispatch(logout());
-    // Clear cart state immediately
     dispatch(clearCart());
-
-    // Rotate guest session ID so the next guest cart is empty
     localStorage.removeItem("x-session-id");
-
     toast.success("Logged out successfully. See you soon!");
     navigate("/login");
   };
@@ -53,11 +46,9 @@ const Navactions = () => {
 
   return (
     <div className="flex items-center gap-5">
-      {/* Search — contains its own trigger button + dropdown panel */}
       {isShopPage && <SearchBar />}
       <ModeToggle />
 
-      {/* Authentication & User Profile */}
       {!user ? (
         <Link
           to="/login"
@@ -90,38 +81,51 @@ const Navactions = () => {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {user?.isAdmin && (
-              <DropdownMenuItem asChild className="cursor-pointer py-2.5 text-primary focus:text-primary focus:bg-primary/5">
-                <Link to="/admin" className="flex items-center w-full font-semibold">
-                  <ShieldCheck className="mr-2 h-4 w-4" />
-                  <span>Admin Dashboard</span>
-                </Link>
-              </DropdownMenuItem>
+            
+            {user?.isAdmin ? (
+              <>
+                <DropdownMenuItem asChild className="cursor-pointer py-2.5 text-primary focus:text-primary focus:bg-primary/5">
+                  <Link to="/admin" className="flex items-center w-full font-semibold">
+                    <ShieldCheck className="mr-2 h-4 w-4" />
+                    <span>Admin Dashboard</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="cursor-pointer py-2.5">
+                  <Link to="/profile" className="flex items-center w-full">
+                    <SettingsIcon className="mr-2 h-4 w-4" />
+                    <span>Profile Settings</span>
+                  </Link>
+                </DropdownMenuItem>
+              </>
+            ) : (
+              <>
+                <DropdownMenuItem asChild className="cursor-pointer py-2.5">
+                  <Link to="/profile" className="flex items-center w-full">
+                    <UserIcon className="mr-2 h-4 w-4" />
+                    <span>My Profile</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="cursor-pointer py-2.5">
+                  <Link to="/favorites" className="flex items-center w-full">
+                    <FavIcon className="mr-2 h-4 w-4" />
+                    <span>Favorites</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="cursor-pointer py-2.5">
+                  <Link to="/orders" className="flex items-center w-full">
+                    <Package className="mr-2 h-4 w-4" />
+                    <span>My Orders</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="cursor-pointer py-2.5">
+                  <Link to="/profile" className="flex items-center w-full">
+                    <SettingsIcon className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                  </Link>
+                </DropdownMenuItem>
+              </>
             )}
-            <DropdownMenuItem asChild className="cursor-pointer py-2.5">
-              <Link to="/profile" className="flex items-center w-full">
-                <UserIcon className="mr-2 h-4 w-4" />
-                <span>My Profile</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild className="cursor-pointer py-2.5">
-              <Link to="/favorites" className="flex items-center w-full">
-                <FavIcon className="mr-2 h-4 w-4" />
-                <span>Favorites</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild className="cursor-pointer py-2.5">
-              <Link to="/orders" className="flex items-center w-full">
-                <Package className="mr-2 h-4 w-4" />
-                <span>My Orders</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild className="cursor-pointer py-2.5">
-              <Link to="/profile" className="flex items-center w-full">
-                <SettingsIcon className="mr-2 h-4 w-4" />
-                <span>Settings</span>
-              </Link>
-            </DropdownMenuItem>
+
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="cursor-pointer text-destructive focus:text-destructive py-2.5"
@@ -134,7 +138,6 @@ const Navactions = () => {
         </DropdownMenu>
       )}
 
-      {/* Cart with Dynamic Badge & Enhancement */}
       <CartButton />
     </div>
   );

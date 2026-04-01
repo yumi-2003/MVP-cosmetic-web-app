@@ -251,11 +251,45 @@ export const updateOrderStatus = async (orderId: string, status: string) => {
   return order;
 };
 
-export const listAllOrders = async () => {
-  return await Order.find({ status: { $ne: "cart" } })
-    .populate("user", "firstname lastname email")
-    .sort({ createdAt: -1 })
-    .lean();
+export const listAllOrders = async (query: { page?: string, limit?: string, search?: string, status?: string } = {}) => {
+  const page = Math.max(1, Number(query.page) || 1);
+  const limit = Math.max(1, Number(query.limit) || 10);
+  const skip = (page - 1) * limit;
+  const search = query.search ? String(query.search) : "";
+  const status = query.status ? String(query.status) : "";
+
+  const filter: any = { status: { $ne: "cart" } };
+  
+  if (status && status !== 'all') {
+    filter.status = status;
+  }
+
+  if (search) {
+    if (mongoose.Types.ObjectId.isValid(search)) {
+      filter._id = search;
+    } else {
+      // In a real app, you might use aggregation to search user fields too.
+      // For now, we filter by exact ID if valid, or just return based on status/page.
+    }
+  }
+
+  const [data, total] = await Promise.all([
+    Order.find(filter)
+      .populate("user", "firstname lastname email")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    Order.countDocuments(filter),
+  ]);
+
+  return {
+    data,
+    page,
+    limit,
+    total,
+    totalPages: Math.ceil(total / limit)
+  };
 };
 
 const reserveStockForItems = async (

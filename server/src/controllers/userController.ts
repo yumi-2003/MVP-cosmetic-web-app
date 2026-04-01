@@ -128,8 +128,33 @@ export const updateUserProfile = async (req: AuthRequest, res: Response) => {
 // @access  Private/Admin
 export const getUsers = async (req: AuthRequest, res: Response) => {
   try {
-    const users = await User.find({}).select("-password");
-    res.status(200).json(users);
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = Math.max(1, Number(req.query.limit) || 10);
+    const skip = (page - 1) * limit;
+    const search = req.query.search ? String(req.query.search) : "";
+
+    const query = search
+      ? {
+          $or: [
+            { firstname: { $regex: search, $options: "i" } },
+            { lastname: { $regex: search, $options: "i" } },
+            { email: { $regex: search, $options: "i" } },
+          ],
+        }
+      : {};
+
+    const [users, total] = await Promise.all([
+      User.find(query).select("-password").skip(skip).limit(limit).sort({ createdAt: -1 }),
+      User.countDocuments(query),
+    ]);
+
+    res.status(200).json({
+      data: users,
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

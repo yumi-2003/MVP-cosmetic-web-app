@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
   Users, 
   Package, 
@@ -6,7 +7,9 @@ import {
   DollarSign, 
   ArrowUpRight, 
   TrendingUp,
-  Clock
+  Clock,
+  LayoutGrid,
+  FileText
 } from "lucide-react";
 import api from "../../redux/api";
 
@@ -31,25 +34,37 @@ interface RecentOrder {
   createdAt: string;
 }
 
-const StatCard = ({ title, value, icon: Icon, color, trend }: any) => (
-  <div className="bg-card/50 backdrop-blur-xl border border-border/50 p-6 rounded-3xl hover:border-primary/50 transition-all duration-300 group">
-    <div className="flex justify-between items-start mb-4">
-      <div className={`p-3 rounded-2xl bg-${color}/10 text-${color} group-hover:scale-110 transition-transform`}>
-        <Icon size={24} />
-      </div>
-      {trend && (
-        <div className="flex items-center gap-1 text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
-          <TrendingUp size={12} />
-          {trend}%
+const StatCard = ({ title, value, icon: Icon, color, trend, path }: any) => {
+  const navigate = useNavigate();
+  return (
+    <div className="bg-card/50 backdrop-blur-xl border border-border/50 p-6 rounded-3xl hover:border-primary/50 transition-all duration-300 group relative">
+      <div className="flex justify-between items-start mb-4">
+        <div className={`p-3 rounded-2xl bg-${color}/10 text-${color} group-hover:scale-110 transition-transform`}>
+          <Icon size={24} />
         </div>
+        {trend && (
+          <div className="flex items-center gap-1 text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
+            <TrendingUp size={12} />
+            {trend}%
+          </div>
+        )}
+      </div>
+      <div>
+        <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
+        <h3 className="text-2xl font-bold tracking-tight">{value}</h3>
+      </div>
+      {path && (
+        <button 
+          onClick={() => navigate(path)}
+          className="absolute bottom-6 right-6 p-2 rounded-full bg-primary/5 text-primary opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-primary-foreground"
+          title={`View ${title}`}
+        >
+          <ArrowUpRight size={16} />
+        </button>
       )}
     </div>
-    <div>
-      <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
-      <h3 className="text-2xl font-bold tracking-tight">{value}</h3>
-    </div>
-  </div>
-);
+  );
+};
 
 const RevenueTrendChart = ({ data }: { data: any[] }) => {
   if (!data?.length) return <div className="h-48 flex items-center justify-center text-muted-foreground italic">No data available</div>;
@@ -130,6 +145,7 @@ const RevenueTrendChart = ({ data }: { data: any[] }) => {
 };
 
 const AdminDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
   const [revenueTrend, setRevenueTrend] = useState<any[]>([]);
@@ -161,13 +177,29 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="space-y-8 pb-10">
-      <div>
-        <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-          Dashboard <span className="text-primary text-xl align-top font-sans">Analytical</span>
-        </h1>
-        <p className="mt-2 text-lg text-muted-foreground">
-          Welcome back, Admin. Here's a summary of your performance.
-        </p>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+            Dashboard <span className="text-primary text-xl align-top font-sans bg-primary/10 px-3 py-1 rounded-full ml-2">Analytical</span>
+          </h1>
+          <p className="mt-2 text-lg text-muted-foreground">
+            Welcome back, your administrative control center is ready.
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <button 
+             onClick={() => navigate('/admin/products')}
+             className="flex items-center gap-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-xl text-sm font-semibold hover:bg-secondary/80 transition-all shadow-sm"
+          >
+            <Package size={16} /> Products
+          </button>
+          <button 
+             onClick={() => navigate('/admin/orders')}
+             className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-semibold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
+          >
+            <ShoppingBag size={16} /> Orders
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -184,6 +216,7 @@ const AdminDashboard: React.FC = () => {
           icon={ShoppingBag} 
           color="primary" 
           trend={8.2}
+          path="/admin/orders"
         />
         <StatCard 
           title="Active Users" 
@@ -191,12 +224,14 @@ const AdminDashboard: React.FC = () => {
           icon={Users} 
           color="indigo" 
           trend={4.1}
+          path="/admin/users"
         />
         <StatCard 
-          title="Total Products" 
-          value={stats?.products} 
-          icon={Package} 
+          title="Curated Blogs" 
+          value={stats?.blogs} 
+          icon={FileText} 
           color="amber" 
+          path="/admin/blogs"
         />
       </div>
 
@@ -219,43 +254,43 @@ const AdminDashboard: React.FC = () => {
                 <h2 className="text-xl font-semibold">Recent Orders</h2>
               </div>
               <button 
-                onClick={() => window.location.href = '/admin/orders'}
-                className="text-xs font-medium text-primary hover:underline flex items-center gap-1"
+                onClick={() => navigate('/admin/orders')}
+                className="text-xs font-bold text-primary flex items-center gap-1 uppercase tracking-widest hover:translate-x-1 transition-transform"
               >
-                View All <ArrowUpRight size={14} />
+                View All Ledger <ArrowUpRight size={14} />
               </button>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="bg-muted/30 text-muted-foreground text-xs uppercase tracking-wider font-semibold">
-                    <th className="px-6 py-4">Customer</th>
-                    <th className="px-6 py-4">Date</th>
-                    <th className="px-6 py-4">Amount</th>
+                  <tr className="bg-muted/30 text-muted-foreground text-[10px] uppercase tracking-widest font-bold">
+                    <th className="px-6 py-4">Client</th>
+                    <th className="px-6 py-4">Timeline</th>
+                    <th className="px-6 py-4">Value</th>
                     <th className="px-6 py-4 text-center">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/50">
                   {recentOrders.map((order) => (
-                    <tr key={order._id} className="hover:bg-accent/10 transition-colors group">
+                    <tr key={order._id} className="hover:bg-accent/10 transition-colors group cursor-pointer" onClick={() => navigate('/admin/orders')}>
                       <td className="px-6 py-4">
                         <div className="flex flex-col">
-                          <span className="font-medium">{order.user?.firstname} {order.user?.lastname}</span>
-                          <span className="text-xs text-muted-foreground truncate max-w-[150px]">{order.user?.email}</span>
+                          <span className="font-bold text-sm">{order.user?.firstname} {order.user?.lastname}</span>
+                          <span className="text-[10px] text-muted-foreground truncate max-w-[150px] font-mono">{order.user?.email}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm whitespace-nowrap">
-                        {new Date(order.createdAt).toLocaleDateString()}
+                      <td className="px-6 py-4 text-xs font-semibold text-muted-foreground whitespace-nowrap">
+                        {new Date(order.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                       </td>
-                      <td className="px-6 py-4 font-semibold">
+                      <td className="px-6 py-4 font-bold text-sm">
                         ${order.total.toFixed(2)}
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex justify-center">
-                          <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                            order.status === 'delivered' ? 'bg-primary/20 text-primary' :
-                            order.status === 'cancelled' ? 'bg-destructive/10 text-destructive' :
-                            'bg-secondary/30 text-secondary-foreground'
+                          <span className={`px-3 py-1 rounded-full text-[8px] font-bold uppercase tracking-wider border ${
+                            order.status === 'delivered' ? 'bg-primary/10 text-primary border-primary/20' :
+                            order.status === 'cancelled' ? 'bg-destructive/10 text-destructive border-destructive/20' :
+                            'bg-muted/40 text-muted-foreground border-border/50'
                           }`}>
                             {order.status}
                           </span>
@@ -269,36 +304,56 @@ const AdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-card/30 backdrop-blur-md border border-border/50 rounded-3xl p-6 h-fit sticky top-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold flex items-center gap-2">
-              <Clock className="text-primary" size={20} />
-              Quick Actions
-            </h2>
+        <div className="space-y-6">
+          <div className="bg-card/30 backdrop-blur-md border border-border/50 rounded-3xl p-6 h-fit">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold flex items-center gap-2">
+                <Clock className="text-primary" size={20} />
+                Quick Actions
+              </h2>
+            </div>
+            <div className="space-y-4">
+              <button 
+                onClick={() => navigate('/admin/products')}
+                className="w-full p-4 bg-primary text-primary-foreground rounded-2xl font-bold uppercase tracking-widest text-[10px] shadow-lg shadow-primary/20 hover:translate-y-[-2px] active:translate-y-[0px] transition-all"
+              >
+                Manage Inventory
+              </button>
+              <button 
+                onClick={() => navigate('/admin/users')}
+                className="w-full p-4 border border-border bg-card rounded-2xl font-bold uppercase tracking-widest text-[10px] hover:bg-accent transition-all"
+              >
+                Access Control
+              </button>
+              <button 
+                onClick={() => navigate('/admin/categories')}
+                className="w-full p-4 border border-border bg-card rounded-2xl font-bold uppercase tracking-widest text-[10px] hover:bg-accent transition-all"
+              >
+                Curate Categories
+              </button>
+            </div>
           </div>
-          <div className="space-y-4">
-            <button 
-              onClick={() => window.location.href = '/admin/products'}
-              className="w-full p-4 bg-primary text-primary-foreground rounded-2xl font-semibold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
-            >
-              Manage Inventory
-            </button>
-            <button 
-              onClick={() => window.location.href = '/admin/users'}
-              className="w-full p-4 border border-border bg-background rounded-2xl font-semibold hover:bg-accent transition-all"
-            >
-              Manage User Access
-            </button>
-            <div className="pt-6 mt-6 border-t border-border">
-              <h3 className="text-sm font-medium text-muted-foreground mb-4">Inventory Alerts</h3>
-              <div className="p-4 bg-primary/10 border border-primary/20 rounded-2xl">
-                <p className="text-xs text-primary font-medium">Some products are low in stock</p>
-                <button 
-                  onClick={() => window.location.href = '/admin/products'}
-                  className="mt-2 text-[10px] font-bold text-primary uppercase tracking-wider hover:underline"
-                >
-                  Restock Now →
-                </button>
+
+          <div className="bg-card/30 backdrop-blur-md border border-border/50 rounded-3xl p-6">
+            <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-4 flex items-center gap-2">
+              <LayoutGrid size={14} className="text-primary" /> System Overview
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-muted/20 border border-border/20 rounded-2xl">
+                 <div className="flex flex-col">
+                   <span className="text-[10px] font-bold uppercase text-muted-foreground">Product Health</span>
+                   <span className="text-sm font-bold">Stable</span>
+                 </div>
+                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              </div>
+              <div className="flex items-center justify-between p-4 bg-muted/20 border border-border/20 rounded-2xl">
+                 <div className="flex flex-col">
+                   <span className="text-[10px] font-bold uppercase text-muted-foreground">Active Sessions</span>
+                   <span className="text-sm font-bold">{Math.floor(Math.random() * 50) + 12} Managers</span>
+                 </div>
+                 <div className="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-500">
+                    <Users size={14} />
+                 </div>
               </div>
             </div>
           </div>

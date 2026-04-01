@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { 
-  BookOpen, 
   Plus, 
   Search, 
   Edit2, 
   Trash2, 
-  Tag, 
-  Calendar,
-  User as UserIcon,
-  Eye,
+  Image as ImageIcon, 
+  Clock, 
   ArrowUpRight,
   CheckCircle2,
-  FileText,
-  Image as ImageIcon,
-  Clock
+  XCircle,
+  FileText
 } from "lucide-react";
 import api from "../../redux/api";
 import type { IBlog } from "../../redux/types";
@@ -22,47 +18,42 @@ import AdminModal from "../../components/admin/AdminModal";
 import { toast } from "sonner";
 
 const AdminBlogs: React.FC = () => {
-  // Data State
   const [blogs, setBlogs] = useState<IBlog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingBlog, setEditingBlog] = useState<IBlog | null>(null);
   
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [limit] = useState(6);
+  const [limit] = useState(6); // 2x3 grid or similar
   
-  // Filters & Search
+  // Search
   const [searchTerm, setSearchTerm] = useState("");
-  
-  // Modal State
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingBlog, setEditingBlog] = useState<IBlog | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Form State
-  const [formData, setFormData] = useState<Partial<IBlog>>({
+  const [formData, setFormData] = useState({
     title: "",
     excerpt: "",
     content: "",
-    authorName: "",
     image: "",
-    tags: []
+    authorName: "",
+    tags: [] as string[]
   });
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`/blogs?page=${currentPage}&limit=${limit}&title=${searchTerm}`);
+      const response = await api.get(`/admin/blogs?page=${currentPage}&limit=${limit}&search=${searchTerm}`);
       if (response.data.data) {
         setBlogs(response.data.data);
-        setTotalPages(response.data.totalPages);
+        setTotalPages(response.data.totalPages || 1);
       } else {
-        setBlogs(response.data);
+        setBlogs(Array.isArray(response.data) ? response.data : []);
         setTotalPages(1);
       }
     } catch (error) {
       console.error("Failed to fetch blogs", error);
-      toast.error("Failed to load editorial content");
+      toast.error("Failed to load editorial archive");
     } finally {
       setLoading(false);
     }
@@ -72,18 +63,35 @@ const AdminBlogs: React.FC = () => {
     fetchData();
   }, [currentPage, searchTerm]);
 
-  const handleOpenModal = (blog?: IBlog) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const tags = e.target.value.split(",").map(t => t.trim());
+    setFormData(prev => ({ ...prev, tags }));
+  };
+
+  const handleOpenModal = (blog: IBlog | null = null) => {
     if (blog) {
       setEditingBlog(blog);
-      setFormData(blog);
+      setFormData({
+        title: blog.title,
+        excerpt: blog.excerpt,
+        content: blog.content,
+        image: blog.image || "",
+        authorName: blog.authorName,
+        tags: blog.tags
+      });
     } else {
       setEditingBlog(null);
       setFormData({
         title: "",
         excerpt: "",
         content: "",
-        authorName: "YUMI Editorial",
         image: "",
+        authorName: "",
         tags: []
       });
     }
@@ -95,88 +103,69 @@ const AdminBlogs: React.FC = () => {
     setEditingBlog(null);
   };
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm("Are you sure you want to delete this editorial masterpiece?")) {
-      try {
-        await api.delete(`/admin/blogs/${id}`);
-        toast.success("Editorial removed successfully");
-        fetchData();
-      } catch (error) {
-        toast.error("Failed to delete blog post");
-      }
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     try {
       if (editingBlog) {
         await api.put(`/admin/blogs/${editingBlog._id}`, formData);
-        toast.success("Editorial refined successfully");
+        toast.success("Masterpiece refined and updated");
       } else {
         await api.post("/admin/blogs", formData);
-        toast.success("Editorial published successfully");
+        toast.success("New masterpiece published");
       }
       handleCloseModal();
       fetchData();
-    } catch (error) {
-      toast.error(editingBlog ? "Failed to refine editorial" : "Failed to publish editorial");
-    } finally {
-      setIsSubmitting(false);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to publish changes");
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setFormData(prev => ({
-      ...prev,
-      tags: value.split(",").map(t => t.trim()).filter(Boolean)
-    }));
+  const handleDelete = async (id: string) => {
+    if (window.confirm("Are you sure you want to retract this masterpiece?")) {
+      try {
+        await api.delete(`/admin/blogs/${id}`);
+        toast.success("Masterpiece removed from archives");
+        fetchData();
+      } catch (error) {
+        toast.error("Failed to strike the masterpiece");
+      }
+    }
   };
 
   if (loading && blogs.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        <p className="text-muted-foreground animate-pulse font-medium">Loading editorial...</p>
+        <p className="text-muted-foreground animate-pulse font-bold uppercase tracking-widest text-[10px]">Opening the archives...</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-12 pb-16">
+    <div className="space-y-10 pb-16">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">
-            Editorial <span className="text-primary italic">Journal</span>
+            Editorial <span className="text-primary italic">Archives</span>
           </h1>
           <p className="mt-2 text-lg text-muted-foreground max-w-2xl leading-relaxed">
-            Compose and curate compelling narratives for your discerning audience.
+            Curate the narrative and share the philosophy of timeless beauty.
           </p>
         </div>
         <button 
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-2 px-10 py-5 bg-primary text-primary-foreground rounded-2xl font-bold shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all group"
+          className="flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all group lg:min-w-[240px] justify-center"
         >
-          <Plus size={24} className="group-hover:rotate-90 transition-transform duration-300" />
-          Compose Selection
+          <Plus size={24} className="group-hover:rotate-180 transition-transform duration-500" />
+          Publish New
         </button>
       </div>
 
-      <div className="relative group max-w-3xl">
+      <div className="relative group max-w-2xl">
         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" size={24} />
         <input 
           type="text" 
-          placeholder="Search editorial archive..." 
+          placeholder="Search the archives..." 
           className="w-full pl-16 pr-8 py-5 bg-card border border-border rounded-3xl focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm text-xl"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -249,13 +238,11 @@ const AdminBlogs: React.FC = () => {
         ))}
       </div>
 
-      {totalPages > 1 && (
-        <Pagination 
-          currentPage={currentPage} 
-          totalPages={totalPages} 
-          onPageChange={setCurrentPage} 
-        />
-      )}
+      <Pagination 
+        currentPage={currentPage} 
+        totalPages={totalPages} 
+        onPageChange={setCurrentPage} 
+      />
 
       {/* Blog Form Modal */}
       <AdminModal 
@@ -280,99 +267,86 @@ const AdminBlogs: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Author Name</label>
-                <input 
-                  type="text" 
-                  name="authorName"
-                  required
-                  value={formData.authorName}
-                  onChange={handleInputChange}
-                  className="w-full px-6 py-4 bg-muted/30 border border-border rounded-xl focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-medium"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Excerpt (Summary)</label>
-                <textarea 
-                  name="excerpt"
-                  required
-                  rows={4}
-                  value={formData.excerpt}
-                  onChange={handleInputChange}
-                  placeholder="A concise summary of the editorial narrative..."
-                  className="w-full px-6 py-4 bg-muted/30 border border-border rounded-xl focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all resize-none"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                  Editorial Banner (URL) <ImageIcon size={14} className="text-primary" />
-                </label>
+                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Visual Asset (Image URL)</label>
                 <input 
                   type="text" 
                   name="image"
-                  required
                   value={formData.image}
                   onChange={handleInputChange}
-                  placeholder="https://exclusive.images/editorial-01.jpg"
-                  className="w-full px-6 py-4 bg-muted/30 border border-border rounded-xl focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-mono text-sm leading-none"
+                  placeholder="https://exclusive.images/blog-cover.jpg"
+                  className="w-full px-6 py-4 bg-muted/40 border border-border rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-mono text-sm"
                 />
+              </div>
+
+              <div className="grid grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Curator (Author)</label>
+                  <input 
+                    type="text" 
+                    name="authorName"
+                    required
+                    value={formData.authorName}
+                    onChange={handleInputChange}
+                    placeholder="Yumi Admin"
+                    className="w-full px-6 py-4 bg-muted/40 border border-border rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-medium"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Classifiers (Tags)</label>
+                  <input 
+                    type="text" 
+                    value={formData.tags.join(", ")}
+                    onChange={handleTagsChange}
+                    placeholder="Skincare, Rituals, Science"
+                    className="w-full px-6 py-4 bg-muted/40 border border-border rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-medium"
+                  />
+                </div>
               </div>
             </div>
 
             <div className="space-y-8">
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                  Narrative Content <FileText size={14} className="text-primary" />
-                </label>
+                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Synopsis (Excerpt)</label>
                 <textarea 
-                  name="content"
+                  name="excerpt"
+                  rows={3}
                   required
-                  rows={14}
-                  value={formData.content}
+                  value={formData.excerpt}
                   onChange={handleInputChange}
-                  placeholder="Compose your narrative masterpiece here..."
-                  className="w-full px-6 py-5 bg-muted/30 border border-border rounded-xl focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-serif italic text-lg leading-relaxed min-h-[360px]"
+                  placeholder="A brief introduction to your masterpiece..."
+                  className="w-full px-6 py-4 bg-muted/40 border border-border rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all resize-none font-medium"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Categorical Tags (Comma Separated)</label>
-                <input 
-                  type="text" 
-                  value={formData.tags?.join(", ")}
-                  onChange={handleTagsChange}
-                  placeholder="Wellness, Skincare Science, Ethical Beauty"
-                  className="w-full px-6 py-4 bg-muted/30 border border-border rounded-xl focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all"
+                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Manuscript (Full Content)</label>
+                <textarea 
+                  name="content"
+                  rows={10}
+                  required
+                  value={formData.content}
+                  onChange={handleInputChange}
+                  placeholder="The full story waiting to be told..."
+                  className="w-full px-6 py-4 bg-muted/40 border border-border rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all resize-none font-medium text-sm leading-relaxed"
                 />
               </div>
             </div>
           </div>
 
-          <div className="flex gap-6 pt-10 border-t border-border/30">
+          <div className="flex gap-4 pt-6">
             <button 
-              type="button"
+              type="button" 
               onClick={handleCloseModal}
-              className="px-10 py-5 bg-muted/50 text-foreground rounded-2xl font-bold hover:bg-muted transition-all"
+              className="flex-1 px-8 py-5 border border-border rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-muted transition-all"
             >
-              Archieve Draft
+              Retract
             </button>
             <button 
               type="submit"
-              disabled={isSubmitting}
-              className="flex-1 px-10 py-5 bg-primary text-primary-foreground rounded-2xl font-bold shadow-2xl shadow-primary/30 hover:scale-102 active:scale-98 transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-3"
+              className="flex-[2] px-8 py-5 bg-primary text-primary-foreground rounded-2xl font-bold uppercase tracking-widest text-xs shadow-2xl shadow-primary/30 hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-3"
             >
-              {isSubmitting ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
-                  Publishing Masterpiece...
-                </>
-              ) : (
-                <>
-                  {editingBlog ? "Record Refinements" : "Commence Publication"}
-                  <CheckCircle2 size={24} />
-                </>
-              )}
+              {editingBlog ? "Update Editorial" : "Publish Masterpiece"}
+              <CheckCircle2 size={18} />
             </button>
           </div>
         </form>

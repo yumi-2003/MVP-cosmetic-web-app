@@ -306,15 +306,13 @@ const AdminProducts: React.FC = () => {
           </table>
         </div>
         
-        {totalPages > 1 && (
-          <div className="border-t border-border/10 bg-muted/5">
-            <Pagination 
-              currentPage={currentPage} 
-              totalPages={totalPages} 
-              onPageChange={setCurrentPage} 
-            />
-          </div>
-        )}
+        <div className="border-t border-border/10 bg-muted/5">
+          <Pagination 
+            currentPage={currentPage} 
+            totalPages={totalPages} 
+            onPageChange={setCurrentPage} 
+          />
+        </div>
       </div>
 
       {/* Product Form Modal */}

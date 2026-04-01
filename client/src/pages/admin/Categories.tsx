@@ -209,13 +209,11 @@ const AdminCategories: React.FC = () => {
         ))}
       </div>
 
-      {totalPages > 1 && (
-        <Pagination 
-          currentPage={currentPage} 
-          totalPages={totalPages} 
-          onPageChange={setCurrentPage} 
-        />
-      )}
+      <Pagination 
+        currentPage={currentPage} 
+        totalPages={totalPages} 
+        onPageChange={setCurrentPage} 
+      />
 
       {/* Category Form Modal */}
       <AdminModal 

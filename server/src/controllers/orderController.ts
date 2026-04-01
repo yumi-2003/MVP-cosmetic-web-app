@@ -58,6 +58,6 @@ export const updateStatus = asyncHandler(async (req: Request, res: Response) => 
 });
 
 export const getAllOrders = asyncHandler(async (req: Request, res: Response) => {
-  const orders = await listAllOrders();
+  const orders = await listAllOrders(req.query as any);
   res.status(200).json(orders);
 });

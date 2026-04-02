@@ -33,7 +33,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobile, onClose }) => {
   const dispatch = useAppDispatch();
 
   return (
-    <div className={`${isMobile ? 'w-full h-full' : 'w-64 min-h-screen sticky top-0'} bg-card border-r border-border flex flex-col h-screen overflow-y-auto`}>
+    <div className={`${isMobile ? 'w-full h-full' : 'w-64 h-screen'} bg-card border-r border-border flex flex-col overflow-y-auto`}>
       <div className="p-6 border-b border-border mb-4">
         <Link to="/" className="flex items-center gap-2 group" onClick={onClose}>
           <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold text-xl group-hover:scale-110 transition-transform">

@@ -1,4 +1,5 @@
 import express from "express";
+import notificationRoutes from "./notification";
 import { protect, admin } from "../middleware/protect";
 import { getDashboardStats } from "../controllers/adminController";
 import {
@@ -21,6 +22,7 @@ import {
   updateStatus,
 } from "../controllers/orderController";
 import {
+  getAllBlogs,
   createBlog,
   updateBlog,
   deleteBlog,
@@ -31,6 +33,9 @@ const router = express.Router();
 // All routes here are protected and require admin privileges
 router.use(protect);
 router.use(admin);
+
+// Notifications
+router.use("/notifications", notificationRoutes);
 
 // Dashboard
 router.get("/stats", getDashboardStats);
@@ -55,6 +60,7 @@ router.get("/orders", getAllOrders);
 router.put("/orders/:id", updateStatus);
 
 // Blogs
+router.get("/blogs", getAllBlogs);
 router.post("/blogs", createBlog);
 router.put("/blogs/:id", updateBlog);
 router.delete("/blogs/:id", deleteBlog);

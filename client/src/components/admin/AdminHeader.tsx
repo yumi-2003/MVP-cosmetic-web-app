@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { 
   User as UserIcon, 
   Settings, 
   LogOut, 
   LayoutDashboard,
   Bell,
-  Search
+  Search,
+  CheckCircle2,
+  Clock,
+  Package,
+  ArrowRight
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -20,11 +24,60 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logout } from "@/redux/slices/authSlice";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
+import api from "@/redux/api";
+
+interface INotification {
+  _id: string;
+  message: string;
+  type: "order" | "user" | "inventory";
+  relatedId?: string;
+  isRead: boolean;
+  createdAt: string;
+}
 
 const AdminHeader: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
+  
+  const [notifications, setNotifications] = useState<INotification[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  const fetchNotifications = useCallback(async () => {
+    try {
+      const response = await api.get("/admin/notifications");
+      setNotifications(response.data);
+      setUnreadCount(response.data.filter((n: INotification) => !n.isRead).length);
+    } catch (error) {
+      console.error("Failed to fetch notifications:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 30000); // Polling every 30s
+    return () => clearInterval(interval);
+  }, [fetchNotifications]);
+
+  const markAsRead = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      await api.patch(`/admin/notifications/${id}/read`);
+      fetchNotifications();
+    } catch (error) {
+      toast.error("Failed to update notification");
+    }
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      await api.patch("/admin/notifications/read-all");
+      fetchNotifications();
+      toast.success("Vault cleared.");
+    } catch (error) {
+      toast.error("Failed to clear vault");
+    }
+  };
 
   const handleLogout = () => {
     dispatch(logout());
@@ -44,16 +97,105 @@ const AdminHeader: React.FC = () => {
           <input 
             type="text" 
             placeholder="Search vault..." 
-            className="h-12 w-80 rounded-2xl border border-border bg-muted/20 pl-12 pr-4 text-sm focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all transition-all duration-300"
+            className="h-12 w-80 rounded-2xl border border-border bg-muted/20 pl-12 pr-4 text-sm focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-300"
           />
         </div>
       </div>
 
       <div className="flex items-center gap-8">
-        <button className="relative p-3 rounded-2xl hover:bg-muted transition-all group overflow-hidden">
-          <Bell size={22} className="text-muted-foreground group-hover:text-primary transition-colors" />
-          <span className="absolute top-3 right-3 h-2.5 w-2.5 rounded-full bg-primary border-2 border-background animate-pulse" />
-        </button>
+        {/* Notifications Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="relative p-3 rounded-2xl hover:bg-muted transition-all group overflow-visible">
+              <Bell size={22} className="text-muted-foreground group-hover:text-primary transition-colors" />
+              {unreadCount > 0 && (
+                <span className="absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white border-2 border-background animate-in zoom-in duration-300">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-[400px] p-0 rounded-3xl border-border/50 bg-card/80 backdrop-blur-2xl shadow-2xl mt-2 animate-in fade-in-0 zoom-in-95 overflow-hidden">
+            <div className="p-6 border-b border-border/40 flex items-center justify-between bg-primary/5">
+              <div>
+                <h3 className="text-lg font-bold tracking-tight">Vault Broadcasts</h3>
+                <p className="text-xs text-muted-foreground font-medium mt-0.5">Real-time ecosystem updates</p>
+              </div>
+              {unreadCount > 0 && (
+                <button 
+                  onClick={markAllAsRead}
+                  className="text-[10px] font-bold uppercase tracking-widest text-primary hover:underline"
+                >
+                  Clear Archive
+                </button>
+              )}
+            </div>
+            
+            <div className="max-h-[480px] overflow-y-auto custom-scrollbar">
+              {notifications.length === 0 ? (
+                <div className="p-12 text-center flex flex-col items-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-muted/30 flex items-center justify-center text-muted-foreground/40">
+                    <Bell size={32} />
+                  </div>
+                  <p className="text-sm font-bold text-muted-foreground/60 uppercase tracking-widest">No broadcasts today</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-border/20">
+                  {notifications.map((notif) => (
+                    <div 
+                      key={notif._id} 
+                      className={`p-5 flex gap-4 transition-all hover:bg-muted/30 group relative ${!notif.isRead ? 'bg-primary/[0.03]' : ''}`}
+                    >
+                      <div className={`mt-1 h-10 w-10 shrink-0 rounded-xl flex items-center justify-center ${
+                        notif.type === 'order' ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'
+                      }`}>
+                        <Package size={20} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <p className={`text-sm tracking-tight leading-relaxed ${!notif.isRead ? 'font-bold' : 'text-muted-foreground font-medium'}`}>
+                            {notif.message}
+                          </p>
+                        </div>
+                        <div className="mt-2 flex items-center gap-4">
+                          <div className="flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">
+                            <Clock size={12} />
+                            {new Date(notif.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </div>
+                          {notif.relatedId && (
+                            <Link 
+                               to={`/admin/orders?search=${notif.relatedId}`}
+                               className="flex items-center gap-1 text-[10px] font-bold text-primary uppercase tracking-widest hover:underline group-hover:translate-x-1 transition-transform"
+                            >
+                              Inspect <ArrowRight size={12} />
+                            </Link>
+                          )}
+                        </div>
+                      </div>
+                      {!notif.isRead && (
+                        <button 
+                          onClick={(e) => markAsRead(notif._id, e)}
+                          className="p-2 h-fit text-muted-foreground/40 hover:text-primary transition-colors"
+                          title="Mark as read"
+                        >
+                          <CheckCircle2 size={18} />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            <DropdownMenuSeparator className="m-0 bg-border/40" />
+            <Link 
+              to="/admin/orders" 
+              className="block p-4 text-center text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary hover:bg-muted/30 transition-all"
+            >
+              View All Operations
+            </Link>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <div className="h-10 w-[1px] bg-border/40" />
 

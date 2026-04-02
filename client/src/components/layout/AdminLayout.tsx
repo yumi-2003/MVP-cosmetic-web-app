@@ -9,7 +9,7 @@ const AdminLayout: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex bg-background min-h-screen relative overflow-hidden">
+    <div className="flex bg-background h-screen relative overflow-hidden">
       {/* Background decorative elements */}
       <div className="fixed top-0 right-0 -z-10 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
       <div className="fixed bottom-0 left-0 -z-10 w-[400px] h-[400px] bg-secondary/5 blur-[100px] rounded-full pointer-events-none" />

@@ -10,6 +10,7 @@ import ApiError from "../utils/ApiError";
 import { calculateTotals } from "../utils/calculateTotals";
 import type { CartOwner } from "./cartService";
 import { clearCartForOwner } from "./cartService";
+import { createNotification } from "../controllers/notificationController";
 
 //owen filter to make sure this cart is made by logged-in user or guest user
 const ownerFilter = (owner: CartOwner) => {
@@ -127,6 +128,13 @@ export const createOrderFromCart = async (
       await shipping.save({ session });
     }
 
+    // Notify Admin
+    createNotification({
+      message: `A new order (${cart._id.toString().slice(-6)}) has been placed!`,
+      type: "order",
+      relatedId: cart._id.toString()
+    });
+
     return cart;
   });
 };
@@ -202,6 +210,13 @@ export const createOrder = async (
 
     // Clear existing cart document for this owner
     await clearCartForOwner(owner, session);
+
+    // Notify Admin
+    createNotification({
+      message: `A new order (${order._id.toString().slice(-6)}) has been placed!`,
+      type: "order",
+      relatedId: order._id.toString()
+    });
 
     return order;
   });

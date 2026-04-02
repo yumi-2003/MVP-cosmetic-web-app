@@ -5,6 +5,7 @@ export interface BlogQuery {
   limit?: string;
   sort?: string;
   tag?: string;
+  search?: string;
 }
 
 export const listBlogs = async (query: BlogQuery) => {
@@ -15,6 +16,13 @@ export const listBlogs = async (query: BlogQuery) => {
   const filter: Record<string, any> = {};
   if (query.tag) {
     filter.tags = query.tag;
+  }
+  if (query.search) {
+    filter.$or = [
+      { title: { $regex: query.search, $options: "i" } },
+      { content: { $regex: query.search, $options: "i" } },
+      { tags: { $in: [new RegExp(query.search, "i")] } }
+    ];
   }
 
   const sort: Record<string, any> = query.sort === "oldest" ? { createdAt: 1 } : { createdAt: -1 };

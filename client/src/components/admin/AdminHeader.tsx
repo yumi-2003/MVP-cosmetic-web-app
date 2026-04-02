@@ -73,15 +73,15 @@ const AdminHeader: React.FC = () => {
     try {
       await api.patch("/admin/notifications/read-all");
       fetchNotifications();
-      toast.success("Vault cleared.");
+      toast.success("Notifications cleared.");
     } catch (error) {
-      toast.error("Failed to clear vault");
+      toast.error("Failed to clear notifications");
     }
   };
 
   const handleLogout = () => {
     dispatch(logout());
-    toast.success("Identity Secured. Logged out of vault.");
+    toast.success("Logged out successfully.");
     navigate("/login");
   };
 
@@ -96,7 +96,7 @@ const AdminHeader: React.FC = () => {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" size={18} />
           <input 
             type="text" 
-            placeholder="Search vault..." 
+            placeholder="Search..." 
             className="h-12 w-80 rounded-2xl border border-border bg-muted/20 pl-12 pr-4 text-sm focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-300"
           />
         </div>
@@ -118,15 +118,15 @@ const AdminHeader: React.FC = () => {
           <DropdownMenuContent align="end" className="w-[400px] p-0 rounded-3xl border-border/50 bg-card/80 backdrop-blur-2xl shadow-2xl mt-2 animate-in fade-in-0 zoom-in-95 overflow-hidden">
             <div className="p-6 border-b border-border/40 flex items-center justify-between bg-primary/5">
               <div>
-                <h3 className="text-lg font-bold tracking-tight">Vault Broadcasts</h3>
-                <p className="text-xs text-muted-foreground font-medium mt-0.5">Real-time ecosystem updates</p>
+                <h3 className="text-lg font-bold tracking-tight">Notifications</h3>
+                <p className="text-xs text-muted-foreground font-medium mt-0.5">Stay updated on recent activity.</p>
               </div>
               {unreadCount > 0 && (
                 <button 
                   onClick={markAllAsRead}
                   className="text-[10px] font-bold uppercase tracking-widest text-primary hover:underline"
                 >
-                  Clear Archive
+                  Mark all as read
                 </button>
               )}
             </div>
@@ -137,7 +137,7 @@ const AdminHeader: React.FC = () => {
                   <div className="w-16 h-16 rounded-full bg-muted/30 flex items-center justify-center text-muted-foreground/40">
                     <Bell size={32} />
                   </div>
-                  <p className="text-sm font-bold text-muted-foreground/60 uppercase tracking-widest">No broadcasts today</p>
+                  <p className="text-sm font-bold text-muted-foreground/60 uppercase tracking-widest">No notifications today</p>
                 </div>
               ) : (
                 <div className="divide-y divide-border/20">
@@ -192,7 +192,7 @@ const AdminHeader: React.FC = () => {
               to="/admin/orders" 
               className="block p-4 text-center text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary hover:bg-muted/30 transition-all"
             >
-              View All Operations
+              View All Orders
             </Link>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -208,14 +208,14 @@ const AdminHeader: React.FC = () => {
               </Avatar>
               <div className="flex flex-col items-start max-md:hidden">
                 <span className="text-sm font-bold text-foreground leading-tight">{user?.firstname} {user?.lastname}</span>
-                <span className="text-[10px] uppercase tracking-widest font-bold text-primary">Master Curator</span>
+                <span className="text-[10px] uppercase tracking-widest font-bold text-primary">Administrator</span>
               </div>
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-64 p-3 rounded-3xl border-border/50 bg-card/80 backdrop-blur-2xl shadow-2xl mt-2 animate-in fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-4">
             <DropdownMenuLabel className="px-3 py-4">
               <div className="flex flex-col space-y-1">
-                <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">Administrative Session</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">Admin Session</span>
                 <p className="text-sm font-bold text-foreground mt-1 truncate">{user?.email}</p>
               </div>
             </DropdownMenuLabel>

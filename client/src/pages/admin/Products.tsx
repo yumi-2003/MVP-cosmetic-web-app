@@ -181,10 +181,10 @@ const AdminProducts: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">
-            Inventory <span className="text-primary italic">Vault</span>
+            Product <span className="text-primary italic">Inventory</span>
           </h1>
           <p className="mt-2 text-lg text-muted-foreground max-w-2xl">
-            Curate and manage your luxury product selection with precision.
+            Manage your product catalog and stock levels.
           </p>
         </div>
         <button 
@@ -192,7 +192,7 @@ const AdminProducts: React.FC = () => {
           className="flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all group"
         >
           <Plus size={24} className="group-hover:rotate-90 transition-transform duration-300" />
-          Add Masterpiece
+          Add Product
         </button>
       </div>
 
@@ -201,7 +201,7 @@ const AdminProducts: React.FC = () => {
           <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" size={20} />
           <input 
             type="text" 
-            placeholder="Search our catalog..." 
+            placeholder="Search products..." 
             className="w-full pl-14 pr-6 py-4 bg-card border border-border rounded-3xl focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm text-lg"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -229,10 +229,10 @@ const AdminProducts: React.FC = () => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-muted/10 text-muted-foreground text-xs uppercase tracking-widest font-bold">
-                <th className="px-8 py-6">Product Masterpiece</th>
+                <th className="px-8 py-6">Product Name</th>
                 <th className="px-8 py-6">Category</th>
-                <th className="px-8 py-6">Pricing</th>
-                <th className="px-8 py-6 text-center">In Reserve</th>
+                <th className="px-8 py-6">Price</th>
+                <th className="px-8 py-6 text-center">In Stock</th>
                 <th className="px-8 py-6 text-right">Actions</th>
               </tr>
             </thead>
@@ -319,14 +319,14 @@ const AdminProducts: React.FC = () => {
       <AdminModal 
         isOpen={isModalOpen} 
         onClose={handleCloseModal} 
-        title={editingProduct ? "Refine Masterpiece" : "Create New Masterpiece"}
+        title={editingProduct ? "Edit Product" : "Add Product"}
       >
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-6">
               <div className="space-y-2">
                 <label className="text-sm font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                   Creation Name <CheckCircle2 size={14} className="text-primary" />
+                   Product Name <CheckCircle2 size={14} className="text-primary" />
                 </label>
                 <input 
                   type="text" 
@@ -388,7 +388,7 @@ const AdminProducts: React.FC = () => {
 
               <div className="space-y-2">
                 <label className="text-sm font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                  Reserve Stock Level
+                  Quantity in Stock
                 </label>
                 <input 
                   type="number" 
@@ -505,11 +505,11 @@ const AdminProducts: React.FC = () => {
               {isSubmitting ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
-                  Commissioning...
+                  Saving...
                 </>
               ) : (
                 <>
-                  {editingProduct ? "Update Masterpiece" : "Finalize Creation"}
+                  {editingProduct ? "Save Changes" : "Add Product"}
                   <CheckCircle2 size={20} />
                 </>
               )}

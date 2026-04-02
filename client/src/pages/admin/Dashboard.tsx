@@ -180,10 +180,10 @@ const AdminDashboard: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-            Dashboard <span className="text-primary text-xl align-top font-sans bg-primary/10 px-3 py-1 rounded-full ml-2">Analytical</span>
+            Dashboard
           </h1>
           <p className="mt-2 text-lg text-muted-foreground">
-            Welcome back, your administrative control center is ready.
+            Manage your store's performance and inventory.
           </p>
         </div>
         <div className="flex gap-3">
@@ -227,7 +227,7 @@ const AdminDashboard: React.FC = () => {
           path="/admin/users"
         />
         <StatCard 
-          title="Curated Blogs" 
+          title="Total Blogs" 
           value={stats?.blogs} 
           icon={FileText} 
           color="amber" 
@@ -257,16 +257,16 @@ const AdminDashboard: React.FC = () => {
                 onClick={() => navigate('/admin/orders')}
                 className="text-xs font-bold text-primary flex items-center gap-1 uppercase tracking-widest hover:translate-x-1 transition-transform"
               >
-                View All Ledger <ArrowUpRight size={14} />
+                View All Orders <ArrowUpRight size={14} />
               </button>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
                   <tr className="bg-muted/30 text-muted-foreground text-[10px] uppercase tracking-widest font-bold">
-                    <th className="px-6 py-4">Client</th>
-                    <th className="px-6 py-4">Timeline</th>
-                    <th className="px-6 py-4">Value</th>
+                    <th className="px-6 py-4">Customer</th>
+                    <th className="px-6 py-4">Date</th>
+                    <th className="px-6 py-4">Total</th>
                     <th className="px-6 py-4 text-center">Status</th>
                   </tr>
                 </thead>
@@ -317,7 +317,7 @@ const AdminDashboard: React.FC = () => {
                 onClick={() => navigate('/admin/products')}
                 className="w-full p-4 bg-primary text-primary-foreground rounded-2xl font-bold uppercase tracking-widest text-[10px] shadow-lg shadow-primary/20 hover:translate-y-[-2px] active:translate-y-[0px] transition-all"
               >
-                Manage Inventory
+                Manage Products
               </button>
               <button 
                 onClick={() => navigate('/admin/users')}
@@ -329,7 +329,7 @@ const AdminDashboard: React.FC = () => {
                 onClick={() => navigate('/admin/categories')}
                 className="w-full p-4 border border-border bg-card rounded-2xl font-bold uppercase tracking-widest text-[10px] hover:bg-accent transition-all"
               >
-                Curate Categories
+                Manage Categories
               </button>
             </div>
           </div>
@@ -347,10 +347,10 @@ const AdminDashboard: React.FC = () => {
                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               </div>
               <div className="flex items-center justify-between p-4 bg-muted/20 border border-border/20 rounded-2xl">
-                 <div className="flex flex-col">
-                   <span className="text-[10px] font-bold uppercase text-muted-foreground">Active Sessions</span>
-                   <span className="text-sm font-bold">{Math.floor(Math.random() * 50) + 12} Managers</span>
-                 </div>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-bold uppercase text-muted-foreground">Active Sessions</span>
+                    <span className="text-sm font-bold">{Math.floor(Math.random() * 50) + 12} Admins</span>
+                  </div>
                  <div className="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-500">
                     <Users size={14} />
                  </div>

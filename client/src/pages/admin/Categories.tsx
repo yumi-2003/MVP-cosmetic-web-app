@@ -141,10 +141,10 @@ const AdminCategories: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">
-            Category <span className="text-primary italic">Architecture</span>
+            Category <span className="text-primary italic">Management</span>
           </h1>
           <p className="mt-2 text-lg text-muted-foreground max-w-2xl">
-            Design the organizational structure of your luxury catalog.
+            Manage product categories and their descriptions.
           </p>
         </div>
         <button 
@@ -152,7 +152,7 @@ const AdminCategories: React.FC = () => {
           className="flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all group"
         >
           <Plus size={24} className="group-hover:rotate-90 transition-transform duration-300" />
-          Foundation New
+          Add Category
         </button>
       </div>
 
@@ -160,7 +160,7 @@ const AdminCategories: React.FC = () => {
         <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" size={20} />
         <input 
           type="text" 
-          placeholder="Filter categories..." 
+          placeholder="Search categories..." 
           className="w-full pl-14 pr-6 py-4 bg-card border border-border rounded-3xl focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm text-lg"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -199,10 +199,10 @@ const AdminCategories: React.FC = () => {
             <div className="space-y-4">
               <h3 className="text-2xl font-bold tracking-tight group-hover:text-primary transition-colors">{category.name}</h3>
               <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
-                {category.description || "No philosophy defined for this category yet. It awaits your creative description."}
+                {category.description || "No description available for this category."}
               </p>
               <div className="flex items-center gap-2 pt-4 text-[10px] font-bold text-primary uppercase tracking-widest group-hover:translate-x-2 transition-transform cursor-pointer">
-                Explore Details <ChevronRight size={14} />
+                Edit Category <ChevronRight size={14} />
               </div>
             </div>
           </div>
@@ -219,13 +219,13 @@ const AdminCategories: React.FC = () => {
       <AdminModal 
         isOpen={isModalOpen} 
         onClose={handleCloseModal} 
-        title={editingCategory ? "Refine Foundation" : "Establish Category"}
+        title={editingCategory ? "Edit Category" : "Add Category"}
       >
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="space-y-6">
             <div className="space-y-2">
               <label className="text-sm font-bold uppercase tracking-widest text-muted-foreground">
-                Category Designation
+                Category Name
               </label>
               <input 
                 type="text" 
@@ -240,7 +240,7 @@ const AdminCategories: React.FC = () => {
 
             <div className="space-y-2">
               <label className="text-sm font-bold uppercase tracking-widest text-muted-foreground">
-                Philosophy (Description)
+                Description
               </label>
               <textarea 
                 name="description"
@@ -254,7 +254,7 @@ const AdminCategories: React.FC = () => {
 
             <div className="space-y-2">
               <label className="text-sm font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                 Iconographic Asset (Image URL) <Upload size={14} className="text-primary" />
+                 Category Image (URL) <Upload size={14} className="text-primary" />
               </label>
               <input 
                 type="text" 
@@ -273,7 +273,7 @@ const AdminCategories: React.FC = () => {
               onClick={handleCloseModal}
               className="px-8 py-4 bg-muted/50 text-foreground rounded-2xl font-bold hover:bg-muted transition-all"
             >
-              Retreat
+              Cancel
             </button>
             <button 
               type="submit"
@@ -283,11 +283,11 @@ const AdminCategories: React.FC = () => {
               {isSubmitting ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
-                   Establishing...
+                   Saving...
                 </>
               ) : (
                 <>
-                  {editingCategory ? "Solidify Refinement" : "Finalize Foundation"}
+                  {editingCategory ? "Update Category" : "Create Category"}
                   <CheckCircle2 size={20} />
                 </>
               )}

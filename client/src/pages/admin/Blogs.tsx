@@ -146,10 +146,10 @@ const AdminBlogs: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">
-            Editorial <span className="text-primary italic">Archives</span>
+            Blog <span className="text-primary italic">Management</span>
           </h1>
           <p className="mt-2 text-lg text-muted-foreground max-w-2xl leading-relaxed">
-            Curate the narrative and share the philosophy of timeless beauty.
+            Create and edit blog posts for your shop.
           </p>
         </div>
         <button 
@@ -165,7 +165,7 @@ const AdminBlogs: React.FC = () => {
         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" size={24} />
         <input 
           type="text" 
-          placeholder="Search the archives..." 
+          placeholder="Search blogs..." 
           className="w-full pl-16 pr-8 py-5 bg-card border border-border rounded-3xl focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm text-xl"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -230,7 +230,7 @@ const AdminBlogs: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-widest group-hover:translate-x-2 transition-transform cursor-pointer">
-                  Review <ArrowUpRight size={18} />
+                  Edit <ArrowUpRight size={18} />
                 </div>
               </div>
             </div>
@@ -248,13 +248,13 @@ const AdminBlogs: React.FC = () => {
       <AdminModal 
         isOpen={isModalOpen} 
         onClose={handleCloseModal} 
-        title={editingBlog ? "Refine Editorial" : "Publish Masterpiece"}
+        title={editingBlog ? "Edit Blog" : "Create Blog"}
       >
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div className="space-y-8">
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Title Designation</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Blog Title</label>
                 <input 
                   type="text" 
                   name="title"
@@ -267,7 +267,7 @@ const AdminBlogs: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Visual Asset (Image URL)</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Blog Image (URL)</label>
                 <input 
                   type="text" 
                   name="image"
@@ -280,7 +280,7 @@ const AdminBlogs: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Curator (Author)</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Author Name</label>
                   <input 
                     type="text" 
                     name="authorName"
@@ -292,7 +292,7 @@ const AdminBlogs: React.FC = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Classifiers (Tags)</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Blog Tags</label>
                   <input 
                     type="text" 
                     value={formData.tags.join(", ")}
@@ -306,7 +306,7 @@ const AdminBlogs: React.FC = () => {
 
             <div className="space-y-8">
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Synopsis (Excerpt)</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Summary</label>
                 <textarea 
                   name="excerpt"
                   rows={3}
@@ -319,7 +319,7 @@ const AdminBlogs: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Manuscript (Full Content)</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Full Content</label>
                 <textarea 
                   name="content"
                   rows={10}
@@ -345,7 +345,7 @@ const AdminBlogs: React.FC = () => {
               type="submit"
               className="flex-[2] px-8 py-5 bg-primary text-primary-foreground rounded-2xl font-bold uppercase tracking-widest text-xs shadow-2xl shadow-primary/30 hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-3"
             >
-              {editingBlog ? "Update Editorial" : "Publish Masterpiece"}
+              {editingBlog ? "Update Blog" : "Create Blog"}
               <CheckCircle2 size={18} />
             </button>
           </div>

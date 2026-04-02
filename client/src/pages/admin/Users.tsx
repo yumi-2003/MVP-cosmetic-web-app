@@ -51,7 +51,7 @@ const AdminUsers: React.FC = () => {
       }
     } catch (error) {
       console.error("Failed to fetch users", error);
-      toast.error("Failed to load user registry");
+      toast.error("Failed to load users");
     } finally {
       setLoading(false);
     }
@@ -68,21 +68,21 @@ const AdminUsers: React.FC = () => {
   const handleToggleAdmin = async (id: string, isAdmin: boolean) => {
     try {
       await api.put(`/admin/users/${id}`, { isAdmin: !isAdmin });
-      toast.success(isAdmin ? "Privileges revoked" : "Privileges granted");
+      toast.success(isAdmin ? "Admin role removed" : "Admin role granted");
       fetchData();
     } catch (error) {
-      toast.error("Security protocol failed: Could not update role");
+      toast.error("Failed to update user role");
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm("Are you sure you want to permanently remove this individual from the registry?")) {
+    if (window.confirm("Are you sure you want to delete this user?")) {
       try {
         await api.delete(`/admin/users/${id}`);
-        toast.success("Identity removed from registry");
+        toast.success("User deleted successfully");
         fetchData();
       } catch (error) {
-        toast.error("Failed to remove user");
+        toast.error("Failed to delete user");
       }
     }
   };
@@ -91,7 +91,7 @@ const AdminUsers: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        <p className="text-muted-foreground animate-pulse font-medium uppercase tracking-widest text-[10px]">Accessing user registry...</p>
+        <p className="text-muted-foreground animate-pulse font-medium text-xs">Loading users...</p>
       </div>
     );
   }
@@ -101,10 +101,10 @@ const AdminUsers: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">
-            User <span className="text-primary italic">Registry</span>
+            User <span className="text-primary italic">Management</span>
           </h1>
           <p className="mt-2 text-lg text-muted-foreground max-w-2xl leading-relaxed">
-            Oversee personnel permissions and curate the community of connoisseurs.
+            Manage user roles, permissions, and accounts.
           </p>
         </div>
       </div>
@@ -113,7 +113,7 @@ const AdminUsers: React.FC = () => {
         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" size={24} />
         <input 
           type="text" 
-          placeholder="Search by identity or contact..." 
+          placeholder="Search by name or email..." 
           className="w-full pl-16 pr-8 py-5 bg-card border border-border rounded-3xl focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm text-xl"
           value={searchTerm}
           onChange={(e) => {
@@ -128,17 +128,17 @@ const AdminUsers: React.FC = () => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-muted/10 text-muted-foreground text-[10px] uppercase tracking-widest font-bold">
-                <th className="px-8 py-6">Individual</th>
-                <th className="px-8 py-6">Identity Verification</th>
-                <th className="px-8 py-6">Commission Status</th>
-                <th className="px-8 py-6">Registry Origin</th>
-                <th className="px-8 py-6 text-right">Sanctions</th>
+                <th className="px-8 py-6">User</th>
+                <th className="px-8 py-6">Email Address</th>
+                <th className="px-8 py-6">Role / Status</th>
+                <th className="px-8 py-6">Joined Date</th>
+                <th className="px-8 py-6 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/20">
               {users.length === 0 ? (
                 <tr>
-                   <td colSpan={5} className="px-8 py-20 text-center text-muted-foreground italic">No individuals found in this registry.</td>
+                   <td colSpan={5} className="px-8 py-20 text-center text-muted-foreground italic">No users found.</td>
                 </tr>
               ) : (
                 users.map((user) => (
@@ -176,12 +176,12 @@ const AdminUsers: React.FC = () => {
                         {user.isAdmin ? (
                           <span className="flex items-center gap-2 px-4 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest bg-primary/15 text-primary border border-primary/20 shadow-sm shadow-primary/5">
                             <ShieldAlert size={14} />
-                            High Authority
+                            Administrator
                           </span>
                         ) : (
                           <span className="flex items-center gap-2 px-4 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest bg-muted/40 text-muted-foreground border border-border/50">
                             <Shield size={14} />
-                            Standard Member
+                            Customer
                           </span>
                         )}
                       </div>
@@ -196,7 +196,7 @@ const AdminUsers: React.FC = () => {
                       <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
                         <button 
                           onClick={() => handleToggleAdmin(user._id, user.isAdmin)}
-                          title={user.isAdmin ? "Revoke Authority" : "Grant Authority"}
+                          title={user.isAdmin ? "Remove Admin Role" : "Make Admin"}
                           className="p-3 border border-border bg-card rounded-2xl hover:bg-primary hover:text-primary-foreground hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 shadow-sm"
                         >
                           {user.isAdmin ? <UserMinus size={18} /> : <UserPlus size={18} />}

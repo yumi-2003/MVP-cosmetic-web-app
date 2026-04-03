@@ -43,7 +43,7 @@ const SLIDES = [
   },
   {
     id: 5,
-    image: "https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=2070", // Aesthetic skincare
+    image: "file:///C:/Users/ASUS/.gemini/antigravity/brain/cd1b73f5-fb97-4dde-b7cf-c56ab435c281/cosmetic_product_luxury_skincare_shot_1775199626446.png", 
     tagline: "THE MINIMALIST",
     title: "Less is\nEverything.",
     subtitle: "A curated collection of multi-tasking heroes for effortless beauty.",
@@ -52,7 +52,7 @@ const SLIDES = [
   },
   {
     id: 6,
-    image: "https://images.unsplash.com/photo-1526045612212-70caf35c14df?q=80&w=2070", // Beauty shot
+    image: "file:///C:/Users/ASUS/.gemini/antigravity/brain/cd1b73f5-fb97-4dde-b7cf-c56ab435c281/cosmetic_product_premium_shot_1775199589952.png", 
     tagline: "SUMMER ESSENTIALS",
     title: "Golden Hour,\nEvery Hour.",
     subtitle: "Protect and nourish while maintaining a sun-kissed luminous finish.",

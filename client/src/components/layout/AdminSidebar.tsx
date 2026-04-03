@@ -55,15 +55,15 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobile, onClose }) => {
               onClick={onClose}
               className={`flex items-center justify-between p-3 rounded-xl transition-all duration-300 ${
                 isActive
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 translate-x-1"
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-black/10 translate-x-1"
                   : "hover:bg-accent hover:text-accent-foreground text-muted-foreground hover:translate-x-1"
               }`}
             >
-              <div className="flex items-center gap-3">
+              <div className={`flex items-center gap-3 ${isActive ? 'text-primary-foreground' : ''}`}>
                 <item.icon size={20} />
                 <span className="font-medium">{item.label}</span>
               </div>
-              {isActive && <ChevronRight size={16} />}
+              {isActive && <ChevronRight size={16} className="text-primary-foreground" />}
             </Link>
           );
         })}

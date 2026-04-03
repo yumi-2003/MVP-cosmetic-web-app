@@ -377,7 +377,7 @@ const ProductDetail = () => {
                     key={index}
                     className={`h-4 w-4 ${
                       index < Math.floor(product.rating)
-                        ? "fill-primary text-primary"
+                        ? "fill-rating text-rating"
                         : "text-muted-foreground/30"
                     }`}
                   />
@@ -581,7 +581,7 @@ const ProductDetail = () => {
                       key={index}
                       className={`h-5 w-5 ${
                         index < Math.round(product.rating)
-                          ? "fill-primary text-primary"
+                          ? "fill-rating text-rating"
                           : "text-muted-foreground/30"
                       }`}
                     />
@@ -625,7 +625,7 @@ const ProductDetail = () => {
                         <StarIcon
                           className={`h-4 w-4 ${
                             value <= reviewRating
-                              ? "fill-primary text-primary"
+                              ? "fill-rating text-rating"
                               : "text-muted-foreground/40"
                           }`}
                         />
@@ -739,7 +739,7 @@ const ProductDetail = () => {
                             key={index}
                             className={`h-4 w-4 ${
                               index < review.rating
-                                ? "fill-primary text-primary"
+                                ? "fill-rating text-rating"
                                 : "text-muted-foreground/30"
                             }`}
                           />

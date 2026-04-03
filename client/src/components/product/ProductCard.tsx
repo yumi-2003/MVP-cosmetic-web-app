@@ -197,7 +197,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 key={i}
                 className={`h-3 w-3 ${
                   i < Math.floor(product.rating)
-                    ? "fill-primary text-primary"
+                    ? "fill-rating text-rating"
                     : "text-muted-foreground/30"
                 }`}
               />

@@ -36,13 +36,13 @@ const concernOptions = [
 const skinTypes = ["normal", "dry", "combination", "oily", "sensitive"];
 const undertones = ["neutral", "warm", "cool", "olive"] as const;
 const panelClass =
-  "rounded-[2.5rem] border border-[#e5d8dc] bg-white/98 backdrop-blur-xl shadow-2xl shadow-[#8f5b67]/8 dark:border-[#4a363e] dark:bg-[#20161c]/90 dark:shadow-black/35";
+  "rounded-[2.5rem] border border-border bg-background backdrop-blur-xl shadow-2xl shadow-black/5 dark:border-border/40 dark:shadow-black/35";
 const inputClass =
-  "h-14 w-full rounded-2xl border border-[#d8c9ce] bg-white px-5 text-sm text-[#24191d] outline-none transition-all focus:border-[#8c5261] focus:ring-4 focus:ring-[#8c5261]/10 appearance-none cursor-pointer dark:border-[#57414a] dark:bg-[#2b2026] dark:text-[#f8edf1]";
+  "h-14 w-full rounded-2xl border border-border bg-background px-5 text-sm text-foreground outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 appearance-none cursor-pointer dark:border-border/60";
 const subtleLabelClass =
-  "text-[10px] font-bold uppercase tracking-[0.25em] text-[#5f4b52] dark:text-[#d5c0c7]";
+  "text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground dark:text-zinc-400";
 const bodyCopyClass =
-  "text-sm leading-relaxed text-[#37292f] dark:text-[#f0e2e7]";
+  "text-sm leading-relaxed text-foreground/80 dark:text-zinc-300";
 
 const normalizeToneHex = (value: string) => {
   const cleaned = value.trim().replace(/^#/, "");
@@ -109,25 +109,25 @@ const PersonalizedRecommendationSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-white px-0 pt-14 pb-12 text-[#1f1418] transition-colors duration-500 dark:bg-[#130d11] dark:text-[#f7edf0] md:pt-16 md:pb-20">
+    <section className="relative min-h-screen overflow-hidden bg-background px-0 pt-14 pb-12 text-foreground transition-colors duration-500 md:pt-16 md:pb-20">
       {/* Dynamic background gradient overlays */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(248,227,232,0.42),transparent_30%),radial-gradient(circle_at_82%_14%,rgba(244,231,236,0.5),transparent_28%),radial-gradient(circle_at_70%_76%,rgba(236,220,212,0.36),transparent_30%)] dark:bg-[radial-gradient(circle_at_18%_18%,rgba(124,73,89,0.28),transparent_30%),radial-gradient(circle_at_82%_14%,rgba(213,146,166,0.16),transparent_24%),radial-gradient(circle_at_70%_76%,rgba(94,54,66,0.2),transparent_30%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-white via-white/92 to-[#fbf6f7] dark:from-transparent dark:via-[#180f14]/35 dark:to-[#130d11]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(0,0,0,0.03),transparent_30%),radial-gradient(circle_at_82%_14%,rgba(0,0,0,0.02),transparent_28%),radial-gradient(circle_at_70%_76%,rgba(0,0,0,0.02),transparent_30%)] dark:bg-none" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-background via-background/92 to-muted dark:from-background dark:via-background/80 dark:to-background" />
       {/* Decorative background elements */}
-      <div className="pointer-events-none absolute top-0 right-0 h-[600px] w-[600px] translate-x-1/4 -translate-y-1/2 rounded-full bg-[#eed8de]/30 blur-[120px] dark:bg-[#8c5261]/16" />
-      <div className="pointer-events-none absolute bottom-0 left-0 h-[500px] w-[500px] -translate-x-1/4 translate-y-1/2 rounded-full bg-[#f1e0d8]/26 blur-[100px] dark:bg-[#5b3642]/18" />
+      <div className="pointer-events-none absolute top-0 right-0 h-[600px] w-[600px] translate-x-1/4 -translate-y-1/2 rounded-full bg-zinc-100/30 blur-[120px] dark:bg-zinc-800/16" />
+      <div className="pointer-events-none absolute bottom-0 left-0 h-[500px] w-[500px] -translate-x-1/4 translate-y-1/2 rounded-full bg-zinc-100/26 blur-[100px] dark:bg-zinc-800/18" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
         {/* Header Section */}
         <div className="mb-16 text-center max-w-2xl mx-auto">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#caa8b1] bg-white/92 px-4 py-1.5 shadow-lg shadow-[#d5b7bf]/25 animate-in fade-in slide-in-from-bottom-4 duration-700 dark:border-[#5c3c47] dark:bg-[#261a21]/88 dark:shadow-black/20">
-            <Sparkles className="h-3.5 w-3.5 text-[#8c5261] dark:text-[#e1a7b8]" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#8c5261] dark:text-[#e1a7b8]">AI Beauty Intelligence</span>
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-white/92 px-4 py-1.5 shadow-lg shadow-black/5 animate-in fade-in slide-in-from-bottom-4 duration-700 dark:border-border/40 dark:bg-zinc-900/88 dark:shadow-black/20">
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary">AI Beauty Intelligence</span>
           </div>
-          <h1 className="mb-6 font-serif text-4xl leading-tight tracking-tight text-[#23171c] md:text-5xl lg:text-7xl dark:text-[#fbf0f3]">
-            Your Personal <br /> <span className="italic text-[#8c5261] dark:text-[#e1a7b8]">Beauty Concierge</span>
+          <h1 className="mb-6 font-serif text-4xl leading-tight tracking-tight text-foreground md:text-5xl lg:text-7xl">
+            Your Personal <br /> <span className="italic text-primary">Beauty Concierge</span>
           </h1>
-          <p className="mx-auto max-w-lg text-sm leading-relaxed text-[#37292f] md:text-base dark:text-[#f5e8ed]">
+          <p className="mx-auto max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
             Discover a curated collection tailored precisely to your unique skin profile, 
             driven by advanced digital mapping and real-time aesthetic analysis.
           </p>
@@ -138,11 +138,11 @@ const PersonalizedRecommendationSection = () => {
           <div className="space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000">
             <div className={`${panelClass} p-8 md:p-10`}>
               <div className="flex items-center gap-4 mb-10">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-[#8c5261] text-white shadow-lg shadow-[#8c5261]/25 dark:bg-[#e1a7b8] dark:text-[#2c1c22]">
+                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-black text-white shadow-lg shadow-black/20 dark:bg-white dark:text-black">
                   <Wand2 className="h-5 w-5" />
                 </div>
                 <div>
-                  <h2 className="font-serif text-2xl tracking-tight text-[#23171c] dark:text-[#fbf0f3]">The Consultation</h2>
+                  <h2 className="font-serif text-2xl tracking-tight text-foreground">The Consultation</h2>
                   <p className={subtleLabelClass}>Profile Refinement</p>
                 </div>
               </div>
@@ -185,12 +185,12 @@ const PersonalizedRecommendationSection = () => {
                 </label>
               </div>
 
-              <div className="mt-8 rounded-[2rem] border border-[#eadde0] bg-[#fff8f9] p-6 md:p-8 dark:border-[#49353d] dark:bg-[#2a1d24]">
+              <div className="mt-8 rounded-[2rem] border border-border bg-muted/30 p-6 md:p-8 dark:bg-zinc-900/40">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="rounded-xl bg-[#8c5261]/10 p-2 text-[#8c5261] dark:bg-[#e1a7b8]/12 dark:text-[#e1a7b8]">
+                  <div className="rounded-xl bg-primary/10 p-2 text-primary">
                     <Maximize className="h-4 w-4" />
                   </div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8c5261] dark:text-[#e1a7b8]">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
                     III. Digital Skin Scan
                   </p>
                 </div>
@@ -199,7 +199,7 @@ const PersonalizedRecommendationSection = () => {
                 </p>
 
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                  <div className="relative group overflow-hidden rounded-2xl border border-[#d8c9ce] bg-white w-full sm:w-28 dark:border-[#4f3941] dark:bg-[#2d2127]">
+                  <div className="relative group overflow-hidden rounded-2xl border border-border bg-background w-full sm:w-28 dark:bg-zinc-950">
                     <input
                       type="color"
                       value={requestToneHex || "#c99574"}
@@ -212,7 +212,7 @@ const PersonalizedRecommendationSection = () => {
                       type="text"
                       value={toneHexInput}
                       onChange={(event) => setToneHexInput(event.target.value)}
-                      className="h-14 w-full rounded-2xl border border-[#d8c9ce] bg-white px-6 text-sm uppercase tracking-widest text-[#24191d] outline-none transition-all focus:border-[#8c5261] focus:ring-4 focus:ring-[#8c5261]/10 dark:border-[#57414a] dark:bg-[#2b2026] dark:text-[#f8edf1]"
+                      className="h-14 w-full rounded-2xl border border-border bg-background px-6 text-sm uppercase tracking-widest text-foreground outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10"
                       placeholder="#HEXCODE"
                     />
                   </div>
@@ -235,11 +235,11 @@ const PersonalizedRecommendationSection = () => {
                         onClick={() => toggleConcern(concern.id)}
                         className={`inline-flex items-center gap-2.5 rounded-full border px-5 py-3 text-[11px] font-semibold tracking-wide transition-all duration-500 ${
                           isActive
-                            ? "scale-[1.02] border-[#8c5261] bg-[#8c5261] text-white shadow-xl shadow-[#8c5261]/20 dark:border-[#e1a7b8] dark:bg-[#e1a7b8] dark:text-[#2a1c22]"
-                            : "border-[#d8c9ce] bg-white text-[#37292f] backdrop-blur hover:border-[#8c5261]/55 hover:bg-[#fdf4f6] hover:text-[#23171c] dark:border-[#4b373f] dark:bg-[#261b21]/82 dark:text-[#e5d7dc] dark:hover:border-[#e1a7b8]/55 dark:hover:bg-[#e1a7b8]/10 dark:hover:text-[#fff5f7]"
+                            ? "scale-[1.02] border-black bg-black text-white shadow-xl shadow-black/20 dark:border-white dark:bg-white dark:text-black"
+                            : "border-border bg-background text-foreground backdrop-blur hover:border-primary hover:bg-muted dark:hover:border-white/55 dark:hover:bg-zinc-800"
                         }`}
                       >
-                        <Icon className={`h-3.5 w-3.5 ${isActive ? 'text-current' : 'text-[#8c5261] dark:text-[#e1a7b8]'}`} strokeWidth={2.5} />
+                        <Icon className={`h-3.5 w-3.5 ${isActive ? 'text-current' : 'text-primary'}`} strokeWidth={2.5} />
                         <span>{concern.label}</span>
                         {isActive && (
                           <CheckCircle2 className="h-3 w-3 ml-0.5 animate-in zoom-in" />
@@ -250,19 +250,19 @@ const PersonalizedRecommendationSection = () => {
                 </div>
               </div>
 
-              <div className="mt-10 border-t border-[#e1d3d7] pt-8 dark:border-[#3d2c33]">
+              <div className="mt-10 border-t border-border pt-8">
                 <div className="flex items-start gap-4">
-                  <div className="mt-1 rounded-xl bg-[#8c5261]/10 p-2 text-[#8c5261] dark:bg-[#e1a7b8]/12 dark:text-[#e1a7b8]">
+                  <div className="mt-1 rounded-xl bg-primary/10 p-2 text-primary">
                     <Activity className="h-4 w-4" />
                   </div>
                   <div className="space-y-3">
-                    <p className="text-xs font-semibold tracking-tight text-[#23171c] dark:text-[#fbf0f3]">V. Behavioral Intelligence</p>
-                    <p className="text-xs leading-relaxed text-[#37292f] dark:text-[#f0e2e7]">
-                      Analyzing <span className="font-bold text-[#8c5261] dark:text-[#e1a7b8]">{advisorRecommendation?.summary.behaviorSignals ?? 0} active signals</span> from your browsing history and favorites to refine your matches.
+                    <p className="text-xs font-semibold tracking-tight text-foreground">V. Behavioral Intelligence</p>
+                    <p className="text-xs leading-relaxed text-muted-foreground">
+                      Analyzing <span className="font-bold text-primary">{advisorRecommendation?.summary.behaviorSignals ?? 0} active signals</span> from your browsing history and favorites to refine your matches.
                     </p>
                     {advisorRecommendation?.summary.preferredCategory && (
-                      <div className="inline-block rounded-full border border-[#e3c9d1] bg-[#fff7f9] px-3 py-1 dark:border-[#5c3f48] dark:bg-[#e1a7b8]/10">
-                        <p className="text-[9px] font-bold uppercase tracking-widest text-[#8c5261] dark:text-[#e1a7b8]">
+                      <div className="inline-block rounded-full border border-border bg-muted px-3 py-1 dark:bg-zinc-800">
+                        <p className="text-[9px] font-bold uppercase tracking-widest text-primary">
                           Preferred Focus: {advisorRecommendation.summary.preferredCategory}
                         </p>
                       </div>
@@ -287,7 +287,7 @@ const PersonalizedRecommendationSection = () => {
                       })
                     )
                   }
-                  className="group h-16 w-full rounded-[2rem] bg-[#23171c] text-[11px] font-bold uppercase tracking-[0.3em] text-white shadow-xl transition-all duration-500 hover:bg-[#8c5261] hover:text-white hover:shadow-[#8c5261]/20 dark:bg-[#f4dfe5] dark:text-[#24161c] dark:hover:bg-[#e1a7b8]"
+                  className="group h-16 w-full rounded-[2rem] bg-black text-[11px] font-bold uppercase tracking-[0.3em] text-white shadow-xl transition-all duration-500 hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
                 >
                   {advisorStatus === "loading" ? (
                     <>
@@ -311,12 +311,12 @@ const PersonalizedRecommendationSection = () => {
             <div className={`${panelClass} p-8 md:p-10`}>
               <div className="flex items-center justify-between gap-4 mb-8">
                 <div>
-                  <h3 className="font-serif text-2xl tracking-tight text-[#23171c] dark:text-[#fbf0f3]">Concierge Analysis</h3>
+                  <h3 className="font-serif text-2xl tracking-tight text-foreground">Concierge Analysis</h3>
                   <p className={subtleLabelClass}>Deep Learning Logic</p>
                 </div>
                 {advisorStatus === "loading" && (
-                  <div className="grid h-8 w-8 place-items-center rounded-full bg-[#8c5261]/7 dark:bg-[#e1a7b8]/10">
-                    <Loader2 className="h-4 w-4 animate-spin text-[#8c5261] dark:text-[#e1a7b8]" />
+                  <div className="grid h-8 w-8 place-items-center rounded-full bg-primary/10">
+                    <Loader2 className="h-4 w-4 animate-spin text-primary" />
                   </div>
                 )}
               </div>
@@ -332,16 +332,16 @@ const PersonalizedRecommendationSection = () => {
                 {advisorRecommendation?.steps.map((step, idx) => (
                   <article
                     key={step.title}
-                    className="group relative rounded-2xl border border-[#e2d4d8] bg-white p-5 transition-all duration-500 hover:border-[#cb9fab] hover:bg-[#fffafb] dark:border-[#46333b] dark:bg-[#281c23] dark:hover:border-[#7d5160] dark:hover:bg-[#302127]"
+                    className="group relative rounded-2xl border border-border bg-background p-5 transition-all duration-500 hover:border-primary/50 hover:bg-muted dark:hover:bg-zinc-900"
                     style={{ animationDelay: `${idx * 150}ms` }}
                   >
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="text-[9px] font-bold tracking-widest text-[#604c53] dark:text-[#b18a97]">{String(idx + 1).padStart(2, '0')}</span>
-                      <h4 className="text-xs font-bold uppercase tracking-widest text-[#23171c] transition-colors group-hover:text-[#8c5261] dark:text-[#fbf0f3] dark:group-hover:text-[#e1a7b8]">
+                      <span className="text-[9px] font-bold tracking-widest text-muted-foreground">{String(idx + 1).padStart(2, '0')}</span>
+                      <h4 className="text-xs font-bold uppercase tracking-widest text-foreground transition-colors group-hover:text-primary">
                         {step.title}
                       </h4>
                     </div>
-                    <p className="pl-7 text-xs leading-relaxed text-[#37292f] dark:text-[#f0e2e7]">
+                    <p className="pl-7 text-xs leading-relaxed text-muted-foreground dark:text-zinc-400">
                       {step.description}
                     </p>
                   </article>
@@ -353,39 +353,39 @@ const PersonalizedRecommendationSection = () => {
             <div className={`${panelClass} p-8 md:p-10`}>
               <div className="flex items-end justify-between gap-4 mb-10">
                 <div>
-                  <h3 className="font-serif text-3xl tracking-tight text-[#23171c] dark:text-[#fbf0f3]">Your Signature Collection</h3>
-                  <p className="mt-2 text-[10px] font-medium uppercase tracking-[0.2em] text-[#8c5261] dark:text-[#e1a7b8]">Curated Matches</p>
+                  <h3 className="font-serif text-3xl tracking-tight text-foreground">Your Signature Collection</h3>
+                  <p className="mt-2 text-[10px] font-medium uppercase tracking-[0.2em] text-primary">Curated Matches</p>
                 </div>
                 <div className="text-right">
-                   <p className="text-2xl font-serif text-[#8c5261] dark:text-[#e1a7b8]">{advisorRecommendation?.recommendations.length ?? 0}</p>
+                   <p className="text-2xl font-serif text-primary">{advisorRecommendation?.recommendations.length ?? 0}</p>
                    <p className={subtleLabelClass}>Selections</p>
                 </div>
               </div>
 
               <div className="grid gap-10 md:grid-cols-2">
                 {advisorRecommendation?.recommendations.map((match, idx) => (
-                  <article key={match.product._id} className="group rounded-[2rem] border border-[#e4d7db] bg-white p-5 animate-in fade-in slide-in-from-bottom-8 duration-1000 dark:border-[#433038] dark:bg-[#21171d]/70" style={{ animationDelay: `${idx * 200}ms` }}>
+                  <article key={match.product._id} className="group rounded-[2rem] border border-border bg-background p-5 animate-in fade-in slide-in-from-bottom-8 duration-1000" style={{ animationDelay: `${idx * 200}ms` }}>
                     <div className="relative mb-6 transform transition-transform duration-700 group-hover:scale-[1.02]">
                       <ProductCard product={match.product} />
                       <div className="absolute top-4 right-4 z-10">
-                        <div className="rounded-full border border-[#ddc6cd] bg-white px-3 py-1.5 shadow-xl backdrop-blur-md dark:border-[#5a4049] dark:bg-[#241920]/92">
-                           <p className="text-[10px] font-bold tracking-tighter text-[#8c5261] dark:text-[#e1a7b8]">
-                             {match.confidence}% <span className="ml-0.5 text-[8px] font-medium uppercase tracking-normal text-[#6d5860] dark:text-[#d5c0c7]">Match</span>
+                        <div className="rounded-full border border-border bg-background px-3 py-1.5 shadow-xl backdrop-blur-md">
+                           <p className="text-[10px] font-bold tracking-tighter text-primary">
+                             {match.confidence}% <span className="ml-0.5 text-[8px] font-medium uppercase tracking-normal text-muted-foreground">Match</span>
                            </p>
                         </div>
                       </div>
                     </div>
                     
                     <div className="space-y-3">
-                      <p className="px-2 text-[9px] font-bold uppercase tracking-[0.15em] text-[#8c5261] dark:text-[#e1a7b8]">Analysis Findings</p>
+                      <p className="px-2 text-[9px] font-bold uppercase tracking-[0.15em] text-primary">Analysis Findings</p>
                       <div className="space-y-2">
                         {match.reasons.map((reason) => (
                           <div
                             key={reason}
-                            className="group/item flex items-start gap-2 rounded-xl border border-[#e1d2d7] bg-[#fff8fa] px-4 py-3 text-[11px] font-medium text-[#35242b] transition-all duration-300 hover:border-[#8c5261] hover:bg-[#fbeef1] dark:border-[#433038] dark:bg-[#e1a7b8]/[0.08] dark:text-[#f2e6ea] dark:hover:border-[#7a5360] dark:hover:bg-[#e1a7b8]/[0.13]"
+                            className="group/item flex items-start gap-2 rounded-xl border border-border bg-muted/40 px-4 py-3 text-[11px] font-medium text-foreground transition-all duration-300 hover:border-primary hover:bg-muted dark:bg-zinc-900/40 dark:hover:bg-zinc-900"
                           >
-                            <Droplet className="mt-0.5 h-3 w-3 shrink-0 text-[#7d5360] transition-colors group-hover/item:text-[#8c5261] dark:text-[#9f7784] dark:group-hover/item:text-[#e1a7b8]" />
-                            <span className="flex-1 leading-relaxed text-[#35242b] dark:text-inherit">{reason}</span>
+                            <Droplet className="mt-0.5 h-3 w-3 shrink-0 text-muted-foreground transition-colors group-hover/item:text-primary" />
+                            <span className="flex-1 leading-relaxed text-foreground dark:text-inherit">{reason}</span>
                           </div>
                         ))}
                       </div>
@@ -396,11 +396,11 @@ const PersonalizedRecommendationSection = () => {
 
               {advisorStatus === "succeeded" &&
               !advisorRecommendation?.recommendations.length ? (
-                <div className="mt-6 rounded-[2rem] border border-dashed border-[#d7c9ce] p-12 text-center text-sm text-[#4f3d45] dark:border-[#47343c] dark:text-[#cebfc5]">
-                  <div className="mb-4 inline-grid h-16 w-16 place-items-center rounded-full bg-[#8c5261]/8 text-[#8c5261] dark:bg-[#e1a7b8]/10 dark:text-[#e1a7b8]">
+                <div className="mt-6 rounded-[2rem] border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
+                  <div className="mb-4 inline-grid h-16 w-16 place-items-center rounded-full bg-primary/10 text-primary">
                     <Sparkles className="h-6 w-6" />
                   </div>
-                  <p className="max-w-xs mx-auto leading-relaxed italic text-[#37292f] dark:text-[#f0e2e7]">
+                  <p className="max-w-xs mx-auto leading-relaxed italic text-foreground">
                     Our AI is still learning your preferences. Try adjusting your focus areas or exploring more products to calibrate the concierge.
                   </p>
                 </div>

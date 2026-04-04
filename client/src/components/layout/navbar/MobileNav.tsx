@@ -226,14 +226,18 @@ const MobileNav = () => {
                 <div className="flex flex-col gap-3">
                   <Link
                     to="/login"
-                    className="w-full py-3 text-center bg-primary text-primary-foreground font-medium tracking-widest text-[11px] uppercase rounded-full hover:bg-primary/90 transition-colors"
+                    className="flex w-full items-center justify-center py-3 font-bold tracking-widest text-[11px] uppercase rounded-full hover:opacity-90 transition-colors shadow-sm"
+                    style={{ 
+                      backgroundColor: theme === "dark" ? "#FFFFFF" : "#000000",
+                      color: theme === "dark" ? "#000000" : "#FFFFFF" 
+                    }}
                     onClick={() => setOpen(false)}
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/signup"
-                    className="w-full py-3 text-center border border-border text-foreground font-medium tracking-widest text-[11px] uppercase rounded-full hover:bg-secondary transition-colors"
+                    className="flex w-full items-center justify-center py-3 border border-border bg-background text-foreground font-bold tracking-widest text-[11px] uppercase rounded-full hover:bg-secondary transition-colors shadow-sm"
                     onClick={() => setOpen(false)}
                   >
                     Create Account

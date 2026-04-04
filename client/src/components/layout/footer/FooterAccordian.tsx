@@ -24,11 +24,11 @@ const FooterAccordian = () => {
             <AccordionTrigger className="text-xs tracking-widest">
               {section.title}
             </AccordionTrigger>
-            <AccordionContent>
+            <AccordionContent className="[&_a]:no-underline">
               <ul className="space-y-2 pb-4 text-sm">
                 {section.links.map((link) => (
                   <li className="" key={link.label}>
-                    <Link to={link.href} className="text-muted-foreground hover:text-primary hover:no-underline transition-colors">
+                    <Link to={link.href} className="no-underline text-muted-foreground hover:text-primary transition-colors">
                       {link.label}
                     </Link>
                   </li>

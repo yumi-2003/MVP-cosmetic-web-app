@@ -16,6 +16,7 @@ import {
 import api from "../../redux/api";
 import type { IProduct, ICategory } from "../../redux/types";
 import Pagination from "../../components/ui/Pagination";
+import { TableSkeleton } from "../../components/ui/TableSkeleton";
 import AdminModal from "../../components/admin/AdminModal";
 import { toast } from "sonner";
 
@@ -168,12 +169,7 @@ const AdminProducts: React.FC = () => {
   };
 
   if (loading && products.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        <p className="text-muted-foreground animate-pulse font-medium">Loading inventory...</p>
-      </div>
-    );
+    return <TableSkeleton />;
   }
 
   return (

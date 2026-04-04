@@ -13,6 +13,7 @@ import {
 import api from "../../redux/api";
 import type { IUser } from "../../redux/types";
 import Pagination from "../../components/ui/Pagination";
+import { TableSkeleton } from "../../components/ui/TableSkeleton";
 import { toast } from "sonner";
 
 const AdminUsers: React.FC = () => {
@@ -88,12 +89,7 @@ const AdminUsers: React.FC = () => {
   };
 
   if (loading && users.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        <p className="text-muted-foreground animate-pulse font-medium text-xs">Loading users...</p>
-      </div>
-    );
+    return <TableSkeleton />;
   }
 
   return (

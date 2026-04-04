@@ -14,6 +14,7 @@ import {
 import api from "../../redux/api";
 import type { IBlog } from "../../redux/types";
 import Pagination from "../../components/ui/Pagination";
+import { TableSkeleton } from "../../components/ui/TableSkeleton";
 import AdminModal from "../../components/admin/AdminModal";
 import { toast } from "sonner";
 
@@ -133,12 +134,7 @@ const AdminBlogs: React.FC = () => {
   };
 
   if (loading && blogs.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        <p className="text-muted-foreground animate-pulse font-bold uppercase tracking-widest text-[10px]">Opening the archives...</p>
-      </div>
-    );
+    return <TableSkeleton />;
   }
 
   return (

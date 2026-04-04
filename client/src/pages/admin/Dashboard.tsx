@@ -12,6 +12,7 @@ import {
   FileText
 } from "lucide-react";
 import api from "../../redux/api";
+import { DashboardSkeleton } from "../../components/ui/DashboardSkeleton";
 
 interface DashboardStats {
   users: number;
@@ -168,11 +169,7 @@ const AdminDashboard: React.FC = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (

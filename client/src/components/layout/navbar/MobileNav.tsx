@@ -226,14 +226,14 @@ const MobileNav = () => {
                 <div className="flex flex-col gap-3">
                   <Link
                     to="/login"
-                    className="w-full py-3 text-center bg-foreground text-background font-medium tracking-widest text-[11px] uppercase rounded-full hover:bg-foreground/90 transition-colors"
+                    className="w-full py-3 text-center bg-primary text-primary-foreground font-medium tracking-widest text-[11px] uppercase rounded-full hover:bg-primary/90 transition-colors"
                     onClick={() => setOpen(false)}
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/signup"
-                    className="w-full py-3 text-center border border-foreground/20 text-foreground font-medium tracking-widest text-[11px] uppercase rounded-full hover:bg-secondary/50 transition-colors"
+                    className="w-full py-3 text-center border border-border text-foreground font-medium tracking-widest text-[11px] uppercase rounded-full hover:bg-secondary transition-colors"
                     onClick={() => setOpen(false)}
                   >
                     Create Account

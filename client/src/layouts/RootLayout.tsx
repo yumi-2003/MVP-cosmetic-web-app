@@ -25,6 +25,11 @@ const RootLayout = () => {
     }
   }, [token, user, dispatch]);
 
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   const hideChrome =
     pathname.startsWith("/login") ||
     pathname.startsWith("/signup") ||

@@ -2,11 +2,12 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
 
 const AdminRoute = () => {
-  const { user, status } = useAppSelector((state) => state.auth);
+  const { user, token, status } = useAppSelector((state) => state.auth);
 
-  if (status === "loading") {
+  // If status is loading OR we have a token but haven't fetched the user yet (on page refresh), wait.
+  if (status === "loading" || (token && !user)) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
       </div>
     );

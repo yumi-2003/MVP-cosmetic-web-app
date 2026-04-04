@@ -498,7 +498,7 @@ const ProductDetail = () => {
                 <Button
                   onClick={handleAddToCart}
                   disabled={isAdding || !inStock}
-                  className="h-14 sm:h-12 flex-1 rounded-xl px-12 sm:px-8 text-sm font-bold uppercase tracking-widest shadow-md"
+                  className="h-14 sm:h-12 flex-1 min-w-[200px] md:min-w-[240px] rounded-xl px-12 sm:px-8 text-sm font-bold uppercase tracking-widest shadow-md"
                 >
                   {isAdding ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

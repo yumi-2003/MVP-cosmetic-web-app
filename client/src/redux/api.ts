@@ -7,13 +7,14 @@ import axios from "axios";
  * other common configurations (like headers) in every API call.
  */
 const api = axios.create({
-  // The base URL for all API requests. In a real-world scenario, 
-  // this would typically be stored in an environment variable (e.g., import.meta.env.VITE_API_URL).
-  baseURL: "http://localhost:5050/api",
+  // In development: falls back to localhost.
+  // In production: uses VITE_API_URL set in .env.production / Vercel env vars.
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/api`
+    : "http://localhost:5050/api",
   headers: {
     "Content-Type": "application/json",
   },
-  // Add a timeout if needed
   timeout: 10000,
 });
 
